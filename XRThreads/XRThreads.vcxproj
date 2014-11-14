@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B2975FEF-C980-4311-9C8A-766851CA53A6}</ProjectGuid>
+    <ProjectGuid>{270EFCF4-C8B7-405F-8DED-7C003D33C5B5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>XRFramework</RootNamespace>
+    <RootNamespace>XRThreads</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,13 +71,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Condition.h" />
+    <ClInclude Include="CriticalSection.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="helpers.h" />
+    <ClInclude Include="Lockables.h" />
+    <ClInclude Include="SingleLock.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SystemClock.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="ThreadImpl.h" />
+    <ClInclude Include="ThreadLocal.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SystemClock.cpp" />
+    <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
