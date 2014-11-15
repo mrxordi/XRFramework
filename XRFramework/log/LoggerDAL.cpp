@@ -5,6 +5,7 @@
 #include <ctime>
 #include "utils/StringUtils.h"
 
+CCriticalSection LoggerDAL::m_critSec;
 
 LoggerDAL::LoggerDAL(LogFile* LogFileObject) {
 
@@ -56,10 +57,10 @@ void LoggerDAL::SendMessageToLog(const char* file, const int lineNumber, const c
 			message << sourceFile;
 		}
 		if (lineNumber > 0) {
-			message << StringUtils::Format("(%d)-", lineNumber);
+			message << StringUtils::Format("(%d", lineNumber);
 		}
 		if (function != NULL && function[0] != 0)	{
-			message << function;
+			message << ", " << function << ")- ";
 		}
 		message << buffer;
 

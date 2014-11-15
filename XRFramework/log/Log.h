@@ -7,7 +7,7 @@
 // krisgus@ieee.org
 // 
 
-#define LOG_QUIET_MODE
+//#define LOG_QUIET_MODE
 
 
 #include "log\Logger.h"

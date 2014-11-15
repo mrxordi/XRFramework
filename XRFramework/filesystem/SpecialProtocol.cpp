@@ -129,7 +129,6 @@ void CSpecialProtocol::LogPaths()
 {
 	LOGINFO("/---- System paths are initialised  ----\\");
 	LOGINFO("**special://app/ is mapped to: %s", GetPath("app").c_str());
-	LOGINFO("**special://app/ is mapped to: %s", GetPath("app").c_str());
 	LOGINFO("**special://appbin/ is mapped to: %s", GetPath("appbin").c_str());
 	LOGINFO("**special://home/ is mapped to: %s", GetPath("home").c_str());
 	LOGINFO("**special://temp/ is mapped to: %s", GetPath("temp").c_str());

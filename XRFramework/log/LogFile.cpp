@@ -54,9 +54,9 @@ void LogFile::CreateLogFile(const char* logPathName) {
 void LogFile::FileOpenOrCreateError(const char* logPathName) {
 	m_errorMessage.append("\"");
 	m_errorMessage.append(logPathName);
-	m_errorMessage.append("\" failed to open. Sending output to stderr.");
+	m_errorMessage.append("\" failed to open. Sending output to stderr. \n");
 	// write log output to stderr
-	fprintf_s(stderr, m_errorMessage.c_str());
+	OutputDebugStringA(m_errorMessage.c_str());
 	m_file = stderr;
 	m_writeToStderr = true;
 }

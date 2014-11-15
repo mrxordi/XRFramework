@@ -50,10 +50,10 @@ bool Logger::Init(const std::string& pathFileName) {
 	m_loggerDAL->Log(LOG_INFO, "", 0, "", "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 	m_loggerDAL->Log(LOG_INFO, "", 0, "", "+                   XRFrameWork event log has been initiated                  +");
 	m_loggerDAL->Log(LOG_INFO, "", 0, "", "+                          (http://github.com/mrxordi)                        +");
-	m_loggerDAL->Log(LOG_INFO, "", 0, "", "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+	m_loggerDAL->Log(LOG_INFO, "", 0, "", "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 	char addr_buff[32];
 	sprintf(addr_buff, "(%p)", static_cast<void*>(m_loggerDAL.get()));
-	m_loggerDAL->Log(LOG_INFO, "", 0, "", "Logger singleton created. %s", string(addr_buff).c_str());
+	m_loggerDAL->Log(LOG_INFO, "", 0, "", "Logger singleton created. %s \n", string(addr_buff).c_str());
 
 	return true;
 }
@@ -81,7 +81,7 @@ bool Logger::InitializeLog(std::string& newFilename, std::string& oldFilename) {
 		m_LogFile = new LogFile(m_LogFileName.c_str(), true, true);
 
 		// Create DAL (data access layer) object through which the user intracts with the logger
-		if (m_loggerDAL != NULL) {
+		if (m_LogFile != NULL) {
 			LoggerDAL *dal = new LoggerDAL(m_LogFile);
 			if (dal == NULL) {
 				m_errorMessage += "Failed to create pointer needed for logging messages (\"LogFileDAL\" is NULL).";
@@ -103,4 +103,24 @@ bool Logger::InitializeLog(std::string& newFilename, std::string& oldFilename) {
 		}
 	}
 	return true;
+}
+
+LoggerDAL_t Logger::GetLog() {
+	//Lock before checking, for possibility to initializing while trying to get instance.
+	CSingleLock singleLock(m_critSec);
+	m_errorMessage.clear();
+	if (IsAlreadyInit() == false) {
+		m_errorMessage = "Logger::GetLog() - Log file has not been initialized.\nLogger::GetLog() - Use Init(...) to initialize the log file instead.\n ";
+		OutputDebugStringA(m_errorMessage.c_str());
+	}
+
+	if (m_loggerDAL.get() == NULL) {
+		m_errorMessage = "Logger::GetLog() - Log file object failed to initialize (object pointer is NULL). Log cannot be used.\n";
+		OutputDebugStringA(m_errorMessage.c_str());
+	}
+	return m_loggerDAL;
+}
+
+bool Logger::IsAlreadyInit() {
+	return  !(m_LogFileName.empty() || m_loggerDAL.get() == NULL);
 }

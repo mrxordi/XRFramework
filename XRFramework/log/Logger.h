@@ -7,11 +7,10 @@
 #include "XRThreads/CriticalSection.h"
 #include "XRThreads/SingleLock.h"
 
-class Logger : public Singleton < Logger >
+class Logger
 {
 public:
-	Logger();
-	~Logger();
+
 
 	static bool Init(const std::string& fileName);
 
@@ -43,11 +42,20 @@ public:
 		return m_errorMessage;
 	}
 
-	static void ResetLogger();
+	// only used for testing, but perhaps this could have other uses.
+	static void ResetLogger(void) {
+		m_loggerDAL.reset();
+		m_LogFileName.clear();
+		m_errorMessage.clear();
+	}
 
 	static void SetExtraLogLevels(int level);
 private:
 	static bool InitializeLog(std::string& newFilename, std::string& oldFilename);
+
+protected:
+	Logger();
+	~Logger();
 
 private:
 	static LoggerDAL_t		m_loggerDAL;
