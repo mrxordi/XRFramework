@@ -52,7 +52,7 @@ void LoggerDAL::SendMessageToLog(const char* file, const int lineNumber, const c
 
 		//add time and log level
 		message << GetLogLevelAndTime(level);
-		const char* sourceFile = StrFileAndExt(file).c_str();
+		std::string sourceFile = StrFileAndExt(file);
 		if (file != NULL && sourceFile[0] != 0) {
 			message << sourceFile;
 		}

@@ -32,11 +32,6 @@
 #define LOGWARN(x, ...) Logger::GetLog()->Log(LOG_WARNING, __FILE__, __LINE__, __FUNCTION__, x, __VA_ARGS__);
 #endif
 
-
-
-class ILogTarget;
-typedef ILogTarget* LogObj_t;
-
 class LoggerDAL;
 typedef std::tr1::shared_ptr<LoggerDAL> LoggerDAL_t;
 

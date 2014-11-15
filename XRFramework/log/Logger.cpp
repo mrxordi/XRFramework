@@ -12,7 +12,6 @@
 Static Data Definitions
 *************************************************************************/
 // singleton instance pointer
-template<> Logger* Singleton<Logger>::ms_Singleton = 0;
 
 LoggerDAL_t Logger::m_loggerDAL = nullptr;
 LogFile* Logger::m_LogFile = nullptr;

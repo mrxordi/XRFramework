@@ -3,7 +3,6 @@
 #include <string>
 #include "LogDefines.h"
 #include "LogFile.h"
-#include "utils/Singleton.h"
 #include "XRThreads/CriticalSection.h"
 #include "XRThreads/SingleLock.h"
 

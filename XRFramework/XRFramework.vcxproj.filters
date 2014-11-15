@@ -46,6 +46,26 @@
     <ClInclude Include="log\Log.h">
       <Filter>log</Filter>
     </ClInclude>
+    <ClInclude Include="utils\Timer.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="window\WindowEvents.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="IApplication.h" />
+    <ClInclude Include="render\dxerr.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\RenderSystemDX.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\D3D10Enumeration.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ID3DResource.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderControl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log\ilog.cpp">
@@ -80,6 +100,25 @@
     <ClCompile Include="log\LogFile.cpp">
       <Filter>log</Filter>
     </ClCompile>
+    <ClCompile Include="utils\Timer.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="window\WindowEvents.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="render\dxerr.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\RenderSystemDX.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\D3D10Enumeration.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ID3DResource.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="log">
@@ -90,6 +129,12 @@
     </Filter>
     <Filter Include="filesystem">
       <UniqueIdentifier>{2e927731-b1b5-49b7-be73-f11f15f9eba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{ee69a811-b9ea-4405-89d9-ca82be904c86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render">
+      <UniqueIdentifier>{8d02a065-c057-461d-ba8e-9c7d50cb69bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

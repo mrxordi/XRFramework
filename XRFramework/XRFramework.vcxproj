@@ -54,6 +54,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>d3d10.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -75,21 +78,29 @@
   <ItemGroup>
     <ClInclude Include="Base.h" />
     <ClInclude Include="filesystem\SpecialProtocol.h" />
+    <ClInclude Include="IApplication.h" />
     <ClInclude Include="log\ilog.h" />
     <ClInclude Include="log\Log.h" />
     <ClInclude Include="log\LogDefines.h" />
     <ClInclude Include="log\LogFile.h" />
     <ClInclude Include="log\Logger.h" />
     <ClInclude Include="log\LoggerDAL.h" />
+    <ClInclude Include="RenderControl.h" />
+    <ClInclude Include="render\D3D10Enumeration.h" />
+    <ClInclude Include="render\dxerr.h" />
+    <ClInclude Include="render\ID3DResource.h" />
+    <ClInclude Include="render\RenderSystemDX.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="utils\Singleton.h" />
     <ClInclude Include="utils\StdString.h" />
     <ClInclude Include="utils\StringUtils.h" />
+    <ClInclude Include="utils\Timer.h" />
     <ClInclude Include="utils\URIUtils.h" />
     <ClInclude Include="utils\URL.h" />
     <ClInclude Include="utils\UrlOptions.h" />
     <ClInclude Include="utils\Variant.h" />
+    <ClInclude Include="window\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="filesystem\SpecialProtocol.cpp" />
@@ -97,16 +108,23 @@
     <ClCompile Include="log\LogFile.cpp" />
     <ClCompile Include="log\Logger.cpp" />
     <ClCompile Include="log\LoggerDAL.cpp" />
+    <ClCompile Include="RenderControl.cpp" />
+    <ClCompile Include="render\D3D10Enumeration.cpp" />
+    <ClCompile Include="render\dxerr.cpp" />
+    <ClCompile Include="render\ID3DResource.cpp" />
+    <ClCompile Include="render\RenderSystemDX.cpp" />
     <ClCompile Include="stdafxf.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="utils\StringUtils.cpp" />
+    <ClCompile Include="utils\Timer.cpp" />
     <ClCompile Include="utils\URIUtils.cpp" />
     <ClCompile Include="utils\URL.cpp" />
     <ClCompile Include="utils\UrlOptions.cpp" />
     <ClCompile Include="utils\Variant.cpp" />
+    <ClCompile Include="window\WindowEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XRThreads\XRThreads.vcxproj">
