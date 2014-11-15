@@ -1,27 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="log\ilog.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafxf.h" />
+    <ClInclude Include="log\Logger.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\LogDefines.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Singleton.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h" />
+    <ClInclude Include="utils\StdString.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\StringUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h" />
+    <ClInclude Include="filesystem\SpecialProtocol.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\URIUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\URL.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\UrlOptions.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Variant.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="log\LoggerDAL.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\LogFile.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\Log.h">
+      <Filter>log</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="log\ilog.cpp">
+      <Filter>log</Filter>
     </ClCompile>
+    <ClCompile Include="stdafxf.cpp" />
+    <ClCompile Include="log\Logger.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\StringUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="filesystem\SpecialProtocol.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\URIUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\URL.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\UrlOptions.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Variant.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="log\LoggerDAL.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\LogFile.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="log">
+      <UniqueIdentifier>{b626f908-cebe-42e6-92d7-8a0fab3c073a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{2217abaa-9fcc-44a7-af21-8a7f85cc9568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="filesystem">
+      <UniqueIdentifier>{2e927731-b1b5-49b7-be73-f11f15f9eba6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

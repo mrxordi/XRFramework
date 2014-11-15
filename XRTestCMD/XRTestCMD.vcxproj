@@ -11,19 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B2975FEF-C980-4311-9C8A-766851CA53A6}</ProjectGuid>
+    <ProjectGuid>{EB65EC3A-6514-41DD-BF8D-3F83DA1F14F0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>XRFramework</RootNamespace>
+    <RootNamespace>XRTestCMD</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -39,19 +39,23 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>./;../;../includes/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../;../XRFramework</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -62,55 +66,38 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Base.h" />
-    <ClInclude Include="filesystem\SpecialProtocol.h" />
-    <ClInclude Include="log\ilog.h" />
-    <ClInclude Include="log\Log.h" />
-    <ClInclude Include="log\LogDefines.h" />
-    <ClInclude Include="log\LogFile.h" />
-    <ClInclude Include="log\Logger.h" />
-    <ClInclude Include="log\LoggerDAL.h" />
-    <ClInclude Include="stdafxf.h" />
-    <ClInclude Include="Util.h" />
-    <ClInclude Include="utils\Singleton.h" />
-    <ClInclude Include="utils\StdString.h" />
-    <ClInclude Include="utils\StringUtils.h" />
-    <ClInclude Include="utils\URIUtils.h" />
-    <ClInclude Include="utils\URL.h" />
-    <ClInclude Include="utils\UrlOptions.h" />
-    <ClInclude Include="utils\Variant.h" />
+    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="filesystem\SpecialProtocol.cpp" />
-    <ClCompile Include="log\ilog.cpp" />
-    <ClCompile Include="log\LogFile.cpp" />
-    <ClCompile Include="log\Logger.cpp" />
-    <ClCompile Include="log\LoggerDAL.cpp" />
-    <ClCompile Include="stdafxf.cpp">
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Util.cpp" />
-    <ClCompile Include="utils\StringUtils.cpp" />
-    <ClCompile Include="utils\URIUtils.cpp" />
-    <ClCompile Include="utils\URL.cpp" />
-    <ClCompile Include="utils\UrlOptions.cpp" />
-    <ClCompile Include="utils\Variant.cpp" />
+    <ClCompile Include="XRTestCMD.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XRThreads\XRThreads.vcxproj">
-      <Project>{270efcf4-c8b7-405f-8ded-7c003d33c5b5}</Project>
+    <ProjectReference Include="..\XRFramework\XRFramework.vcxproj">
+      <Project>{b2975fef-c980-4311-9c8a-766851ca53a6}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

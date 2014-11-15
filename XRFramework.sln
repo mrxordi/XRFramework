@@ -1,13 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
+# Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRThreads", "XRThreads\XRThreads.vcxproj", "{270EFCF4-C8B7-405F-8DED-7C003D33C5B5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRFramework", "XRFramework\XRFramework.vcxproj", "{B2975FEF-C980-4311-9C8A-766851CA53A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{270EFCF4-C8B7-405F-8DED-7C003D33C5B5} = {270EFCF4-C8B7-405F-8DED-7C003D33C5B5}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRTests", "XRTests\XRTests.vcxproj", "{54E91663-AA3E-4012-B2AC-E79C79D8099A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRTests", "XRTests\XRTests.vcxproj", "{6AA3ECB3-627B-48E9-AFAC-8F98C4D986D0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRTestCMD", "XRTestCMD\XRTestCMD.vcxproj", "{EB65EC3A-6514-41DD-BF8D-3F83DA1F14F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2975FEF-C980-4311-9C8A-766851CA53A6} = {B2975FEF-C980-4311-9C8A-766851CA53A6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +31,14 @@ Global
 		{B2975FEF-C980-4311-9C8A-766851CA53A6}.Debug|Win32.Build.0 = Debug|Win32
 		{B2975FEF-C980-4311-9C8A-766851CA53A6}.Release|Win32.ActiveCfg = Release|Win32
 		{B2975FEF-C980-4311-9C8A-766851CA53A6}.Release|Win32.Build.0 = Release|Win32
-		{54E91663-AA3E-4012-B2AC-E79C79D8099A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{54E91663-AA3E-4012-B2AC-E79C79D8099A}.Debug|Win32.Build.0 = Debug|Win32
-		{54E91663-AA3E-4012-B2AC-E79C79D8099A}.Release|Win32.ActiveCfg = Release|Win32
-		{54E91663-AA3E-4012-B2AC-E79C79D8099A}.Release|Win32.Build.0 = Release|Win32
+		{6AA3ECB3-627B-48E9-AFAC-8F98C4D986D0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6AA3ECB3-627B-48E9-AFAC-8F98C4D986D0}.Debug|Win32.Build.0 = Debug|Win32
+		{6AA3ECB3-627B-48E9-AFAC-8F98C4D986D0}.Release|Win32.ActiveCfg = Release|Win32
+		{6AA3ECB3-627B-48E9-AFAC-8F98C4D986D0}.Release|Win32.Build.0 = Release|Win32
+		{EB65EC3A-6514-41DD-BF8D-3F83DA1F14F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EB65EC3A-6514-41DD-BF8D-3F83DA1F14F0}.Debug|Win32.Build.0 = Debug|Win32
+		{EB65EC3A-6514-41DD-BF8D-3F83DA1F14F0}.Release|Win32.ActiveCfg = Release|Win32
+		{EB65EC3A-6514-41DD-BF8D-3F83DA1F14F0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

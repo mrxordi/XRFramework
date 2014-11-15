@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{54E91663-AA3E-4012-B2AC-E79C79D8099A}</ProjectGuid>
+    <ProjectGuid>{6AA3ECB3-627B-48E9-AFAC-8F98C4D986D0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>XRTests</RootNamespace>
   </PropertyGroup>
@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
     <ClInclude Include="XRTests.h" />
   </ItemGroup>
   <ItemGroup>
