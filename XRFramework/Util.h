@@ -8,10 +8,10 @@ public:
 	~CUtil();
 
 	static std::string ValidatePath(const std::string &path, bool bFixDoubleSlashes = false); ///< return a validated path, with correct directory separators.
-	static CStdString ResolveExecutablePath();
-	static CStdString ResolveSystemTempPath();
-	static CStdString ResolveUserPath();
-	static CStdString ResolveDocPath();
+	static std::string ResolveExecutablePath();
+	static std::string ResolveSystemTempPath();
+	static std::string ResolveUserPath();
+	static std::string ResolveDocPath();
 	static bool		  GetFocussedProcess(std::string &strProcessFile);
 private:
 

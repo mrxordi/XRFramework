@@ -62,9 +62,9 @@ std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes 
 	return result;
 }
 
-CStdString CUtil::ResolveExecutablePath()
+std::string CUtil::ResolveExecutablePath()
 {
-	CStdString strExecutablePath;
+	std::string strExecutablePath;
 
 	static const size_t bufSize = MAX_PATH * 2;
 	char* buf = new char[bufSize];
@@ -74,7 +74,7 @@ CStdString CUtil::ResolveExecutablePath()
 	strExecutablePath += buf;
 	delete[] buf;
 
-	CStdString strPath;
+	std::string strPath;
 
 	size_t last_sep = strExecutablePath.find_last_of(PATH_SEPARATOR_CHAR);
 	if (last_sep != std::string::npos)
@@ -85,9 +85,9 @@ CStdString CUtil::ResolveExecutablePath()
 	return strPath;
 }
 
-CStdString CUtil::ResolveSystemTempPath()
+std::string CUtil::ResolveSystemTempPath()
 {
-	CStdString strTempPath;
+	std::string strTempPath;
 
 	static const size_t bufSize = MAX_PATH * 2;
 	char* buf = new char[bufSize];
@@ -100,9 +100,9 @@ CStdString CUtil::ResolveSystemTempPath()
 	return strTempPath;
 }
 
-CStdString CUtil::ResolveUserPath()
+std::string CUtil::ResolveUserPath()
 {
-	CStdString strUserPath;
+	std::string strUserPath;
 
 	static const size_t bufSize = MAX_PATH * 2;
 	char* buf = new char[bufSize];
@@ -115,9 +115,9 @@ CStdString CUtil::ResolveUserPath()
 	return strUserPath;
 }
 
-CStdString CUtil::ResolveDocPath()
+std::string CUtil::ResolveDocPath()
 {
-	CStdString strDocPath;
+	std::string strDocPath;
 
 	static const size_t bufSize = MAX_PATH * 2;
 	char* buf = new char[bufSize];
