@@ -6,8 +6,12 @@
 #pragma once
 
 
+#define NOMINMAX
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#define LOGQUIETMODE
+#define TARGET_WINDOWS
 
+#include "log\Log.h"
 
 
 // TODO: reference additional headers your program requires here
