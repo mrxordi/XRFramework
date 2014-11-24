@@ -34,9 +34,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\XRFrameworkDef.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\XRFrameworkDef.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -48,14 +50,15 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>./;../;../includes/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3d10.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3d10.lib;Ws2_32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -77,37 +80,64 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Base.h" />
+    <ClInclude Include="DLLoader\DllPaths_win32.h" />
+    <ClInclude Include="DLLoader\DynamicDll.h" />
+    <ClInclude Include="DLLoader\iLibraryLoader.h" />
+    <ClInclude Include="DLLoader\LoaderContainer.h" />
+    <ClInclude Include="DLLoader\LoaderFactory.h" />
+    <ClInclude Include="DLLoader\Win32DllLoader.h" />
+    <ClInclude Include="filesystem\CurlFile.h" />
+    <ClInclude Include="filesystem\DllLibCurl.h" />
+    <ClInclude Include="filesystem\File.h" />
+    <ClInclude Include="filesystem\IFile.h" />
+    <ClInclude Include="filesystem\IFileTypes.h" />
     <ClInclude Include="filesystem\SpecialProtocol.h" />
+    <ClInclude Include="filesystem\URL.h" />
     <ClInclude Include="IApplication.h" />
+    <ClInclude Include="log\FilePathUtils.h" />
     <ClInclude Include="log\ilog.h" />
     <ClInclude Include="log\Log.h" />
     <ClInclude Include="log\LogDefines.h" />
-    <ClInclude Include="log\LogFile.h" />
-    <ClInclude Include="log\Logger.h" />
-    <ClInclude Include="log\LoggerDAL.h" />
+    <ClInclude Include="log\LogImplementation.h" />
     <ClInclude Include="RenderControl.h" />
     <ClInclude Include="render\D3D10Enumeration.h" />
     <ClInclude Include="render\dxerr.h" />
     <ClInclude Include="render\ID3DResource.h" />
     <ClInclude Include="render\RenderSystemDX.h" />
     <ClInclude Include="stdafxf.h" />
+    <ClInclude Include="system\SysInfo.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="utils\AutoBuffer.h" />
+    <ClInclude Include="utils\Converter.h" />
+    <ClInclude Include="utils\ConverterFactory.h" />
+    <ClInclude Include="utils\HttpHeader.h" />
+    <ClInclude Include="utils\RingBuffer.h" />
     <ClInclude Include="utils\Singleton.h" />
     <ClInclude Include="utils\StdString.h" />
+    <ClInclude Include="utils\StringConverter.h" />
     <ClInclude Include="utils\StringUtils.h" />
     <ClInclude Include="utils\Timer.h" />
     <ClInclude Include="utils\URIUtils.h" />
-    <ClInclude Include="utils\URL.h" />
     <ClInclude Include="utils\UrlOptions.h" />
     <ClInclude Include="utils\Variant.h" />
     <ClInclude Include="window\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DLLoader\DynamicDll.cpp" />
+    <ClCompile Include="DLLoader\iLibraryLoader.cpp" />
+    <ClCompile Include="DLLoader\LoaderContainer.cpp" />
+    <ClCompile Include="DLLoader\LoaderFactory.cpp" />
+    <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
+    <ClCompile Include="filesystem\CurlFile.cpp" />
+    <ClCompile Include="filesystem\DllLibCurl.cpp" />
+    <ClCompile Include="filesystem\File.cpp" />
+    <ClCompile Include="filesystem\IFile.cpp" />
     <ClCompile Include="filesystem\SpecialProtocol.cpp" />
+    <ClCompile Include="filesystem\URL.cpp" />
+    <ClCompile Include="log\FilePathUtils.cpp" />
     <ClCompile Include="log\ilog.cpp" />
-    <ClCompile Include="log\LogFile.cpp" />
-    <ClCompile Include="log\Logger.cpp" />
-    <ClCompile Include="log\LoggerDAL.cpp" />
+    <ClCompile Include="log\Log.cpp" />
+    <ClCompile Include="log\LogImplementation.cpp" />
     <ClCompile Include="RenderControl.cpp" />
     <ClCompile Include="render\D3D10Enumeration.cpp" />
     <ClCompile Include="render\dxerr.cpp" />
@@ -117,11 +147,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="system\SysInfo.cpp" />
     <ClCompile Include="Util.cpp" />
+    <ClCompile Include="utils\AutoBuffer.cpp" />
+    <ClCompile Include="utils\Converter.cpp" />
+    <ClCompile Include="utils\ConverterFactory.cpp" />
+    <ClCompile Include="utils\HttpHeader.cpp" />
+    <ClCompile Include="utils\RingBuffer.cpp" />
+    <ClCompile Include="utils\StringConverter.cpp" />
     <ClCompile Include="utils\StringUtils.cpp" />
     <ClCompile Include="utils\Timer.cpp" />
     <ClCompile Include="utils\URIUtils.cpp" />
-    <ClCompile Include="utils\URL.cpp" />
     <ClCompile Include="utils\UrlOptions.cpp" />
     <ClCompile Include="utils\Variant.cpp" />
     <ClCompile Include="window\WindowEvents.cpp" />

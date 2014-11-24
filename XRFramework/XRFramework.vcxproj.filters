@@ -1,13 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="log\ilog.h">
-      <Filter>log</Filter>
-    </ClInclude>
     <ClInclude Include="stdafxf.h" />
-    <ClInclude Include="log\Logger.h">
-      <Filter>log</Filter>
-    </ClInclude>
     <ClInclude Include="log\LogDefines.h">
       <Filter>log</Filter>
     </ClInclude>
@@ -28,23 +22,11 @@
     <ClInclude Include="utils\URIUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\URL.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\UrlOptions.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\Variant.h">
       <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="log\LoggerDAL.h">
-      <Filter>log</Filter>
-    </ClInclude>
-    <ClInclude Include="log\LogFile.h">
-      <Filter>log</Filter>
-    </ClInclude>
-    <ClInclude Include="log\Log.h">
-      <Filter>log</Filter>
     </ClInclude>
     <ClInclude Include="utils\Timer.h">
       <Filter>utils</Filter>
@@ -66,15 +48,76 @@
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="RenderControl.h" />
+    <ClInclude Include="filesystem\CurlFile.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\DllLibCurl.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\IFile.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\IFileTypes.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\RingBuffer.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\URL.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLoader\DllPaths_win32.h">
+      <Filter>dllloader</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLoader\DynamicDll.h">
+      <Filter>dllloader</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLoader\iLibraryLoader.h">
+      <Filter>dllloader</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLoader\LoaderContainer.h">
+      <Filter>dllloader</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLoader\LoaderFactory.h">
+      <Filter>dllloader</Filter>
+    </ClInclude>
+    <ClInclude Include="DLLoader\Win32DllLoader.h">
+      <Filter>dllloader</Filter>
+    </ClInclude>
+    <ClInclude Include="system\SysInfo.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\HttpHeader.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="log\Log.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\LogImplementation.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\FilePathUtils.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\ilog.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\StringConverter.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\ConverterFactory.h" />
+    <ClInclude Include="utils\Converter.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\File.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\AutoBuffer.h">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="log\ilog.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
     <ClCompile Include="stdafxf.cpp" />
-    <ClCompile Include="log\Logger.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
     <ClCompile Include="utils\StringUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -85,20 +128,11 @@
     <ClCompile Include="utils\URIUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="utils\URL.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="utils\UrlOptions.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="utils\Variant.cpp">
       <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="log\LoggerDAL.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
-    <ClCompile Include="log\LogFile.cpp">
-      <Filter>log</Filter>
     </ClCompile>
     <ClCompile Include="utils\Timer.cpp">
       <Filter>utils</Filter>
@@ -119,6 +153,67 @@
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="RenderControl.cpp" />
+    <ClCompile Include="filesystem\CurlFile.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\DllLibCurl.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\IFile.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\RingBuffer.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\URL.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLoader\DynamicDll.cpp">
+      <Filter>dllloader</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLoader\iLibraryLoader.cpp">
+      <Filter>dllloader</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLoader\LoaderContainer.cpp">
+      <Filter>dllloader</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLoader\LoaderFactory.cpp">
+      <Filter>dllloader</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLoader\Win32DllLoader.cpp">
+      <Filter>dllloader</Filter>
+    </ClCompile>
+    <ClCompile Include="system\SysInfo.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\HttpHeader.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="log\Log.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\LogImplementation.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\FilePathUtils.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\ilog.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\StringConverter.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\ConverterFactory.cpp" />
+    <ClCompile Include="utils\Converter.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\File.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\AutoBuffer.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="log">
@@ -135,6 +230,12 @@
     </Filter>
     <Filter Include="render">
       <UniqueIdentifier>{8d02a065-c057-461d-ba8e-9c7d50cb69bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dllloader">
+      <UniqueIdentifier>{91cf96a5-58d9-47d3-8399-0cff70cc6a7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{5af2cf9d-f3e4-437f-8b2f-ce7ee1b37e7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
