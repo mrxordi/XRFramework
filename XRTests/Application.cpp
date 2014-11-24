@@ -1,15 +1,11 @@
 #include "stdafx.h"
-#include <vld.h>
-
 #include "Application.h"
-#include "CurlJsonCConverterLoggerT.h"
-//#include "../XRFramework/log/Logger.h"
-//#include "../XRFramework/log/LoggerDAL.h"
-//#include "../XRFramework/log/LogDefines.h"
+#include "../XRFramework/log/Logger.h"
+#include "../XRFramework/log/LoggerDAL.h"
+#include "../XRFramework/log/LogDefines.h"
 #include "../XRFramework/window/WindowEvents.h"
 #include "../XRFramework/RenderControl.h"
 #include "../XRFramework/render/RenderSystemDX.h"
-
 
 
 template<> Application* Singleton<Application>::ms_Singleton = 0;
@@ -30,16 +26,12 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow) {
 	LoadString(hInstance, IDC_XRTESTS, szWindowClass, 100);
 	MyRegisterClass(hInstance);
 
-	cRenderSystemDX::Create();
-
 	// Perform application initialization:
 	if (!InitInstance(hInstance, nCmdShow))
 	{
 		LOGDEBUG("Failed to initialize window system.");
 		return false;
 	}
-	CurlJsonCharsetConverterLoggerTests();
-
 	return true;
 }
 
@@ -55,7 +47,7 @@ void Application::Run() {
 		g_DXRendererPtr->EndRender();
 
 	}
-	OnDestroy();
+	g_DXRendererPtr->DestroyRenderSystem();
 }
 
 bool Application::AppMsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -87,16 +79,11 @@ bool Application::OnCreate(HWND hWnd) {
 	//window creation
 	RECT rc = { 20, 20, 400, 250 };
 	m_rendercontrol.Initialize(hWnd, hInst, rc);
+	cRenderSystemDX::Create();
 
 	g_DXRendererPtr->InitRenderSystem(&m_rendercontrol);
 
 
-	return true;
-}
-
-bool Application::OnDestroy() {
-	g_DXRendererPtr->DestroyRenderSystem();
-	g_DXRendererPtr->Destroy();
 	return true;
 }
 
