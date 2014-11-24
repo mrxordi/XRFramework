@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
 
+#include "ilog.h"
 #include "LogDefines.h"
 #include "LogImplementation.h"
-#include "utils\Singleton.h"
+
+#include "utils/Singleton.h"
 #include "../XRThreads/CriticalSection.h"
 
 static const char* const levelNames[] =
@@ -56,3 +58,16 @@ private:
 
 #define g_Log CLog::getSingleton()
 #define g_LogPtr CLog::getSingletonPtr()
+
+namespace XR
+{
+	class LogImpl : public XR::ILogger
+	{
+	public:
+		virtual ~LogImpl() {}
+		inline virtual void log(int logLevel, const char* file, const int lineNumber,
+			const char* functionName, _In_z_ const char* message) {
+			g_LogPtr->Log(logLevel, file, lineNumber, functionName, "%s", message);
+		}
+	};
+}

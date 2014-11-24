@@ -1,7 +1,7 @@
 #pragma once
 #include "Event.h"
 #include "ThreadImpl.h"
-#include "XRFramework\log\ilog.h"
+#include "../XRFramework/log/ilog.h"
 #include "SystemClock.h"
 #include <stdint.h>
 
