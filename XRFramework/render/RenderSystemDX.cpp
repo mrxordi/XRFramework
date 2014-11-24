@@ -93,7 +93,7 @@ bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl)
 		&m_pDevice));
 
 	if (!m_pDevice){
-		LOGERR("(!)RenderSystem - D3D Device not created!");
+		LOGERR("RenderSystem - D3D Device not created!");
 		return false;
 	}
 
@@ -136,7 +136,7 @@ bool cRenderSystemDX::DestroyRenderSystem()
 	SAFE_RELEASE(m_pDevice);
 	m_enumeration.Shutdown();
 
-	LOGDEBUG("(-)RenderSystem unloaded.");
+	LOGDEBUG("RenderSystem now is destroyed.");
 	return true;
 }
 
@@ -245,7 +245,7 @@ bool cRenderSystemDX::OnResize()
 	}
 
 	if (!m_pDepthStencilView) {
-		LOGERR("(!) GraphicLayer - No DepthStencilView");
+		LOGERR("Renderer failed to create DepthStencilView.");
 		return false;
 	}
 
