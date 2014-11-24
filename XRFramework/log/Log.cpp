@@ -126,7 +126,7 @@ bool CLog::WriteLogString(int logLevel, const char* file, const int lineNumber, 
 	std::string extraString;
 	std::string sourceFile = StrFileAndExt(file);
 	if (file != NULL && file[0] != 0 && lineNumber > 0) {
-		extraString = StringUtils::Format("[%s(%i)%s]", sourceFile.c_str(), lineNumber, functionName);
+		extraString = StringUtils::Format("[%s(%i)%s] ", sourceFile.c_str(), lineNumber, functionName);
 	}
 	else {
 		extraString = "";
