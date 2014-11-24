@@ -94,6 +94,7 @@
     <ClInclude Include="filesystem\SpecialProtocol.h" />
     <ClInclude Include="filesystem\URL.h" />
     <ClInclude Include="IApplication.h" />
+    <ClInclude Include="LoggerContext.h" />
     <ClInclude Include="log\FilePathUtils.h" />
     <ClInclude Include="log\ilog.h" />
     <ClInclude Include="log\Log.h" />
@@ -111,6 +112,9 @@
     <ClInclude Include="utils\Converter.h" />
     <ClInclude Include="utils\ConverterFactory.h" />
     <ClInclude Include="utils\HttpHeader.h" />
+    <ClInclude Include="utils\IJobCallback.h" />
+    <ClInclude Include="utils\Job.h" />
+    <ClInclude Include="utils\JobManager.h" />
     <ClInclude Include="utils\RingBuffer.h" />
     <ClInclude Include="utils\Singleton.h" />
     <ClInclude Include="utils\StdString.h" />
@@ -134,6 +138,7 @@
     <ClCompile Include="filesystem\IFile.cpp" />
     <ClCompile Include="filesystem\SpecialProtocol.cpp" />
     <ClCompile Include="filesystem\URL.cpp" />
+    <ClCompile Include="LoggerContext.cpp" />
     <ClCompile Include="log\FilePathUtils.cpp" />
     <ClCompile Include="log\ilog.cpp" />
     <ClCompile Include="log\Log.cpp" />
@@ -153,6 +158,8 @@
     <ClCompile Include="utils\Converter.cpp" />
     <ClCompile Include="utils\ConverterFactory.cpp" />
     <ClCompile Include="utils\HttpHeader.cpp" />
+    <ClCompile Include="utils\Job.cpp" />
+    <ClCompile Include="utils\JobManager.cpp" />
     <ClCompile Include="utils\RingBuffer.cpp" />
     <ClCompile Include="utils\StringConverter.cpp" />
     <ClCompile Include="utils\StringUtils.cpp" />
