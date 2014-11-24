@@ -7,7 +7,7 @@ public:
 	CUtil();
 	~CUtil();
 
-	static CStdString ValidatePath(const CStdString &path, bool bFixDoubleSlashes = false); ///< return a validated path, with correct directory separators.
+	static std::string ValidatePath(const std::string &path, bool bFixDoubleSlashes = false); ///< return a validated path, with correct directory separators.
 	static CStdString ResolveExecutablePath();
 	static CStdString ResolveSystemTempPath();
 	static CStdString ResolveUserPath();
