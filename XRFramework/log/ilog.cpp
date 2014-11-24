@@ -3,7 +3,7 @@
 #include "utils/StringUtils.h"
 
 
-void XR::ILogger::Log(LOGLEVEL loglevel, const char* file, const int linenumber, const char* function, const char* message, ...)
+void XR::ILogger::Log(int loglevel, const char* file, const int linenumber, const char* function, const char* message, ...)
 {
 	std::string strData;
 	strData.reserve(16384);
