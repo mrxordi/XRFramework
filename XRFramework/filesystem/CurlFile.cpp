@@ -945,9 +945,14 @@ bool CCurlFile::Open(const CURL& url)
 	}
 
 	char* efurl;
-	if (CURLE_OK == m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL, &efurl) && efurl)
+	if (CURLE_OK == m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL, &efurl) && efurl) {
+		if (m_url != efurl)
+		{
+			std::string redactEfpath = CURL::GetRedacted(efurl);
+			LOGDEBUG("CCurlFile::Open - effective URL: <%s>", redactEfpath.c_str());
+		}
 		m_url = efurl;
-
+	}
 	return true;
 }
 
@@ -1425,7 +1430,16 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
 						if (msg->data.result == CURLE_OK)
 							return true;
 
-						LOGERR("CCurlFile::FillBuffer - Failed: %s(%d)", m_curlInterface.easy_strerror(msg->data.result), msg->data.result);
+						if (msg->data.result == CURLE_HTTP_RETURNED_ERROR)
+						{
+							long httpCode;
+							m_curlInterface.easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &httpCode);
+							LOGERR("CCurlFile::FillBuffer - Failed: HTTP returned error %ld", httpCode);
+						}
+						else
+						{
+							LOGERR("CCurlFile::FillBuffer - Failed: %s(%d)", m_curlInterface.easy_strerror(msg->data.result), msg->data.result);
+						}
 
 						// We need to check the result here as we don't want to retry on every error
 						if ((msg->data.result == CURLE_OPERATION_TIMEDOUT ||
@@ -1617,19 +1631,21 @@ bool CCurlFile::GetMimeType(const CURL &url, CStdString &content, CStdString use
 		return true;
 	}
 	LOGDEBUG("CCurlFile::GetMimeType - %s -> failed", redactUrl.c_str());
-	content = "";
+	content.clear();
 	return false;
 }
 
 bool CCurlFile::GetCookies(const CURL &url, std::string &cookies)
 {
-	std::string cookiesStr;
+	std::string		cookiesStr;
 	struct curl_slist*     curlCookies;
-	CURL_HANDLE*    easyHandle;
-	CURLM*          multiHandle;
+	CURL_HANDLE*			easyHandle;
+	CURLM*					multiHandle;
 
 	// get the cookies list
-	DllLibCurlGlobal::Get().easy_aquire(url.GetProtocol().c_str(), url.GetHostName().c_str(), &easyHandle, &multiHandle);
+	DllLibCurlGlobal::Get().easy_aquire(url.GetProtocol().c_str(),
+		url.GetHostName().c_str(),
+		&easyHandle, &multiHandle);
 	if (CURLE_OK == DllLibCurlGlobal::Get().easy_getinfo(easyHandle, CURLINFO_COOKIELIST, &curlCookies))
 	{
 		// iterate over each cookie and format it into an RFC 2109 formatted Set-Cookie string
