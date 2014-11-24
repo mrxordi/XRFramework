@@ -26,19 +26,22 @@ class CURL;
 class URIUtils
 {
 public:
-  URIUtils(void);
-  virtual ~URIUtils(void);
+	URIUtils(void);
+	virtual ~URIUtils(void);
 
-  static bool IsURL(const std::string& strFile);
-  static bool IsURL(const CStdString& strFile);
+	static bool IsURL(const std::string& strFile);
+	static bool IsURL(const CStdString& strFile);
 
-  static bool IsDOSPath(const std::string& path);
-  static bool IsDOSPath(const CStdString& path);
-  static const CStdString GetFileName(const CStdString& strFileNameAndPath);
+	static bool IsInternetStream(const std::string& path, bool bStrictCheck = false);
+	static bool IsInternetStream(const CURL& url, bool bStrictCheck = false);
 
-  static void AddSlashAtEnd(std::string& strFolder);
-  static bool HasSlashAtEnd(const std::string& strFile, bool checkURL = false);
-  static void RemoveSlashAtEnd(std::string& strFolder);
-  static CStdString AddFileToFolder(const CStdString& strFolder, const CStdString& strFile);
+	static bool IsDOSPath(const std::string& path);
+	static bool IsDOSPath(const CStdString& path);
+	static const CStdString GetFileName(const CStdString& strFileNameAndPath);
+
+	static void AddSlashAtEnd(std::string& strFolder);
+	static bool HasSlashAtEnd(const std::string& strFile, bool checkURL = false);
+	static void RemoveSlashAtEnd(std::string& strFolder);
+	static CStdString AddFileToFolder(const CStdString& strFolder, const CStdString& strFile);
 };
 

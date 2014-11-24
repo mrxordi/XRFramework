@@ -1,6 +1,6 @@
 #include "stdafxf.h"
 #include "URIUtils.h"
-#include "URL.h"
+#include "filesystem/URL.h"
 #include "StringUtils.h"
 
 
@@ -151,4 +151,39 @@ CStdString URIUtils::AddFileToFolder(const CStdString& strFolder,
 		StringUtils::Replace(strResult, '/', '\\');
 
 	return strResult;
+}
+
+bool URIUtils::IsInternetStream(const std::string &path, bool bStrictCheck /* = false */)
+{
+	const CURL pathToUrl(path);
+	return IsInternetStream(pathToUrl, bStrictCheck);
+}
+
+bool URIUtils::IsInternetStream(const CURL& url, bool bStrictCheck /* = false */)
+{
+	if (url.GetProtocol().empty())
+		return false;
+
+	// there's nothing to stop internet streams from being stacked
+	if (url.IsProtocol("stack"))
+		return false;
+
+	// Special case these
+	if (url.IsProtocol("ftp") || url.IsProtocol("ftps") ||
+		url.IsProtocol("dav") || url.IsProtocol("davs") ||
+		url.IsProtocol("sftp"))
+		return bStrictCheck;
+
+	std::string protocol = url.GetTranslatedProtocol();
+	if (CURL::IsProtocolEqual(protocol, "http") || CURL::IsProtocolEqual(protocol, "https") ||
+		CURL::IsProtocolEqual(protocol, "tcp") || CURL::IsProtocolEqual(protocol, "udp") ||
+		CURL::IsProtocolEqual(protocol, "rtp") || CURL::IsProtocolEqual(protocol, "sdp") ||
+		CURL::IsProtocolEqual(protocol, "mms") || CURL::IsProtocolEqual(protocol, "mmst") ||
+		CURL::IsProtocolEqual(protocol, "mmsh") || CURL::IsProtocolEqual(protocol, "rtsp") ||
+		CURL::IsProtocolEqual(protocol, "rtmp") || CURL::IsProtocolEqual(protocol, "rtmpt") ||
+		CURL::IsProtocolEqual(protocol, "rtmpe") || CURL::IsProtocolEqual(protocol, "rtmpte") ||
+		CURL::IsProtocolEqual(protocol, "rtmps"))
+		return true;
+
+	return false;
 }

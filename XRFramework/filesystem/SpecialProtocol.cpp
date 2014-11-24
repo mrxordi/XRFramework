@@ -2,7 +2,7 @@
 #include "SpecialProtocol.h"
 #include "Util.h"
 #include "log/Log.h"
-#include "utils/URL.h"
+#include "filesystem/URL.h"
 #include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
 
@@ -40,21 +40,21 @@ bool CSpecialProtocol::ComparePath(const CStdString &path1, const CStdString &pa
 	return TranslatePath(path1) == TranslatePath(path2);
 }
 
-CStdString CSpecialProtocol::TranslatePath(const CStdString &path)
+std::string CSpecialProtocol::TranslatePath(const std::string &path)
 {
 	CURL url(path);
 	// check for special-protocol, if not, return
-	if (!url.GetProtocol().Equals("special"))
+	if (url.GetProtocol() != "special")
 	{
 		return path;
 	}
 	return TranslatePath(url);
 }
 
-CStdString CSpecialProtocol::TranslatePath(const CURL &url)
+std::string CSpecialProtocol::TranslatePath(const CURL &url)
 {
 	// check for special-protocol, if not, return
-	if (!url.GetProtocol().Equals("special"))
+	if (!(url.GetProtocol() == "special"))
 	{
 		return url.Get();
 	}
