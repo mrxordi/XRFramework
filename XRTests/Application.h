@@ -2,6 +2,7 @@
 #include "../XRFramework/utils/Singleton.h"
 #include "../XRFramework/IApplication.h"
 #include "../XRFramework/RenderControl.h"
+#include <string>
 
 #include "Resource.h"
 
@@ -13,13 +14,17 @@ public:
 
 	bool Initialize(HINSTANCE hInstance, int nCmdShow);
 	void Run();
-	void Stop() {
-		m_bRunning = false;
-	}
+	void Stop() { m_bRunning = false; }
 
 	bool AppMsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	bool OnCreate(HWND hWnd);
+	bool OnDestroy();
+
+	static Application& Create() { return *new Application; }
+	static void	Destroy() { delete Application::getSingletonPtr(); }
+
+	//std::string UtfTo1250(std::string& utfstring);
 
 private:
 	// Forward declarations of functions included in this code module:
