@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "XRTests.h"
 #include "Application.h"
+#include "LoggerContext.h"
 #include "DLLoader/LoaderFactory.h"
 #include "filesystem/DllLibCurl.h"
 #include "../XRFramework/filesystem/SpecialProtocol.h"
@@ -18,7 +19,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-
+	Context context;
 
 
 	CStdString appPath, tempPath, docPath, homePath;
