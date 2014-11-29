@@ -12,7 +12,10 @@ public:
 	static std::string ResolveSystemTempPath();
 	static std::string ResolveUserPath();
 	static std::string ResolveDocPath();
-	static bool		  GetFocussedProcess(std::string &strProcessFile);
+
+	static bool IsPicture(const CStdString& strFile);
+
+	static bool GetFocussedProcess(std::string &strProcessFile);
 private:
 
 };

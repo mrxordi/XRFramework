@@ -130,6 +130,12 @@ std::string CUtil::ResolveDocPath()
 	return strDocPath;
 }
 
+bool CUtil::IsPicture(const CStdString& strFile)
+{
+	return URIUtils::HasExtension(strFile,
+		std::string(URIUtils::pictureExtensions));
+}
+
 // Retrieve the filename of the process that currently has the focus.
 // Typically this will be some process using the system tray grabbing
 // the focus and causing XBMC to minimise. Logging the offending
@@ -188,5 +194,3 @@ bool CUtil::GetFocussedProcess(std::string &strProcessFile)
 
 	return true;
 }
-
-
