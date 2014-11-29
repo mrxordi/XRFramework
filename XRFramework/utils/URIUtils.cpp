@@ -2,7 +2,12 @@
 #include "URIUtils.h"
 #include "filesystem/URL.h"
 #include "StringUtils.h"
+#include <vector>
 
+const char* URIUtils::pictureExtensions = { ".png|.jpg|.jpeg|.bmp|.gif|.ico|.tif|.tiff|.tga|.pcx|.cbz|.zip|.cbr|.rar|.dng|.nef|.cr2|.crw|.orf|.arw|.erf|.3fr|.dcr|.x3f|.mef|.raf|.mrw|.pef|.sr2|.rss" };
+const char* URIUtils::musicExtensions = { ".nsv|.m4a|.flac|.aac|.strm|.pls|.rm|.rma|.mpa|.wav|.wma|.ogg|.mp3|.mp2|.m3u|.mod|.amf|.669|.dmf|.dsm|.far|.gdm|.imf|.it|.m15|.med|.okt|.s3m|.stm|.sfx|.ult|.uni|.xm|.sid|.ac3|.dts|.cue|.aif|.aiff|.wpl|.ape|.mac|.mpc|.mp+|.mpp|.shn|.zip|.rar|.wv|.nsf|.spc|.gym|.adx|.dsp|.adp|.ymf|.ast|.afc|.hps|.xsp|.xwav|.waa|.wvs|.wam|.gcm|.idsp|.mpdsp|.mss|.spt|.rsd|.mid|.kar|.sap|.cmc|.cmr|.dmc|.mpt|.mpd|.rmt|.tmc|.tm8|.tm2|.oga|.url|.pxml|.tta|.rss|.cm3|.cms|.dlt|.brstm|.wtv|.mka|.tak|.opus|.dff|.dsf|.sidstream|.oggstream|.nsfstream|.asapstream|.cdda" };
+const char* URIUtils::videoExtensions = { ".m4v|.3g2|.3gp|.nsv|.tp|.ts|.ty|.strm|.pls|.rm|.rmvb|.m3u|.m3u8|.ifo|.mov|.qt|.divx|.xvid|.bivx|.vob|.nrg|.img|.iso|.pva|.wmv|.asf|.asx|.ogm|.m2v|.avi|.bin|.dat|.mpg|.mpeg|.mp4|.mkv|.avc|.vp3|.svq3|.nuv|.viv|.dv|.fli|.flv|.rar|.001|.wpl|.zip|.vdr|.dvr-ms|.xsp|.mts|.m2t|.m2ts|.evo|.ogv|.sdp|.avs|.rec|.url|.pxml|.vc1|.h264|.rcv|.rss|.mpls|.webm|.bdmv|.wtv|.pvr|.disc" };
+const char* URIUtils::subtitlesExtensions = { ".utf|.utf8|.utf-8|.sub|.srt|.smi|.rt|.txt|.ssa|.text|.ssa|.aqt|.jss|.ass|.idx|.ifo|.rar|.zip" };
 
 URIUtils::URIUtils(void)
 {
@@ -12,7 +17,7 @@ URIUtils::~URIUtils(void)
 {
 }
 
-const CStdString URIUtils::GetFileName(const CStdString& strFileNameAndPath)
+const std::string URIUtils::GetFileName(const std::string& strFileNameAndPath)
 {
 	if (IsURL(strFileNameAndPath))
 	{
@@ -23,6 +28,11 @@ const CStdString URIUtils::GetFileName(const CStdString& strFileNameAndPath)
 	/* find the last slash */
 	const size_t slash = strFileNameAndPath.find_last_of("/\\");
 	return strFileNameAndPath.substr(slash + 1);
+}
+
+const std::string URIUtils::GetFileName(const CURL& url)
+{
+	return GetFileName(url.GetFileName());
 }
 
 void URIUtils::AddSlashAtEnd(std::string& strFolder)
@@ -186,4 +196,220 @@ bool URIUtils::IsInternetStream(const CURL& url, bool bStrictCheck /* = false */
 		return true;
 
 	return false;
+}
+
+/* returns filename extension including period of filename */
+std::string URIUtils::GetExtension(const CURL& url)
+{
+	return URIUtils::GetExtension(url.GetFileName());
+}
+
+std::string URIUtils::GetExtension(const std::string& strFileName)
+{
+	if (IsURL(strFileName))
+	{
+		CURL url(strFileName);
+		return GetExtension(url.GetFileName());
+	}
+
+	size_t period = strFileName.find_last_of("./\\");
+	if (period == std::string::npos || strFileName[period] != '.')
+		return CStdString();
+
+	return strFileName.substr(period);
+}
+
+bool URIUtils::HasExtension(const std::string& strFileName)
+{
+	if (IsURL(strFileName))
+	{
+		CURL url(strFileName);
+		return HasExtension(url.GetFileName());
+	}
+
+	size_t iPeriod = strFileName.find_last_of("./\\");
+	return iPeriod != std::string::npos && strFileName[iPeriod] == '.';
+}
+
+bool URIUtils::HasExtension(const CURL& url, const std::string& strExtensions)
+{
+	return HasExtension(url.GetFileName(), strExtensions);
+}
+
+bool URIUtils::HasExtension(const std::string& strFileName, const std::string& strExtensions)
+{
+	if (IsURL(strFileName))
+	{
+		CURL url(strFileName);
+		return HasExtension(url.GetFileName(), strExtensions);
+	}
+
+	// Search backwards so that '.' can be used as a search terminator.
+	std::string::const_reverse_iterator itExtensions = strExtensions.rbegin();
+	while (itExtensions != strExtensions.rend())
+	{
+		// Iterate backwards over strFileName untill we hit a '.' or a mismatch
+		for (std::string::const_reverse_iterator itFileName = strFileName.rbegin();
+			itFileName != strFileName.rend() && itExtensions != strExtensions.rend() &&
+			tolower(*itFileName) == *itExtensions;
+		++itFileName, ++itExtensions)
+		{
+			if (*itExtensions == '.')
+				return true; // Match
+		}
+
+		// No match. Look for more extensions to try.
+		while (itExtensions != strExtensions.rend() && *itExtensions != '|')
+			++itExtensions;
+
+		while (itExtensions != strExtensions.rend() && *itExtensions == '|')
+			++itExtensions;
+	}
+
+	return false;
+}
+
+void URIUtils::RemoveExtension(std::string& strFileName)
+{
+	if (IsURL(strFileName))
+	{
+		CURL url(strFileName);
+		strFileName = url.GetFileName();
+		RemoveExtension(strFileName);
+		url.SetFileName(strFileName);
+		strFileName = url.Get();
+		return;
+	}
+
+	size_t period = strFileName.find_last_of("./\\");
+	if (period != std::string::npos && strFileName[period] == '.')
+	{
+		std::string strExtension = strFileName.substr(period);
+		StringUtils::ToLower(strExtension);
+		strExtension += "|";
+
+		std::string strFileMask;
+		strFileMask = pictureExtensions;
+		strFileMask += "|";
+		strFileMask += musicExtensions;
+		strFileMask += "|";
+		strFileMask += videoExtensions;
+		strFileMask += "|";
+		strFileMask += subtitlesExtensions;
+#if defined(TARGET_DARWIN)
+		strFileMask += "|.py|.xml|.milk|.xpr|.xbt|.cdg|.app|.applescript|.workflow";
+#else
+		strFileMask += "|.py|.xml|.milk|.xpr|.xbt|.cdg";
+#endif
+		strFileMask += "|";
+
+		if (strFileMask.find(strExtension) != std::string::npos)
+			strFileName.erase(period);
+	}
+}
+
+std::string URIUtils::ReplaceExtension(const std::string& strFile,
+	const std::string& strNewExtension)
+{
+	using namespace std;
+	if (IsURL(strFile))
+	{
+		CURL url(strFile);
+		url.SetFileName(ReplaceExtension(url.GetFileName(), strNewExtension));
+		return url.Get();
+	}
+
+	string strChangedFile;
+	string strExtension = GetExtension(strFile);
+	if (strExtension.size())
+	{
+		strChangedFile = strFile.substr(0, strFile.size() - strExtension.size());
+		strChangedFile += strNewExtension;
+	}
+	else
+	{
+		strChangedFile = strFile;
+		strChangedFile += strNewExtension;
+	}
+	return strChangedFile;
+}
+
+std::string URIUtils::FixSlashesAndDups(const std::string& path, const char slashCharacter /* = '/' */, const size_t startFrom /*= 0*/)
+{
+	const size_t len = path.length();
+	if (startFrom >= len)
+		return path;
+
+	std::string result(path, 0, startFrom);
+	result.reserve(len);
+
+	const char* const str = path.c_str();
+	size_t pos = startFrom;
+	do
+	{
+		if (str[pos] == '\\' || str[pos] == '/')
+		{
+			result.push_back(slashCharacter);  // append one slash
+			pos++;
+			// skip any following slashes
+			while (str[pos] == '\\' || str[pos] == '/') // str is null-terminated, no need to check for buffer overrun
+				pos++;
+		}
+		else
+			result.push_back(str[pos++]);   // append current char and advance pos to next char
+
+	} while (pos < len);
+
+	return result;
+}
+
+std::string URIUtils::CanonicalizePath(const std::string& path, const char slashCharacter /*= '\\'*/)
+{
+	using namespace std;
+	assert(slashCharacter == '\\' || slashCharacter == '/');
+
+	if (path.empty())
+		return path;
+
+	const std::string slashStr(1, slashCharacter);
+	vector<std::string> pathVec, resultVec;
+	StringUtils::Tokenize(path, pathVec, slashStr);
+
+	for (vector<std::string>::const_iterator it = pathVec.begin(); it != pathVec.end(); ++it)
+	{
+		if (*it == ".")
+		{ /* skip - do nothing */
+		}
+		else if (*it == ".." && !resultVec.empty() && resultVec.back() != "..")
+			resultVec.pop_back();
+		else
+			resultVec.push_back(*it);
+	}
+
+	std::string result;
+	if (path[0] == slashCharacter)
+		result.push_back(slashCharacter); // add slash at the begin
+
+	result += StringUtils::Join(resultVec, slashStr);
+
+	if (path[path.length() - 1] == slashCharacter  && !result.empty() && result[result.length() - 1] != slashCharacter)
+		result.push_back(slashCharacter); // add slash at the end if result isn't empty and result isn't "/"
+
+	return result;
+}
+
+std::string URIUtils::GetDirectory(const std::string &strFilePath)
+{
+	// Will from a full filename return the directory the file resides in.
+	// Keeps the final slash at end and possible |option=foo options.
+
+	size_t iPosSlash = strFilePath.find_last_of("/\\");
+	if (iPosSlash == std::string::npos)
+		return ""; // No slash, so no path (ignore any options)
+
+	size_t iPosBar = strFilePath.rfind('|');
+	if (iPosBar == std::string::npos)
+		return strFilePath.substr(0, iPosSlash + 1); // Only path
+
+	return strFilePath.substr(0, iPosSlash + 1) + strFilePath.substr(iPosBar); // Path + options
 }
