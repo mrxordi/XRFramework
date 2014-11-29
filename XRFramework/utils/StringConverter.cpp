@@ -1,4 +1,5 @@
 #include "stdafxf.h"
+#include "WIN32Utils.h"
 #include "StringConverter.h"
 #include "Converter.h"
 #include "ConverterFactory.h"
@@ -37,6 +38,81 @@ bool StringConverter::Utf8ToWin1250(const std::string& utf8StringSrc, std::strin
 
 bool StringConverter::WToWin1250(const std::wstring& wStringSrc, std::string& win1250StringDst, bool failOnBadChar) {
 	return Convert(WCHAR_CHARSET, "WINDOWS-1250", wStringSrc, win1250StringDst, failOnBadChar);
+}
+
+
+std::wstring StringConverter::ConvertPathToWin32Form(const std::string& pathUtf8)
+{
+	std::wstring result;
+	if (pathUtf8.empty())
+		return result;
+
+	bool convertResult;
+
+	if (pathUtf8.compare(0, 2, "\\\\", 2) != 0) // pathUtf8 don't start from "\\"
+	{ // assume local file path in form 'C:\Folder\File.ext'
+		std::string formedPath("\\\\?\\"); // insert "\\?\" prefix
+		formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8, '\\'), '\\'); // fix duplicated and forward slashes, resolve relative path
+		convertResult = StringConverter::utf8ToW(formedPath, result, true);
+	}
+	else if (pathUtf8.compare(0, 8, "\\\\?\\UNC\\", 8) == 0) // pathUtf8 starts from "\\?\UNC\"
+	{
+		std::string formedPath("\\\\?\\UNC"); // start from "\\?\UNC" prefix
+		formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8.substr(7), '\\'), '\\'); // fix duplicated and forward slashes, resolve relative path, don't touch "\\?\UNC" prefix,
+		convertResult = StringConverter::utf8ToW(formedPath, result, true);
+	}
+	else if (pathUtf8.compare(0, 4, "\\\\?\\", 4) == 0) // pathUtf8 starts from "\\?\", but it's not UNC path
+	{
+		std::string formedPath("\\\\?"); // start from "\\?" prefix
+		formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8.substr(3), '\\'), '\\'); // fix duplicated and forward slashes, resolve relative path, don't touch "\\?" prefix,
+		convertResult = StringConverter::utf8ToW(formedPath, result, true);
+	}
+	else // pathUtf8 starts from "\\", but not from "\\?\UNC\"
+	{ // assume UNC path in form '\\server\share\folder\file.ext'
+		std::string formedPath("\\\\?\\UNC"); // append "\\?\UNC" prefix
+		formedPath += URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(pathUtf8), '\\'); // fix duplicated and forward slashes, resolve relative path, transform "\\" prefix to single "\"
+		convertResult = StringConverter::utf8ToW(formedPath, result, true);
+	}
+
+	if (!convertResult)
+	{
+		LOGERR("Error converting path \"%s\" to Win32 wide string!", pathUtf8.c_str());
+		return L"";
+	}
+
+	return result;
+}
+
+std::wstring StringConverter::ConvertPathToWin32Form(const CURL& url)
+{
+	assert(url.GetProtocol().empty() || url.IsProtocol("smb"));
+
+	if (url.GetFileName().empty())
+		return std::wstring(); // empty string
+
+	if (url.GetProtocol().empty())
+	{
+		std::wstring result;
+		if (StringConverter::utf8ToW("\\\\?\\" +
+			URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(url.GetFileName(), '\\'), '\\'), result, true))
+			return result;
+	}
+	else if (url.IsProtocol("smb"))
+	{
+		if (url.GetHostName().empty())
+			return std::wstring(); // empty string
+
+		std::wstring result;
+		if (StringConverter::utf8ToW("\\\\?\\UNC\\" +
+			URIUtils::CanonicalizePath(URIUtils::FixSlashesAndDups(url.GetHostName() + '\\' + url.GetFileName(), '\\'), '\\'),
+			result, true))
+			return result;
+	}
+	else
+		return std::wstring(); // unsupported protocol, return empty string
+
+	LOGERR("Error converting path \"%s\" to Win32 form", url.Get().c_str());
+	return std::wstring(); // empty string
 }
 
 template<class INPUT, class OUTPUT>

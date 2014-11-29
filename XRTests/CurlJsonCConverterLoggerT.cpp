@@ -5,9 +5,11 @@
 
 #include "../XRFramework/filesystem/CurlFile.h"
 #include "../XRFramework/filesystem/URL.h"
+#include "../XRFramework/filesystem/SpecialProtocol.h"
 #include "../XRFramework/utils/StringUtils.h"
 #include "../XRFramework/utils/StringConverter.h"
 #include "../XRFramework/log/Log.h"
+#include "../XRFramework/filesystem/Win32File.h"
 
 
 void CurlJsonCharsetConverterLoggerTests(void) {
@@ -55,4 +57,22 @@ void CurlJsonCharsetConverterLoggerTests(void) {
 
 
 	StringConverter::utf8ToW(utfString, wStrConv, false);
+
+
+	LOGINFO("*----------------------------------------------------------------------------*");
+	CURL filenameurl(CSpecialProtocol::TranslatePath("special://app/test.txt"));
+
+	CWin32File winfile;
+	LOGDEBUG("File test to open %s.", winfile.Exists(filenameurl) ? "exist" : "doesn't exist");
+	LOGDEBUG("Opening file for write - %s.", winfile.OpenForWrite(filenameurl) ? "succes" : "failed");
+	LOGDEBUG("File has %lld bytes.", winfile.GetLength());
+	winfile.Seek(0, FILE_END);
+	const char* texttowrite = { "Text addition. \n" }; 
+	LOGDEBUG("File has %i bytes.", winfile.Write(texttowrite, strlen(texttowrite)*sizeof(char)));
+	LOGDEBUG("File has %lld bytes.", winfile.GetLength());
+	LOGDEBUG("File closing.");
+	winfile.Close();
+	LOGINFO("*----------------------------------------------------------------------------*");
+
+
 }

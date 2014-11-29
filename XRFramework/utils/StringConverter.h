@@ -11,6 +11,8 @@
 //#pragma comment(lib, "libiconv.lib")
 #endif
 
+class CURL;
+
 class StringConverter
 {
 public:
@@ -23,6 +25,9 @@ public:
 	static bool Win1250ToW(const std::string& win1250StringSrc, std::wstring& wStringDst, bool failOnBadChar = false);
 	static bool Utf8ToWin1250(const std::string& win1250StringSrc, std::string& utf8StringDst, bool failOnBadChar = false);
 	static bool WToWin1250(const std::wstring& win1250StringSrc, std::string& wStringDst, bool failOnBadChar = false);
+
+	static std::wstring ConvertPathToWin32Form(const std::string& pathUtf8);
+	static std::wstring ConvertPathToWin32Form(const CURL& url);
 
 	template<class INPUT, class OUTPUT>
 	static bool Convert(const std::string& sourceCharset, const std::string& targetCharset, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar = false);
