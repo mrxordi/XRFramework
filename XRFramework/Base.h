@@ -15,12 +15,20 @@
 #define GET_B(color)            ((color >>  0) & 0xFF)
 
 #ifndef HR
-#define HR(x) {                                            \
+#define HR(x) {                                             \
 	HRESULT hr = (x);                                      \
 	if(FAILED(hr))                                         \
-		{												\
+																			{												\
 		LOGERR("%X - %s", hr, DXGetErrorString(hr));     \
 		DXTraceW(__FILEW__, (DWORD)__LINE__, hr, L#x, true); \
-		}
 
 #endif
+
+#if !defined(_SSIZE_T_DEFINED) && !defined(HAVE_SSIZE_T)
+typedef intptr_t      ssize_t;
+#define _SSIZE_T_DEFINED
+#endif // !_SSIZE_T_DEFINED
+#ifndef SSIZE_MAX
+#define SSIZE_MAX INTPTR_MAX
+#endif // !SSIZE_MAX
+#define snprintf _snprintf
