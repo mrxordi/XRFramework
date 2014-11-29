@@ -18,10 +18,11 @@
 #define HR(x) {                                             \
 	HRESULT hr = (x);                                      \
 	if(FAILED(hr))                                         \
-																			{												\
-		LOGERR("%X - %s", hr, DXGetErrorString(hr));     \
+				{											\
+		LOGERR("%X - %s", hr, DXGetErrorString(hr));		\
 		DXTraceW(__FILEW__, (DWORD)__LINE__, hr, L#x, true); \
-
+				}									\
+		}
 #endif
 
 #if !defined(_SSIZE_T_DEFINED) && !defined(HAVE_SSIZE_T)
