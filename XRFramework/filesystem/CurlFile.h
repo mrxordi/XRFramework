@@ -52,10 +52,10 @@ public:
 	virtual int  Stat(const CURL& url, struct __stat64* buffer);
 	virtual void Close();
 	virtual bool ReadString(char *szLine, int iLineLength)     { return m_state->ReadString(szLine, iLineLength); }
-	virtual unsigned int Read(void* lpBuf, int64_t uiBufSize)  { return m_state->Read(lpBuf, uiBufSize); }
+	virtual ssize_t Read(void* lpBuf, int64_t uiBufSize)  { return m_state->Read(lpBuf, uiBufSize); }
 	virtual int Write(const void* lpBuf, int64_t uiBufSize);
 	virtual CStdString GetMimeType()                           { return m_state->m_httpheader.GetMimeType(); }
-	virtual CStdString GetContent()                            { return GetMimeType(); }
+	virtual std::string GetContent()                            { return GetMimeType(); }
 	virtual int IoControl(EIoControl request, void* param);
 	virtual std::string GetContentCharset(void)                { return GetServerReportedCharset(); }
 

@@ -31,6 +31,7 @@
 
 #include "utils/StdString.h"
 #include "IFileTypes.h"
+#include "Base.h"
 
 class CURL;
 
@@ -49,8 +50,8 @@ public:
 	virtual int Stat(const CURL& url, struct __stat64* buffer) = 0;
 	virtual int Stat(struct __stat64* buffer);
 
-	virtual unsigned int Read(void* lpBuf, int64_t uiBufSize) = 0;
-	virtual int Write(const void* lpBuf, int64_t uiBufSize) { return -1; };
+	virtual ssize_t Read(void* lpBuf, int64_t uiBufSize) = 0;
+	virtual ssize_t Write(const void* lpBuf, int64_t uiBufSize) { return -1; };
 
 	virtual bool ReadString(char *szLine, int iLineLength);
 	virtual int64_t Seek(int64_t iFilePosition, int iWhence = SEEK_SET) = 0;
@@ -77,7 +78,7 @@ public:
 
 	virtual int IoControl(EIoControl request, void* param) { return -1; }
 
-	virtual CStdString GetContent()                            { return "application/octet-stream"; }
+	virtual std::string GetContent()                            { return "application/octet-stream"; }
 	virtual std::string GetContentCharset(void)                { return ""; }
 };
 
