@@ -8,7 +8,6 @@
     <ClInclude Include="utils\Singleton.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="Base.h" />
     <ClInclude Include="utils\StdString.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -105,7 +104,6 @@
     <ClInclude Include="utils\StringConverter.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\ConverterFactory.h" />
     <ClInclude Include="utils\Converter.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -115,12 +113,32 @@
     <ClInclude Include="utils\AutoBuffer.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\JobManager.h" />
-    <ClInclude Include="utils\Job.h" />
     <ClInclude Include="utils\IJobCallback.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="LoggerContext.h" />
+    <ClInclude Include="utils\ConverterFactory.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\DateTime.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\AutoPtrHandle.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Job.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\JobManager.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\Win32File.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\WIN32Utils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -210,7 +228,6 @@
     <ClCompile Include="utils\StringConverter.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="utils\ConverterFactory.cpp" />
     <ClCompile Include="utils\Converter.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -220,9 +237,28 @@
     <ClCompile Include="utils\AutoBuffer.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="utils\JobManager.cpp" />
-    <ClCompile Include="utils\Job.cpp" />
     <ClCompile Include="LoggerContext.cpp" />
+    <ClCompile Include="utils\ConverterFactory.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\DateTime.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\AutoPtrHandle.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Job.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\JobManager.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\Win32File.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\WIN32Utils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="log">

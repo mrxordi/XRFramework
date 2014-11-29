@@ -93,6 +93,7 @@
     <ClInclude Include="filesystem\IFileTypes.h" />
     <ClInclude Include="filesystem\SpecialProtocol.h" />
     <ClInclude Include="filesystem\URL.h" />
+    <ClInclude Include="filesystem\Win32File.h" />
     <ClInclude Include="IApplication.h" />
     <ClInclude Include="LoggerContext.h" />
     <ClInclude Include="log\FilePathUtils.h" />
@@ -109,8 +110,10 @@
     <ClInclude Include="system\SysInfo.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="utils\AutoBuffer.h" />
+    <ClInclude Include="utils\AutoPtrHandle.h" />
     <ClInclude Include="utils\Converter.h" />
     <ClInclude Include="utils\ConverterFactory.h" />
+    <ClInclude Include="utils\DateTime.h" />
     <ClInclude Include="utils\HttpHeader.h" />
     <ClInclude Include="utils\IJobCallback.h" />
     <ClInclude Include="utils\Job.h" />
@@ -124,6 +127,7 @@
     <ClInclude Include="utils\URIUtils.h" />
     <ClInclude Include="utils\UrlOptions.h" />
     <ClInclude Include="utils\Variant.h" />
+    <ClInclude Include="utils\WIN32Utils.h" />
     <ClInclude Include="window\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +142,7 @@
     <ClCompile Include="filesystem\IFile.cpp" />
     <ClCompile Include="filesystem\SpecialProtocol.cpp" />
     <ClCompile Include="filesystem\URL.cpp" />
+    <ClCompile Include="filesystem\Win32File.cpp" />
     <ClCompile Include="LoggerContext.cpp" />
     <ClCompile Include="log\FilePathUtils.cpp" />
     <ClCompile Include="log\ilog.cpp" />
@@ -155,8 +160,10 @@
     <ClCompile Include="system\SysInfo.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="utils\AutoBuffer.cpp" />
+    <ClCompile Include="utils\AutoPtrHandle.cpp" />
     <ClCompile Include="utils\Converter.cpp" />
     <ClCompile Include="utils\ConverterFactory.cpp" />
+    <ClCompile Include="utils\DateTime.cpp" />
     <ClCompile Include="utils\HttpHeader.cpp" />
     <ClCompile Include="utils\Job.cpp" />
     <ClCompile Include="utils\JobManager.cpp" />
@@ -167,6 +174,7 @@
     <ClCompile Include="utils\URIUtils.cpp" />
     <ClCompile Include="utils\UrlOptions.cpp" />
     <ClCompile Include="utils\Variant.cpp" />
+    <ClCompile Include="utils\WIN32Utils.cpp" />
     <ClCompile Include="window\WindowEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
