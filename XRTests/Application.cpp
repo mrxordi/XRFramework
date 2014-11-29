@@ -38,6 +38,8 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow) {
 		LOGDEBUG("Failed to initialize window system.");
 		return false;
 	}
+
+
 	CurlJsonCharsetConverterLoggerTests();
 
 	return true;
