@@ -12,6 +12,7 @@
 #define TARGET_WINDOWS
 
 #include "log\Log.h"
+#include <Windows.h>
 
 
 // TODO: reference additional headers your program requires here
