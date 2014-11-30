@@ -13,6 +13,8 @@
 
 #include "log\Log.h"
 #include <Windows.h>
+#define BOOST_LIB_TOOLSET "vc120"
+
 
 
 // TODO: reference additional headers your program requires here
