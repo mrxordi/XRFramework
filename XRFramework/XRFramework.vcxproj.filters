@@ -107,9 +107,6 @@
     <ClInclude Include="utils\Converter.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\File.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="utils\AutoBuffer.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -139,6 +136,31 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="Base.h" />
+    <ClInclude Include="window\StatusBar.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\File.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\FileItem.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\IDirectory.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\MimeTypes.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\Directory.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\SpecialProtocolDirectory.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\Win32Directory.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\FileOperationJob.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -259,6 +281,29 @@
     <ClCompile Include="utils\WIN32Utils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="window\StatusBar.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\FileItem.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\IDirectory.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\MimeTypes.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\Directory.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\Win32Directory.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\FileOperationJob.cpp" />
+    <ClCompile Include="IApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="log">

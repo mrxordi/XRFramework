@@ -87,12 +87,19 @@
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
+    <ClInclude Include="filesystem\Directory.h" />
     <ClInclude Include="filesystem\DllLibCurl.h" />
     <ClInclude Include="filesystem\File.h" />
+    <ClInclude Include="filesystem\FileItem.h" />
+    <ClInclude Include="filesystem\FileOperationJob.h" />
+    <ClInclude Include="filesystem\IDirectory.h" />
     <ClInclude Include="filesystem\IFile.h" />
     <ClInclude Include="filesystem\IFileTypes.h" />
+    <ClInclude Include="filesystem\MimeTypes.h" />
     <ClInclude Include="filesystem\SpecialProtocol.h" />
+    <ClInclude Include="filesystem\SpecialProtocolDirectory.h" />
     <ClInclude Include="filesystem\URL.h" />
+    <ClInclude Include="filesystem\Win32Directory.h" />
     <ClInclude Include="filesystem\Win32File.h" />
     <ClInclude Include="IApplication.h" />
     <ClInclude Include="LoggerContext.h" />
@@ -128,6 +135,7 @@
     <ClInclude Include="utils\UrlOptions.h" />
     <ClInclude Include="utils\Variant.h" />
     <ClInclude Include="utils\WIN32Utils.h" />
+    <ClInclude Include="window\StatusBar.h" />
     <ClInclude Include="window\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
@@ -137,12 +145,20 @@
     <ClCompile Include="DLLoader\LoaderFactory.cpp" />
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp" />
+    <ClCompile Include="filesystem\Directory.cpp" />
     <ClCompile Include="filesystem\DllLibCurl.cpp" />
     <ClCompile Include="filesystem\File.cpp" />
+    <ClCompile Include="filesystem\FileItem.cpp" />
+    <ClCompile Include="filesystem\FileOperationJob.cpp" />
+    <ClCompile Include="filesystem\IDirectory.cpp" />
     <ClCompile Include="filesystem\IFile.cpp" />
+    <ClCompile Include="filesystem\MimeTypes.cpp" />
     <ClCompile Include="filesystem\SpecialProtocol.cpp" />
+    <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp" />
     <ClCompile Include="filesystem\URL.cpp" />
+    <ClCompile Include="filesystem\Win32Directory.cpp" />
     <ClCompile Include="filesystem\Win32File.cpp" />
+    <ClCompile Include="IApplication.cpp" />
     <ClCompile Include="LoggerContext.cpp" />
     <ClCompile Include="log\FilePathUtils.cpp" />
     <ClCompile Include="log\ilog.cpp" />
@@ -175,6 +191,7 @@
     <ClCompile Include="utils\UrlOptions.cpp" />
     <ClCompile Include="utils\Variant.cpp" />
     <ClCompile Include="utils\WIN32Utils.cpp" />
+    <ClCompile Include="window\StatusBar.cpp" />
     <ClCompile Include="window\WindowEvents.cpp" />
   </ItemGroup>
   <ItemGroup>

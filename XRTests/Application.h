@@ -2,15 +2,17 @@
 #include "../XRFramework/utils/Singleton.h"
 #include "../XRFramework/IApplication.h"
 #include "../XRFramework/RenderControl.h"
+#include "../XRFramework/filesystem/File.h"
+#include "../XRFramework/window/StatusBar.h"
 #include <string>
 
 #include "Resource.h"
 
-class Application : public Singleton < Application >, IApplication
+class Application : public Singleton<Application>, public IApplication, public IFileCallback
 {
 public:
 	Application();
-	~Application();
+	virtual ~Application();
 
 	bool Initialize(HINSTANCE hInstance, int nCmdShow);
 	void Run();
@@ -21,10 +23,13 @@ public:
 	bool OnCreate(HWND hWnd);
 	bool OnDestroy();
 
+	virtual bool OnFileCallback(void* pContext, int ipercent, float avgSpeed) {
+		return true;
+	}
+
 	static Application& Create() { return *new Application; }
 	static void	Destroy() { delete Application::getSingletonPtr(); }
 
-	//std::string UtfTo1250(std::string& utfstring);
 
 private:
 	// Forward declarations of functions included in this code module:

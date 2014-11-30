@@ -3,6 +3,7 @@
 
 #include "Application.h"
 #include "CurlJsonCConverterLoggerT.h"
+#include "utils\JobManager.h"
 //#include "../XRFramework/log/Logger.h"
 //#include "../XRFramework/log/LoggerDAL.h"
 //#include "../XRFramework/log/LogDefines.h"
@@ -14,7 +15,7 @@
 
 template<> Application* Singleton<Application>::ms_Singleton = 0;
 
-Application::Application() : m_bRunning(false)
+Application::Application() : m_bRunning(false), IApplication(this)
 {
 }
 
@@ -38,6 +39,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow) {
 		LOGDEBUG("Failed to initialize window system.");
 		return false;
 	}
+
 
 
 	CurlJsonCharsetConverterLoggerTests();
@@ -64,6 +66,7 @@ bool Application::AppMsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	PAINTSTRUCT ps;
 	HDC hdc;
+	int x, y;
 
 	switch (uMsg)
 	{
@@ -77,6 +80,13 @@ bool Application::AppMsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		g_applicationPtr->Stop();
 		break;
+	case WM_SIZE:
+		// Save the new client area dimensions.
+		x = GET_X_LPARAM(lParam);
+		y = GET_Y_LPARAM(lParam);
+
+		m_Statusbar->OnResize(x, y);
+
 	default:
 		return false;
 	}
@@ -87,6 +97,8 @@ bool Application::OnCreate(HWND hWnd) {
 
 	//handles the WM_CREATE message of the main, parent window; return -1 to fail
 	//window creation
+	m_Statusbar->OnCreate(hWnd, hInst);
+
 	RECT rc = { 20, 20, 400, 250 };
 	m_rendercontrol.Initialize(hWnd, hInst, rc);
 
@@ -97,6 +109,8 @@ bool Application::OnCreate(HWND hWnd) {
 }
 
 bool Application::OnDestroy() {
+	CJobManager::GetInstance().CancelJobs();
+	m_Statusbar->OnDestory();
 	g_DXRendererPtr->DestroyRenderSystem();
 	g_DXRendererPtr->Destroy();
 	return true;
