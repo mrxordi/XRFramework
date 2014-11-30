@@ -1,6 +1,7 @@
 #include "stdafxf.h"
 #include "URIUtils.h"
 #include "filesystem/URL.h"
+#include "filesystem/SpecialProtocol.h"
 #include "StringUtils.h"
 #include <vector>
 
@@ -131,6 +132,18 @@ bool URIUtils::IsDOSPath(const CStdString& path)
 	return false;
 }
 
+bool URIUtils::IsSpecial(const std::string& strFile)
+{
+	std::string strFile2(strFile);
+
+	return IsProtocol(strFile2, "special");
+}
+
+bool URIUtils::IsProtocol(const std::string& url, const std::string &type)
+{
+	return StringUtils::StartsWithNoCase(url, type + "://");
+}
+
 CStdString URIUtils::AddFileToFolder(const CStdString& strFolder,
 	const CStdString& strFile)
 {
@@ -161,6 +174,44 @@ CStdString URIUtils::AddFileToFolder(const CStdString& strFolder,
 		StringUtils::Replace(strResult, '/', '\\');
 
 	return strResult;
+}
+
+bool URIUtils::HasParentInHostname(const CURL& url)
+{
+	return url.IsProtocol("zip")
+		|| url.IsProtocol("rar")
+		|| url.IsProtocol("apk")
+		|| url.IsProtocol("bluray")
+		|| url.IsProtocol("udf");
+}
+
+bool URIUtils::HasEncodedHostname(const CURL& url)
+{
+	return HasParentInHostname(url)
+		|| url.IsProtocol("musicsearch")
+		|| url.IsProtocol("image");
+}
+
+bool URIUtils::IsHD(const CStdString& strFileName)
+{
+	CURL url(strFileName);
+
+	if (IsProtocol(strFileName, "special"))
+		return IsHD(CSpecialProtocol::TranslatePath(strFileName));
+
+	if (HasParentInHostname(url))
+		return IsHD(url.GetHostName());
+
+	return url.GetProtocol().empty() || url.IsProtocol("file");
+}
+
+bool URIUtils::HasEncodedFilename(const CURL& url)
+{
+	const std::string prot2 = url.GetTranslatedProtocol();
+
+	// For now assume only (quasi) http internet streams use URL encoding
+	return CURL::IsProtocolEqual(prot2, "http") ||
+		CURL::IsProtocolEqual(prot2, "https");
 }
 
 bool URIUtils::IsInternetStream(const std::string &path, bool bStrictCheck /* = false */)
@@ -397,6 +448,54 @@ std::string URIUtils::CanonicalizePath(const std::string& path, const char slash
 
 	return result;
 }
+
+std::string URLEncodePath(const std::string& strPath)
+{
+	using namespace std;
+	vector<string> segments = StringUtils::Split(strPath, "/");
+	for (vector<string>::iterator i = segments.begin(); i != segments.end(); ++i)
+		*i = CURL::Encode(*i);
+
+	return StringUtils::Join(segments, "/");
+}
+
+std::string URLDecodePath(const std::string& strPath)
+{
+	using namespace std;
+	vector<string> segments = StringUtils::Split(strPath, "/");
+	for (vector<string>::iterator i = segments.begin(); i != segments.end(); ++i)
+		*i = CURL::Decode(*i);
+
+	return StringUtils::Join(segments, "/");
+}
+
+std::string URIUtils::ChangeBasePath(const std::string &fromPath, const std::string &fromFile, const std::string &toPath)
+{
+	std::string toFile = fromFile;
+
+	// Convert back slashes to forward slashes, if required
+	if (IsDOSPath(fromPath) && !IsDOSPath(toPath))
+		StringUtils::Replace(toFile, "\\", "/");
+
+	// Handle difference in URL encoded vs. not encoded
+	if (HasEncodedFilename(CURL(fromPath))
+		&& !HasEncodedFilename(CURL(toPath)))
+	{
+		toFile = URLDecodePath(toFile); // Decode path
+	}
+	else if (!HasEncodedFilename(CURL(fromPath))
+		&& HasEncodedFilename(CURL(toPath)))
+	{
+		toFile = URLEncodePath(toFile); // Encode path
+	}
+
+	// Convert forward slashes to back slashes, if required
+	if (!IsDOSPath(fromPath) && IsDOSPath(toPath))
+		StringUtils::Replace(toFile, "/", "\\");
+
+	return AddFileToFolder(toPath, toFile);
+}
+
 
 std::string URIUtils::GetDirectory(const std::string &strFilePath)
 {

@@ -37,6 +37,12 @@ public:
 
 	static bool IsDOSPath(const std::string& path);
 	static bool IsDOSPath(const CStdString& path);
+
+	static bool IsSpecial(const std::string& strFile);
+
+	static bool IsProtocol(const std::string& url, const std::string &type);
+	static bool IsHD(const CStdString& strFileName);
+
 	static const std::string GetFileName(const std::string& strFileNameAndPath);
 	static const std::string GetFileName(const CURL& url);
 
@@ -45,6 +51,10 @@ public:
 	static bool HasSlashAtEnd(const std::string& strFile, bool checkURL = false);
 	static void RemoveSlashAtEnd(std::string& strFolder);
 	static CStdString AddFileToFolder(const CStdString& strFolder, const CStdString& strFile);
+
+	static bool HasParentInHostname(const CURL& url);
+	static bool HasEncodedHostname(const CURL& url);
+	static bool HasEncodedFilename(const CURL& url);
 
 	static std::string GetExtension(const CURL& url);
 	static std::string GetExtension(const std::string& strFileName);
@@ -55,7 +65,9 @@ public:
 
 	static std::string CanonicalizePath(const std::string& path, const char slashCharacter = '\\');
 
+	static bool URIUtils::PathEquals(const std::string& url, const std::string &start) { return url == start;}
 
+	static std::string ChangeBasePath(const std::string &fromPath, const std::string &fromFile, const std::string &toPath);
 
 	/*!
 	\brief Check if there is a file extension
