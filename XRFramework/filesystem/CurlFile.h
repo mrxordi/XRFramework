@@ -88,6 +88,7 @@ public:
 	void SetBufferSize(unsigned int size);
 
 	const CHttpHeader& GetHttpHeader() { return m_state->m_httpheader; }
+	static bool GetMimeType(const CURL &url, std::string &content, const std::string &useragent = "");
 	std::string GetServerReportedCharset(void);
 
 	/* static function that will get content type of a file */

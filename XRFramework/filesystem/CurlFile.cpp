@@ -1585,6 +1585,28 @@ void CCurlFile::SetRequestHeader(CStdString header, long value)
 	m_requestheaders[header] = StringUtils::Format("%ld", value);
 }
 
+bool CCurlFile::GetMimeType(const CURL &url, std::string &content, const std::string &useragent)
+{
+	CCurlFile file;
+	if (!useragent.empty())
+		file.SetUserAgent(useragent);
+
+	struct __stat64 buffer;
+	std::string redactUrl = url.GetRedacted();
+	if (file.Stat(url, &buffer) == 0)
+	{
+		if (buffer.st_mode == _S_IFDIR)
+			content = "x-directory/normal";
+		else
+			content = file.GetMimeType();
+		LOGDEBUG("GetMimeType - %s -> %s", redactUrl.c_str(), content.c_str());
+		return true;
+	}
+	LOGDEBUG("GetMimeType - %s -> failed", redactUrl.c_str());
+	content.clear();
+	return false;
+}
+
 std::string CCurlFile::GetServerReportedCharset(void)
 {
 	if (!m_state)
