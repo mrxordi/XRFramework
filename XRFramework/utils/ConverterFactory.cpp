@@ -76,7 +76,7 @@ Converter* ConverterFactory::CreateConverter(const std::string&  sourceCharset, 
 	newUnit.m_unloadDelayStartTick = XR::SystemClockMillis();
 
 	m_vConverters.push_back(newUnit);
-	LOGDEBUG("Succesfully created converter (%s --> %s).", sourceCharset.c_str(), targetCharset.c_str());
+	//LOGDEBUG("Succesfully created converter (%s --> %s).", sourceCharset.c_str(), targetCharset.c_str());
 
 	return pNewConverter;
 }
