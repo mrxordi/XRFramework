@@ -86,10 +86,12 @@
     <ClInclude Include="DLLoader\LoaderContainer.h" />
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
+    <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\Directory.h" />
     <ClInclude Include="filesystem\DllLibCurl.h" />
     <ClInclude Include="filesystem\File.h" />
+    <ClInclude Include="filesystem\FileCache.h" />
     <ClInclude Include="filesystem\FileItem.h" />
     <ClInclude Include="filesystem\FileOperationJob.h" />
     <ClInclude Include="filesystem\IDirectory.h" />
@@ -118,6 +120,7 @@
     <ClInclude Include="Util.h" />
     <ClInclude Include="utils\AutoBuffer.h" />
     <ClInclude Include="utils\AutoPtrHandle.h" />
+    <ClInclude Include="utils\BitstreamStats.h" />
     <ClInclude Include="utils\Converter.h" />
     <ClInclude Include="utils\ConverterFactory.h" />
     <ClInclude Include="utils\DateTime.h" />
@@ -144,10 +147,12 @@
     <ClCompile Include="DLLoader\LoaderContainer.cpp" />
     <ClCompile Include="DLLoader\LoaderFactory.cpp" />
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
+    <ClCompile Include="filesystem\CacheStrategy.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp" />
     <ClCompile Include="filesystem\Directory.cpp" />
     <ClCompile Include="filesystem\DllLibCurl.cpp" />
     <ClCompile Include="filesystem\File.cpp" />
+    <ClCompile Include="filesystem\FileCache.cpp" />
     <ClCompile Include="filesystem\FileItem.cpp" />
     <ClCompile Include="filesystem\FileOperationJob.cpp" />
     <ClCompile Include="filesystem\IDirectory.cpp" />
@@ -177,6 +182,7 @@
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="utils\AutoBuffer.cpp" />
     <ClCompile Include="utils\AutoPtrHandle.cpp" />
+    <ClCompile Include="utils\BitstreamStats.cpp" />
     <ClCompile Include="utils\Converter.cpp" />
     <ClCompile Include="utils\ConverterFactory.cpp" />
     <ClCompile Include="utils\DateTime.cpp" />

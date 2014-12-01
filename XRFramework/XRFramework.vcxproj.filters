@@ -161,6 +161,9 @@
       <Filter>filesystem</Filter>
     </ClInclude>
     <ClInclude Include="filesystem\FileOperationJob.h" />
+    <ClInclude Include="filesystem\FileCache.h" />
+    <ClInclude Include="filesystem\CacheStrategy.h" />
+    <ClInclude Include="utils\BitstreamStats.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -304,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="filesystem\FileOperationJob.cpp" />
     <ClCompile Include="IApplication.cpp" />
+    <ClCompile Include="filesystem\FileCache.cpp" />
+    <ClCompile Include="filesystem\CacheStrategy.cpp" />
+    <ClCompile Include="utils\BitstreamStats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="log">
