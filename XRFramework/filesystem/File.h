@@ -3,10 +3,12 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <stdint.h>
 #include "Base.h"
 #include "IFileTypes.h"
 #include "URL.h"
 #include "utils/AutoBuffer.h"
+#include "utils/BitstreamStats.h"
 
 class IFile;
 
@@ -35,27 +37,31 @@ public:
 /* indicate the caller will seek between multiple streams in the file frequently */
 #define READ_MULTI_STREAM 0x20
 
+class FileStreamBuffer;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // CFile definition
 /////////////////////////////////////////////////////////////////////////////////////////
-
 class File
 {
 public:
 	File();
 	~File();
+
 	bool Open(const std::string& strFileName, const unsigned int flags = 0);
 	bool Open(const CURL& file, const unsigned int flags = 0);
 
 	bool OpenForWrite(const std::string& strFileName, bool bOverWrite = false);
 	bool OpenForWrite(const CURL& file, bool bOverWrite = false);
 
+	//Function returns how large in memory is the file.
 	ssize_t LoadFile(const std::string &filename, auto_buffer& outputBuffer);
 	ssize_t LoadFile(const CURL &file, auto_buffer& outputBuffer);
 
 	//Attempt to read bufSize bytes from currently opened file into buffer bufPtr.
+	//Error returns -1, num bytes readed return when success
 	ssize_t Read(void* bufPtr, size_t bufSize);
+
 	bool ReadString(char *szLine, int iLineLength);
 
 	//Attempt to write bufSize bytes from buffer bufPtr into currently opened file.
@@ -82,7 +88,7 @@ public:
 	}
 
 	bool SkipNext();
-	//BitstreamStats* GetBitstreamStats() { return m_bitStreamStats; }
+	BitstreamStats* GetBitstreamStats() { return m_bitStreamStats; }
 
 	int IoControl(EIoControl request, void* param);
 
@@ -121,10 +127,58 @@ public:
 	static bool SetHidden(const std::string& fileName, bool hidden);
 	static bool SetHidden(const CURL& file, bool hidden);
 
-protected:
-	virtual IFile* FileFactory(const CURL& url);
+	static IFile* FileFactory(const std::string& strFileName);
+	static IFile* FileFactory(CURL& url);
 
 private:
 	unsigned int m_flags;
 	IFile* m_pFile;
+
+	FileStreamBuffer* m_pBuffer;
+	BitstreamStats* m_bitStreamStats;
+};
+
+using namespace std;
+/////////////////////////////////////////////////////////////////////////////////////////
+// CFileStreamBuffer // streambuf for file io, only supports buffered input currently
+/////////////////////////////////////////////////////////////////////////////////////////
+class FileStreamBuffer : public std::streambuf
+{
+public:
+	~FileStreamBuffer();
+	FileStreamBuffer(int backsize = 0);
+
+	void Attach(IFile *file);
+	void Detach();
+
+private:
+	virtual int_type underflow();
+	virtual std::streamsize showmanyc();
+	virtual pos_type seekoff(off_type, std::ios_base::seekdir, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
+	virtual pos_type seekpos(pos_type, std::ios_base::openmode = std::ios_base::in | std::ios_base::out);
+
+	IFile* m_file;
+	char*  m_buffer;
+	int    m_backsize;
+	int    m_frontsize;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// CFileStreamBuffer // streambuf for file io, only supports buffered input currently
+/////////////////////////////////////////////////////////////////////////////////////////
+// very basic file input stream
+class FileStream : public std::istream
+{
+public:
+	FileStream(int backsize = 0);
+	~FileStream();
+
+	bool Open(const std::string& filename);
+	bool Open(const CURL& filename);
+	void Close();
+
+	int64_t GetLength();
+private:
+	FileStreamBuffer m_buffer;
+	IFile*            m_file;
 };
