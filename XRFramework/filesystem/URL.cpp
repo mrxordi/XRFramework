@@ -59,12 +59,12 @@ void CURL::Parse(const std::string& strURL1)
 	// decode protocol
 	size_t iPos = strURL.find("://");
 	if (iPos == std::string::npos) {
-		/* set filename and update extension*/
-		SetFileName(strURL);
-		URLTYPE = _URLTYPE::FULLPATH;
-		return;
-	}
-	else {
+			/* set filename and update extension*/
+			SetFileName(strURL);
+			return;
+	} else 
+	{
+
 		SetProtocol(strURL.substr(0, iPos));
 		iPos += 3;
 	}
@@ -79,16 +79,10 @@ void CURL::Parse(const std::string& strURL1)
 		// 		m_strProtocol.Equals("virtualpath") ||
 		// 		m_strProtocol.Equals("multipath") ||
 		// 		m_strProtocol.Equals("filereader") ||
-		0 == m_strProtocol.compare("special")
+		IsProtocol("special")
 		)
 	{
 		SetFileName(strURL.substr(iPos));
-		if (URLTYPE != _URLTYPE::LIBRARY) {
-			if (m_strFileType != "")
-				URLTYPE = _URLTYPE::FILE;
-			else
-				URLTYPE = _URLTYPE::PATH;
-		}
 		return;
 	}
 
@@ -102,10 +96,10 @@ void CURL::Parse(const std::string& strURL1)
 
 	//TODO fix all Addon paths
 	std::string strProtocol2 = GetTranslatedProtocol();
-	if (strProtocol2 == "http"
-		|| strProtocol2 == "https"
-		|| strProtocol2 == "rtsp"
-		|| strProtocol2 == "zip")
+	if (IsProtocol("http")
+		|| IsProtocol("https")
+		|| IsProtocol("rtsp")
+		|| IsProtocol("zip"))
 		sep = "?;#|";
 	else if (strProtocol2 == "ftp"
 		|| strProtocol2 == "ftps")
@@ -133,7 +127,7 @@ void CURL::Parse(const std::string& strURL1)
 	if (iSlash >= iEnd)
 		iSlash = std::string::npos; // was an invalid slash as it was contained in options
 
-	if (m_strProtocol != "")
+	if (!IsProtocol("iso9660"))
 	{
 		size_t iAlphaSign = strURL.find("@", iPos);
 		if (iAlphaSign != std::string::npos && iAlphaSign < iEnd && (iAlphaSign < iSlash || iSlash == std::string::npos))
@@ -142,7 +136,7 @@ void CURL::Parse(const std::string& strURL1)
 			std::string strUserNamePassword = strURL.substr(iPos, iAlphaSign - iPos);
 
 			// first extract domain, if protocol is smb
-			if (m_strProtocol == "smb")
+			if (IsProtocol("smb"))
 			{
 				size_t iSemiColon = strUserNamePassword.find(";");
 
@@ -221,6 +215,13 @@ void CURL::Parse(const std::string& strURL1)
 	/* update extension */
 	SetFileName(m_strFileName);
 
+	/* decode urlencoding on this stuff */
+	if (URIUtils::HasEncodedHostname(*this))
+	{
+		m_strHostName = Decode(m_strHostName);
+		SetHostName(m_strHostName);
+	}
+
 	m_strUserName = Decode(m_strUserName);
 	m_strPassword = Decode(m_strPassword);
 
@@ -237,8 +238,6 @@ void CURL::SetFileName(const std::string& strFileName)
 	int period = m_strFileName.find_last_of('.');
 	if (period != -1 && (slash == -1 || period > slash)) {
 		m_strFileType = m_strFileName.substr(period + 1);
-		if (m_strFileType == "dll")
-			URLTYPE = _URLTYPE::LIBRARY;
 	}
 	else
 		m_strFileType = "";
