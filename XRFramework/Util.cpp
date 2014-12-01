@@ -3,9 +3,47 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "filesystem/SpecialProtocol.h"
+#include "filesystem/File.h"
+#include "filesystem/FileItem.h"
+#include "filesystem/Directory.h"
 #include <shlobj.h>
 
+std::string CUtil::GetNextFilename(const std::string &fn_template, int max)
+{
+	if (fn_template.find("%03d") == std::string::npos)
+		return "";
 
+	CStdString searchPath = URIUtils::GetDirectory(fn_template);
+	CStdString mask = URIUtils::GetExtension(fn_template);
+	CStdString name = StringUtils::Format(fn_template.c_str(), 0);
+
+	FileItemList items;
+	if (!Directory::GetDirectory(searchPath, items, mask, DIR_FLAG_NO_FILE_DIRS))
+		return name;
+
+	items.SetFastLookup(true);
+	for (int i = 0; i <= max; i++)
+	{
+		CStdString name = StringUtils::Format(fn_template.c_str(), i);
+		if (!items.Get(name))
+			return name;
+	}
+	return "";
+}
+
+std::string CUtil::GetNextPathname(const std::string &path_template, int max)
+{
+	if (path_template.find("%04d") == std::string::npos)
+		return "";
+
+	for (int i = 0; i <= max; i++)
+	{
+		CStdString name = StringUtils::Format(path_template.c_str(), i);
+		if (!File::Exists(name) && !Directory::Exists(name))
+			return name;
+	}
+	return "";
+}
 
 std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes /*= false*/)
 {
