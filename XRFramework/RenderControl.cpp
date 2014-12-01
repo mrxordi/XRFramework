@@ -1,5 +1,6 @@
 #include "stdafxf.h"
 #include "RenderControl.h"
+#include "render/RenderSystemDX.h"
 
 RenderControl* RenderControl::m_pThis = nullptr;
 WNDPROC RenderControl::m_OldWndProc = nullptr;
@@ -63,6 +64,8 @@ LRESULT CALLBACK RenderControl::NewWndProc(HWND hwnd, UINT mesg, WPARAM wParam, 
 		// Save the new client area dimensions.
 		m_pThis->w = GET_X_LPARAM(lParam);
 		m_pThis->h = GET_Y_LPARAM(lParam);
+		g_DXRendererPtr->OnResize();
+		
 
 	case WM_DESTROY: {// do g³ównej procedury okna
 		PostQuitMessage(0);

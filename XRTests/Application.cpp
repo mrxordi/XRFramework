@@ -54,7 +54,8 @@ void Application::Run() {
 	m_bRunning = true;
 	while (m_bRunning)
 	{
-		CWindowEvents::MessagePump();
+		if (CWindowEvents::GetQueueSize())
+			CWindowEvents::MessagePump();
 		g_DXRendererPtr->BeginRender();
 		g_DXRendererPtr->EndRender();
 
@@ -99,7 +100,7 @@ bool Application::OnCreate(HWND hWnd) {
 	//window creation
 	m_Statusbar->OnCreate(hWnd, hInst);
 
-	RECT rc = { 20, 20, 400, 250 };
+	RECT rc = { 20, 20, 800, 600 };
 	m_rendercontrol.Initialize(hWnd, hInst, rc);
 
 	g_DXRendererPtr->InitRenderSystem(&m_rendercontrol);
