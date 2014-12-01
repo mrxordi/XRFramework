@@ -6,33 +6,33 @@
 #include <Windows.h>
 #include "log\Log.h"
 
-cTimer* cTimer::m_pTimer = NULL;
+//cTimer* cTimer::m_pTimer = NULL;
 
-cTimer::cTimer()
+Timer::Timer()
 	: mSecondsPerCount(0.0), mDeltaTime(-1.0), mBaseTime(0),
 	mPausedTime(0), mPrevTime(0), mCurrTime(0), mStopped(false)
 {
-	m_pTimer = this;
+	//m_pTimer = this;
 
-	LOGINFO("(+)Game Timer class loaded.");
+	//LOGINFO("(+)Game Timer class loaded.");
 
 	__int64 countsPerSec;
 	QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
 	mSecondsPerCount = 1.0 / (double)countsPerSec;
 }
 
-cTimer::~cTimer() {
-	LOGINFO("(-)Game Timer class unloaded.");
+Timer::~Timer() {
+	//LOGINFO("Timer class unloaded.");
 }
 
-cTimer* cTimer::Create()
-{
-	return new cTimer;
-}
+//cTimer* cTimer::Create()
+//{
+//	return new cTimer;
+//}
 
 // Returns the total time elapsed since reset() was called, NOT counting any
 // time when the clock is stopped.
-float cTimer::getGameTime()const {
+float Timer::getGameTime()const {
 	// If we are stopped, do not count the time that has passed since we stopped.
 	//
 	// ----*---------------*------------------------------*------> time
@@ -57,11 +57,11 @@ float cTimer::getGameTime()const {
 	}
 }
 
-float cTimer::getDeltaTime()const {
+float Timer::getDeltaTime()const {
 	return (float)mDeltaTime;
 }
 
-void cTimer::reset() {
+void Timer::reset() {
 	__int64 currTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
 
@@ -71,7 +71,7 @@ void cTimer::reset() {
 	mStopped = false;
 }
 
-void cTimer::start() {
+void Timer::start() {
 	__int64 startTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&startTime);
 
@@ -91,7 +91,7 @@ void cTimer::start() {
 	}
 }
 
-void cTimer::stop() {
+void Timer::stop() {
 	if (!mStopped) {
 		__int64 currTime;
 		QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
@@ -101,7 +101,7 @@ void cTimer::stop() {
 	}
 }
 
-void cTimer::tick() {
+void Timer::tick() {
 	if (mStopped) {
 		mDeltaTime = 0.0;
 		return;

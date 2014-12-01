@@ -1,12 +1,10 @@
 #pragma once
 
-class cTimer  {
-protected:
-	cTimer();
-	static cTimer* m_pTimer;
+class Timer  {
 public:
-	~cTimer();
-	static cTimer* Create();
+	Timer();
+	~Timer();
+	//static cTimer* Create();
 
 	float getGameTime()const;  // in seconds
 	float getDeltaTime()const; // in seconds
