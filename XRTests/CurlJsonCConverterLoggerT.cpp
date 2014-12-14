@@ -15,6 +15,9 @@
 #include "../XRFramework/filesystem/FileItem.h"
 #include "../XRFramework/filesystem/FileOperationJob.h"
 #include "../XRFramework/utils/JobManager.h"
+#include "../XRFramework/core/VideoRenderers/YUV2RGBMatrix.h"
+#include "../XRFramework/core/VideoRenderers/TransformMatrix.h"
+#include "../XRFramework/core/VideoRenderers/WinShader.h"
 #include "Application.h"
 
 
@@ -52,7 +55,7 @@ void CurlJsonCharsetConverterLoggerTests(void) {
 
 	std::wstring wStrConv;
 	std::string	utfString;
-	int i;
+	unsigned int i;
 	Json::ValueIterator it = root.begin();
 	for (i = 0; i < root.size(); ++i, it++) {
 		std::string buff = (*it)["channel_title"].asString();
@@ -124,12 +127,17 @@ void CurlJsonCharsetConverterLoggerTests(void) {
 	FileItemList itemlist2;
 	Directory::Hints hints2;
 
-	itemlist2.Add(FileItemPtr(new FileItem("https://code.msdn.microsoft.com/windowsapps/Universal-Windows-app-cb3248c3/file/111483/19/Universal%20Windows%20app%20samples.zip", false)));
-	FileOperationJob* operation = new FileOperationJob(FileOperationJob::ActionCopy, itemlist2, "special://app/cache5", true);
+	//itemlist2.Add(FileItemPtr(new FileItem("https://code.msdn.microsoft.com/windowsapps/Universal-Windows-app-cb3248c3/file/111483/19/Universal%20Windows%20app%20samples.zip", false)));
+	//FileOperationJob* operation = new FileOperationJob(FileOperationJob::ActionCopy, itemlist2, "special://app/cache5", true);
 	//operation.DoWork();
-	CJobManager::GetInstance().AddJob(operation, operation, CJob::PRIORITY_HIGH);
+	//CJobManager::GetInstance().AddJob(operation, operation, CJob::PRIORITY_HIGH);
 	//CJobManager::GetInstance().;
 	//File::Copy("http://www78.zippyshare.com/d/60151792/14326/Tiesto-Club-Life-Podcast-382-27-07-2014-www.HousePlanet.DJ.mp3", "special://app/cache/Tiesto-Club-Life-Podcast-382-27-07-2014-www.HousePlanet.DJ.mp3");
 
+	//CURL rtmpurl("rtmp://95.211.215.135/channel/1455/live live=true pageUrl=token swfUrl=76488264 ");
+	//LOGINFO(rtmpurl.GetRedacted().c_str());
 
+	//YUV2RGBMatrix yuvmat;
+	//yuvmat.SetParameters(1.0f, 0.0f, 274, RENDER_FMT_YUV420P);
+	//XMMATRIX* mat = yuvmat.Matrix();
 }
