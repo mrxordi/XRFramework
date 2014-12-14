@@ -1,9 +1,10 @@
 #pragma once
 #include "../XRFramework/utils/Singleton.h"
 #include "../XRFramework/IApplication.h"
-#include "../XRFramework/RenderControl.h"
+#include "../XRFramework/window/RenderControl.h"
 #include "../XRFramework/filesystem/File.h"
 #include "../XRFramework/window/StatusBar.h"
+#include "../XRFramework/core/VideoRenderers/TestShader.h"
 #include <string>
 
 #include "Resource.h"
@@ -44,6 +45,7 @@ private:
 	TCHAR szWindowClass[100];			// the main window class name
 	HWND m_hWnd;
 	RenderControl m_rendercontrol;
+	TestShader m_testshader;
 };
 
 #define g_applicationPtr Application::getSingletonPtr()

@@ -8,7 +8,7 @@
 //#include "../XRFramework/log/LoggerDAL.h"
 //#include "../XRFramework/log/LogDefines.h"
 #include "../XRFramework/window/WindowEvents.h"
-#include "../XRFramework/RenderControl.h"
+#include "../XRFramework/window/RenderControl.h"
 #include "../XRFramework/render/RenderSystemDX.h"
 
 
@@ -40,8 +40,6 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow) {
 		return false;
 	}
 
-
-
 	CurlJsonCharsetConverterLoggerTests();
 
 	return true;
@@ -56,7 +54,11 @@ void Application::Run() {
 	{
 		if (CWindowEvents::GetQueueSize())
 			CWindowEvents::MessagePump();
-		g_DXRendererPtr->BeginRender();
+
+		if (g_DXRendererPtr->BeginRender()) {
+			m_testshader.Render();
+		}
+		g_DXRendererPtr->PresentRender();
 		g_DXRendererPtr->EndRender();
 
 	}
@@ -101,19 +103,19 @@ bool Application::OnCreate(HWND hWnd) {
 	m_Statusbar->OnCreate(hWnd, hInst);
 
 	RECT rc = { 20, 20, 800, 600 };
+
 	m_rendercontrol.Initialize(hWnd, hInst, rc);
-
 	g_DXRendererPtr->InitRenderSystem(&m_rendercontrol);
-
+	m_testshader.Create();
 
 	return true;
 }
 
 bool Application::OnDestroy() {
 	CJobManager::GetInstance().CancelJobs();
-	m_Statusbar->OnDestory();
 	g_DXRendererPtr->DestroyRenderSystem();
 	g_DXRendererPtr->Destroy();
+	m_Statusbar->OnDestory();
 	return true;
 }
 
