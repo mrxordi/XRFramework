@@ -19,8 +19,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-	Context context;
 
+	Context context;
 
 	CStdString appPath, tempPath, docPath, homePath;
 
@@ -46,7 +46,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 			CSpecialProtocol::TranslatePath("special://home/").c_str());
 		return false;
 	}
-	g_LogPtr->SetExtraLogLevels(LOGCURL);
+	//g_LogPtr->SetExtraLogLevels(LOGCURL);
 
 	LOGINFO("Start application initialization. Running on thread: %d", m_threadid);
 
