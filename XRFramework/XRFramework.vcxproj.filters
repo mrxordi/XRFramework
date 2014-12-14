@@ -46,7 +46,6 @@
     <ClInclude Include="render\ID3DResource.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="RenderControl.h" />
     <ClInclude Include="filesystem\CurlFile.h">
       <Filter>filesystem</Filter>
     </ClInclude>
@@ -161,9 +160,34 @@
       <Filter>filesystem</Filter>
     </ClInclude>
     <ClInclude Include="filesystem\FileOperationJob.h" />
-    <ClInclude Include="filesystem\FileCache.h" />
-    <ClInclude Include="filesystem\CacheStrategy.h" />
-    <ClInclude Include="utils\BitstreamStats.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="filesystem\CacheStrategy.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\FileCache.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\BitstreamStats.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\VideoRenderers\RenderModes.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="core\VideoRenderers\TransformMatrix.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\VideoRenderers\YUV2RGBMatrix.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="core\VideoRenderers\WinShader.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="core\VideoRenderers\TestShader.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="window\RenderControl.h">
+      <Filter>window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -201,7 +225,6 @@
     <ClCompile Include="render\ID3DResource.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="RenderControl.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
@@ -307,9 +330,27 @@
     </ClCompile>
     <ClCompile Include="filesystem\FileOperationJob.cpp" />
     <ClCompile Include="IApplication.cpp" />
-    <ClCompile Include="filesystem\FileCache.cpp" />
-    <ClCompile Include="filesystem\CacheStrategy.cpp" />
-    <ClCompile Include="utils\BitstreamStats.cpp" />
+    <ClCompile Include="filesystem\CacheStrategy.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\FileCache.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\BitstreamStats.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp">
+      <Filter>core\VideoRenderers</Filter>
+    </ClCompile>
+    <ClCompile Include="core\VideoRenderers\WinShader.cpp">
+      <Filter>core\VideoRenderers</Filter>
+    </ClCompile>
+    <ClCompile Include="core\VideoRenderers\TestShader.cpp">
+      <Filter>core\VideoRenderers</Filter>
+    </ClCompile>
+    <ClCompile Include="window\RenderControl.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="log">
@@ -332,6 +373,24 @@
     </Filter>
     <Filter Include="system">
       <UniqueIdentifier>{5af2cf9d-f3e4-437f-8b2f-ce7ee1b37e7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dvdplayer">
+      <UniqueIdentifier>{e9c4c100-3a68-419d-8dac-96c6156305f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dvdplayer\DVDCodecs">
+      <UniqueIdentifier>{07fcd76f-f751-419f-b16f-f3604c5649f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dvdplayer\DVDDemuxers">
+      <UniqueIdentifier>{274c5670-1010-45ef-b11b-bb87442f775e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dvdplayer\DVDInputStreams">
+      <UniqueIdentifier>{5ca09b95-c3c1-40d2-9b0d-635bf7c7d710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{b39c2dc5-d6c8-4433-ab7f-22dd896b7970}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\VideoRenderers">
+      <UniqueIdentifier>{daf4cb0c-6c68-4614-81ce-fe17688b1bb4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

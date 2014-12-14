@@ -80,12 +80,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Base.h" />
+    <ClInclude Include="core\VideoRenderers\RenderModes.h" />
+    <ClInclude Include="core\VideoRenderers\TestShader.h" />
+    <ClInclude Include="core\VideoRenderers\TransformMatrix.h" />
+    <ClInclude Include="core\VideoRenderers\WinShader.h" />
     <ClInclude Include="DLLoader\DllPaths_win32.h" />
     <ClInclude Include="DLLoader\DynamicDll.h" />
     <ClInclude Include="DLLoader\iLibraryLoader.h" />
     <ClInclude Include="DLLoader\LoaderContainer.h" />
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
+    <ClInclude Include="dvdplayer\VideoRenderers\YUV2RGBMatrix.h" />
     <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\Directory.h" />
@@ -110,11 +115,11 @@
     <ClInclude Include="log\Log.h" />
     <ClInclude Include="log\LogDefines.h" />
     <ClInclude Include="log\LogImplementation.h" />
-    <ClInclude Include="RenderControl.h" />
     <ClInclude Include="render\D3D10Enumeration.h" />
     <ClInclude Include="render\dxerr.h" />
     <ClInclude Include="render\ID3DResource.h" />
     <ClInclude Include="render\RenderSystemDX.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="system\SysInfo.h" />
     <ClInclude Include="Util.h" />
@@ -138,10 +143,14 @@
     <ClInclude Include="utils\UrlOptions.h" />
     <ClInclude Include="utils\Variant.h" />
     <ClInclude Include="utils\WIN32Utils.h" />
+    <ClInclude Include="window\RenderControl.h" />
     <ClInclude Include="window\StatusBar.h" />
     <ClInclude Include="window\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\VideoRenderers\TestShader.cpp" />
+    <ClCompile Include="core\VideoRenderers\WinShader.cpp" />
+    <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp" />
     <ClCompile Include="DLLoader\DynamicDll.cpp" />
     <ClCompile Include="DLLoader\iLibraryLoader.cpp" />
     <ClCompile Include="DLLoader\LoaderContainer.cpp" />
@@ -169,7 +178,6 @@
     <ClCompile Include="log\ilog.cpp" />
     <ClCompile Include="log\Log.cpp" />
     <ClCompile Include="log\LogImplementation.cpp" />
-    <ClCompile Include="RenderControl.cpp" />
     <ClCompile Include="render\D3D10Enumeration.cpp" />
     <ClCompile Include="render\dxerr.cpp" />
     <ClCompile Include="render\ID3DResource.cpp" />
@@ -197,6 +205,7 @@
     <ClCompile Include="utils\UrlOptions.cpp" />
     <ClCompile Include="utils\Variant.cpp" />
     <ClCompile Include="utils\WIN32Utils.cpp" />
+    <ClCompile Include="window\RenderControl.cpp" />
     <ClCompile Include="window\StatusBar.cpp" />
     <ClCompile Include="window\WindowEvents.cpp" />
   </ItemGroup>
