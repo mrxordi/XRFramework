@@ -33,7 +33,6 @@ private:
 private:
 	bool m_bHasEnumerated;
 	IDXGIFactory* m_pDXGIFactory;
-	std::vector<DXGI_FORMAT>	  m_DepthStencilPossibleList;
 	std::vector<EnumAdapterInfo*> m_AdapterInfoList;
 
 
