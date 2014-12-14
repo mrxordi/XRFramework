@@ -84,6 +84,7 @@
     <ClInclude Include="core\VideoRenderers\TestShader.h" />
     <ClInclude Include="core\VideoRenderers\TransformMatrix.h" />
     <ClInclude Include="core\VideoRenderers\WinShader.h" />
+    <ClInclude Include="core\VideoRenderers\YUV2RGBShader.h" />
     <ClInclude Include="DLLoader\DllPaths_win32.h" />
     <ClInclude Include="DLLoader\DynamicDll.h" />
     <ClInclude Include="DLLoader\iLibraryLoader.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="core\VideoRenderers\TestShader.cpp" />
     <ClCompile Include="core\VideoRenderers\WinShader.cpp" />
     <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp" />
+    <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp" />
     <ClCompile Include="DLLoader\DynamicDll.cpp" />
     <ClCompile Include="DLLoader\iLibraryLoader.cpp" />
     <ClCompile Include="DLLoader\LoaderContainer.cpp" />
