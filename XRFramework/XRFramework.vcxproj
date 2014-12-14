@@ -119,7 +119,6 @@
     <ClInclude Include="render\dxerr.h" />
     <ClInclude Include="render\ID3DResource.h" />
     <ClInclude Include="render\RenderSystemDX.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="system\SysInfo.h" />
     <ClInclude Include="Util.h" />
