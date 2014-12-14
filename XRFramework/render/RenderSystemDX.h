@@ -1,23 +1,23 @@
 #pragma once
-#include "Base.h"
 #include <vector>
+#include <d3d10.h>
+#include <DirectXMath.h>
+#include <DirectXPackedVector.h>
+
+#include "Base.h"
 #include "utils/Singleton.h"
 #include "render/D3D10Enumeration.h"
 #include "XRThreads/CriticalSection.h"
 #include "XRThreads/SingleLock.h"
 #include "log/Log.h"
 //#include "window/Resolution.h"
-#include <d3d10.h>
-#include <DirectXMath.h>
-#include <DirectXPackedVector.h>
-#include "RenderControl.h"
+#include "window/RenderControl.h"
 
 
 using namespace DirectX;
 using namespace PackedVector;
 
 class ID3DResource;
-
 
 class cRenderSystemDX : public Singleton < cRenderSystemDX >
 {
@@ -64,6 +64,18 @@ public:
 	bool GetVSync() { return m_bVSync; }
 	int GetWidth() { return m_width; }
 	int GetHeight() { return m_height; }
+	void SetCameraPosition(XMFLOAT2 &camera, int screenWidth, int screenHeight);
+	D3D10_VIEWPORT GetViewPort() { return m_viewPort; }
+
+	XMFLOAT4X4 m_projection;
+	XMFLOAT4X4 m_view;
+	XMFLOAT4X4 m_world;
+
+	struct {
+		XMFLOAT4X4 m_projection;
+		XMFLOAT4X4 m_view;
+		XMFLOAT4X4 m_world;
+	} m_matMVP;
 protected:
 
 
@@ -100,6 +112,8 @@ protected:
 	std::string		m_RenderRenderer;
 	std::string		m_RenderVendor;
 	std::string		m_RenderVersion;
+
+	D3D10_VIEWPORT m_viewPort;
 };
 
 

@@ -31,7 +31,7 @@ cRenderSystemDX::cRenderSystemDX(void)
 
 	m_width = m_height = 0;
 	m_renderControl = NULL;
-
+	XMStoreFloat4x4(&m_world,XMMatrixIdentity());
 }
 
 cRenderSystemDX::~cRenderSystemDX(void)
@@ -81,12 +81,19 @@ bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl)
 	sd.Flags = 0;
 
 	IDXGIAdapter* pAdapter = NULL;
-	pAdapter = m_enumeration.GetAdapterInfo(0)->m_pAdapter;
 
-	HR(D3D10CreateDeviceAndSwapChain(NULL,
+	EnumAdapterInfo* adapterInfo = m_enumeration.GetAdapterInfo(0);
+	pAdapter = adapterInfo->m_pAdapter;
+
+	UINT createDeviceFlags = 0;
+#ifdef _DEBUG
+	createDeviceFlags |= D3D10_CREATE_DEVICE_DEBUG;
+#endif
+
+	HR(D3D10CreateDeviceAndSwapChain(pAdapter,
 		D3D10_DRIVER_TYPE_HARDWARE,
 		NULL,
-		0,
+		createDeviceFlags,
 		D3D10_SDK_VERSION,
 		&sd,
 		&m_pSwapChain,
@@ -112,7 +119,6 @@ bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl)
 		(*i)->OnCreateDevice();
 
 	m_bRenderCreated = true;
-
 	return true;
 }
 
@@ -157,6 +163,8 @@ void cRenderSystemDX::Unregister(ID3DResource *resource)
 
 bool cRenderSystemDX::OnResize()
 {
+	if (!m_pDevice)
+		return false;
 
 	m_renderControl->GetWH(m_width, m_height);
 
@@ -184,15 +192,14 @@ bool cRenderSystemDX::OnResize()
 	backBufferPtr->GetDesc(&backBufferDesc);
 
 	// Set the viewport transform.
-	D3D10_VIEWPORT vp;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	vp.Width = backBufferDesc.Width;
-	vp.Height = backBufferDesc.Height;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
+	m_viewPort.TopLeftX = 0;
+	m_viewPort.TopLeftY = 0;
+	m_viewPort.Width = backBufferDesc.Width*2;
+	m_viewPort.Height = backBufferDesc.Height*2;
+	m_viewPort.MinDepth = 0.0f;
+	m_viewPort.MaxDepth = 1.0f;
 
-	m_pDevice->RSSetViewports(1, &vp);
+	m_pDevice->RSSetViewports(1, &m_viewPort);
 	HR(m_pDevice->CreateRenderTargetView(backBufferPtr, 0, &m_pRenderTargetView));
 
 	//release back buffer pointer as not needed
@@ -253,10 +260,12 @@ bool cRenderSystemDX::OnResize()
 
 	LOGDEBUG("Renderer resized BackBuffer to: %i x %i .", backBufferDesc.Width, backBufferDesc.Height);
 
-	if (m_bRenderCreated) {
+	if (m_pDevice) {
 		for (std::vector<ID3DResource *>::iterator i = m_resources.begin(); i != m_resources.end(); i++)
 			(*i)->OnResizeDevice();
 	}
+
+	SetCameraPosition(XMFLOAT2(0, 0), m_width, m_height);
 
 	return true;
 }
@@ -319,4 +328,28 @@ void cRenderSystemDX::SetVSync(bool vsync)
 
 }
 
+void cRenderSystemDX::SetCameraPosition(XMFLOAT2 &camera, int screenWidth, int screenHeight)
+{
+	if (!m_pDevice)
+		return;
 
+	float w = m_viewPort.Width*0.5f;
+	float h = m_viewPort.Height*0.5f;
+
+	XMFLOAT2 offset = XMFLOAT2(camera.x - screenWidth*0.5f, camera.y - screenHeight*0.5f);
+
+	// world view.  Until this is moved onto the GPU (via a vertex shader for instance), we set it to the identity
+	// here.
+	XMStoreFloat4x4(&m_world, XMMatrixIdentity());
+
+	// camera view.  Multiply the Y coord by -1 then translate so that everything is relative to the camera
+	// position.
+	XMMATRIX flipY, translate;
+	flipY = XMMatrixScaling(1.0f, -1.0f, 1.0f);
+	translate = XMMatrixTranslation(-(w + offset.x), -(h + offset.y), 2 * h);
+	XMStoreFloat4x4(&m_view, XMMatrixMultiply(translate, flipY));
+
+	// projection onto screen space
+	XMStoreFloat4x4(&m_projection, XMMatrixPerspectiveOffCenterLH((-w - offset.x)*0.5f, (w - offset.x)*0.5f, (-h + offset.y)*0.5f, (h + offset.y)*0.5f, h, 100 * h));
+
+}
