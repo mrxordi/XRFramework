@@ -9,6 +9,7 @@ WinShader::~WinShader()
 		m_effect.Release();
 	if (m_vb.GetVertexBuffer() || m_vb.GetIndexBuffer())
 		m_vb.Release();
+
 	SAFE_RELEASE(m_inputLayout);
 }
 
@@ -142,13 +143,3 @@ bool WinShader::Execute(std::vector<ID3D10RenderTargetView*> *vecRT, unsigned in
 	pDevice->RSSetViewports(1, &g_DXRendererPtr->GetViewPort());
 	return true;
 }
-
-
-
-
-
-
-
-
-
-

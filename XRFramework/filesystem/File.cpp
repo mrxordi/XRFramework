@@ -172,7 +172,7 @@ ssize_t File::LoadFile(const CURL& file, auto_buffer& outputBuffer)
 			if (chunksize < max_chunk_size)
 				chunksize *= 2;
 		}
-		ssize_t read = Read(outputBuffer.get() + total_read, outputBuffer.size() - total_read);
+		ssize_t read = Read((char*)outputBuffer.get() + total_read, outputBuffer.size() - total_read);
 		if (read < 0)
 		{
 			outputBuffer.clear();
@@ -184,6 +184,7 @@ ssize_t File::LoadFile(const CURL& file, auto_buffer& outputBuffer)
 	}
 
 	outputBuffer.resize(total_read);
+	Close();
 
 	return total_read;
 }
@@ -622,7 +623,7 @@ bool File::Copy(const CURL& url2, const CURL& dest, IFileCallback* pCallback, vo
 			/* write data and make sure we managed to write it all */
 			iWrite = 0;
 			while (iWrite < iRead) {
-				ssize_t iWrite2 = newFile.Write(buffer.get() + iWrite, iRead - iWrite);
+				ssize_t iWrite2 = newFile.Write((char*)buffer.get() + iWrite, iRead - iWrite);
 				if (iWrite2 <= 0)
 					break;
 				iWrite += iWrite2;
