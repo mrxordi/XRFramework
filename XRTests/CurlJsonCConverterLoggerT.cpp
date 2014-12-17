@@ -83,8 +83,8 @@ void CurlJsonCharsetConverterLoggerTests(void) {
 	LOGDEBUG("File has %lld bytes.", winfile.GetLength());
 	LOGDEBUG("File closing.");
 	winfile.Close();
-	File::Copy("http://i.wp.pl/a/f/jpeg/34136/afp_ukraina_obwe_600.jpeg", "special://app/cache/afp_ukraina_obwe_600.jpeg", g_applicationPtr, 0);
-	File::Copy("http://i.wp.pl/a/f/jpeg/34136/afp_ukraina_obwe_600.jpeg", "special://app/cache/skopiowany_obrazek.jpeg", g_applicationPtr, 0);
+// 	File::Copy("http://i.wp.pl/a/f/jpeg/34136/afp_ukraina_obwe_600.jpeg", "special://app/cache/afp_ukraina_obwe_600.jpeg", g_applicationPtr, 0);
+// 	File::Copy("http://i.wp.pl/a/f/jpeg/34136/afp_ukraina_obwe_600.jpeg", "special://app/cache/skopiowany_obrazek.jpeg", g_applicationPtr, 0);
 
 	LOGINFO("*----------------------------------------------------------------------------*");
 	CURL httpurl("http://i.wp.pl/a/f/jpeg/34136/lanisek_scr2_lanisek_screen_nr1_650_360.jpeg");

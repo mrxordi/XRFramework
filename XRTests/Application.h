@@ -5,11 +5,12 @@
 #include "../XRFramework/filesystem/File.h"
 #include "../XRFramework/window/StatusBar.h"
 #include "../XRFramework/core/VideoRenderers/TestShader.h"
+#include "../XRFramework/core/VideoRenderers/YUV2RGBShader.h"
 #include <string>
 
 #include "Resource.h"
 
-class Application : public Singleton<Application>, public IApplication, public IFileCallback
+class Application : public Singleton<Application>, public IApplication
 {
 public:
 	Application();
@@ -23,10 +24,6 @@ public:
 
 	bool OnCreate(HWND hWnd);
 	bool OnDestroy();
-
-	virtual bool OnFileCallback(void* pContext, int ipercent, float avgSpeed) {
-		return true;
-	}
 
 	static Application& Create() { return *new Application; }
 	static void	Destroy() { delete Application::getSingletonPtr(); }
@@ -46,6 +43,9 @@ private:
 	HWND m_hWnd;
 	RenderControl m_rendercontrol;
 	TestShader m_testshader;
+	YUV2RGBShader m_yuvshader;
+	YUVBuffer m_yuvbuffer;
+
 };
 
 #define g_applicationPtr Application::getSingletonPtr()

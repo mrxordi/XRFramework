@@ -6,9 +6,9 @@ using namespace DirectX;
 
 class TestShader : public WinShader
 {
-	__declspec(align(16)) struct CUSTOMVERTEX {
-		XMVECTOR position;
-		XMVECTOR color;
+	struct CUSTOMVERTEX {
+		XMFLOAT4 position;
+		XMFLOAT4 color;
 	};
 
 public:

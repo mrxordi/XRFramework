@@ -1,7 +1,3 @@
-m_resource
-m_resource
-m_renderTargetView
-m_renderTargetView
 #include "stdafxf.h"
 #include "ID3DResource.h"
 #include "RenderSystemDX.h"
@@ -22,13 +18,19 @@ D3DTexture::D3DTexture()
 
 D3DTexture::~D3DTexture()
 {
+	if ((m_shaderResourceView || m_renderTargetView) && m_resource)
+	{
+		Release();
+	}
 }
 
-bool D3DTexture::Create(UINT width, UINT height, D3D10_BIND_FLAG bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels)
+bool D3DTexture::Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels)
 {
 	m_mipLevels = mipLevels;
 	m_format = format;
 	m_bindflag = bindflag;
+	m_width = width;
+	m_height = height;
 	ID3D10Device* pDevice = g_DXRendererPtr->GetDevice();
 
 	DXGI_SAMPLE_DESC dxgiSampleDesc;
@@ -46,8 +48,8 @@ bool D3DTexture::Create(UINT width, UINT height, D3D10_BIND_FLAG bindflag, D3D10
 	d3d10Texture2DDesc.SampleDesc = dxgiSampleDesc;
 	d3d10Texture2DDesc.Usage = usage;
 	d3d10Texture2DDesc.BindFlags = bindflag;
-	d3d10Texture2DDesc.CPUAccessFlags = (usage == D3D10_USAGE_DYNAMIC) ? D3D10_CPU_ACCESS_WRITE : 0;
-	d3d10Texture2DDesc.MiscFlags = (mipLevels > 0) ? D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
+	d3d10Texture2DDesc.CPUAccessFlags = (usage == D3D10_USAGE_DYNAMIC || usage == D3D10_USAGE_STAGING) ? D3D10_CPU_ACCESS_WRITE : 0;
+	d3d10Texture2DDesc.MiscFlags = (mipLevels > 1) ? D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
 
 	if (!g_DXRenderer.getSingletonPtr()) {
 		LOGERR("Failed to create texture!");
@@ -81,8 +83,6 @@ bool D3DTexture::Create(UINT width, UINT height, D3D10_BIND_FLAG bindflag, D3D10
 				LOGERR("Failed to create Shader Resource View!");
 				return false;
 			}
-
-			LOGINFO("Texture dimension %ux%u created with usage: %s", m_width, m_height, usages[usage]);
 		}
 		else if ((m_bindflag & D3D10_BIND_RENDER_TARGET) == D3D10_BIND_RENDER_TARGET) {
 			D3D10_RENDER_TARGET_VIEW_DESC rtDesc;
@@ -95,11 +95,12 @@ bool D3DTexture::Create(UINT width, UINT height, D3D10_BIND_FLAG bindflag, D3D10
 				LOGERR("Failed to create Shader Render Target View!");
 				return false;
 			}
-		} else {
+		}/* else {
 			LOGERR("Unsupported Bind flags for texture resource!");
 			Release();
 			return false;
-		}
+		}*/
+		LOGINFO("Texture dimension %ux%u created with usage: %s", m_width, m_height, usages[usage]);
 
 		g_DXRendererPtr->Register(this);
 		return true;
@@ -107,12 +108,12 @@ bool D3DTexture::Create(UINT width, UINT height, D3D10_BIND_FLAG bindflag, D3D10
 	return false;
 }
 
-bool D3DTexture::Lock(UINT level, D3D10_MAP typeofmap, D3D10_MAPPED_TEXTURE2D & mappedtexture)
+bool D3DTexture::Lock(UINT level, D3D10_MAP typeofmap, D3D10_MAPPED_TEXTURE2D* mappedtexture)
 {
 	if (m_bLocked)
 		return false;
 
-	bool bResult = (m_resource->Map(D3D10CalcSubresource(0, 0, level), typeofmap, 0, &mappedtexture) >= 0);
+	bool bResult = (m_resource->Map(D3D10CalcSubresource(0, 0, level), typeofmap, 0, mappedtexture) >= 0);
 	if (bResult)
 		m_bLocked = true;
 
@@ -156,6 +157,8 @@ D3DEffect::D3DEffect()
 
 D3DEffect::~D3DEffect()
 {
+	if (m_effect)
+		Release();
 }
 
 bool D3DEffect::Create(const std::string &effectString, DefinesMap* defines)
@@ -180,6 +183,7 @@ bool D3DEffect::Create(const std::string &effectString, DefinesMap* defines)
 
 void D3DEffect::Release()
 {
+	SAFE_DELETE(m_technique);
 	SAFE_RELEASE(m_effect);
 	m_defines.clear();
 	g_DXRendererPtr->Unregister(this);
@@ -192,10 +196,10 @@ bool D3DEffect::SetFloatArray(std::string handle, const float* val, unsigned int
 	return false;
 }
 
-bool D3DEffect::SetMatrix(std::string handle, XMMATRIX& mat)
+bool D3DEffect::SetMatrix(std::string handle, const XMFLOAT4X4& mat)
 {
 	if (m_effect)
-		return (m_effect->GetVariableByName(handle.c_str())->AsMatrix()->SetMatrix(reinterpret_cast<float*>(&mat)) >= 0);
+		return (m_effect->GetVariableByName(handle.c_str())->AsMatrix()->SetMatrix((float*)mat.m) >= 0);
 
 	return false;
 }
@@ -287,6 +291,11 @@ bool D3DEffect::CreateEffect()
 	return true;
 }
 
+
+
+/************************************************************************/
+/*    D3DVertexBuffer                                                    */
+/************************************************************************/
 D3DVertexBuffer::D3DVertexBuffer()
 {
 	m_bIsValid = false;
@@ -298,6 +307,8 @@ D3DVertexBuffer::D3DVertexBuffer()
 
 D3DVertexBuffer::~D3DVertexBuffer()
 {
+	if (m_bIsValid)
+		Release();
 }
 
 bool D3DVertexBuffer::CreateBuffer(UINT length, D3D10_USAGE usage /*= D3D10_USAGE_DEFAULT*/, void* data /*= NULL*/)
@@ -305,7 +316,7 @@ bool D3DVertexBuffer::CreateBuffer(UINT length, D3D10_USAGE usage /*= D3D10_USAG
 	if (m_vertexBuffer)
 		return false;
 
-	if (usage == D3D10_USAGE_IMMUTABLE && data == NULL && length == 0) {
+	if (usage == D3D10_USAGE_IMMUTABLE && data == NULL) {
 		LOGERR("No data provided while creating %s buffer", usages[usage]);
 		return false;
 	}
