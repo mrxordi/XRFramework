@@ -59,12 +59,12 @@ public:
 	 * Get pointer to buffer content
 	 * @return pointer to buffer content or NULL if buffer is zero size
 	 */
-	inline void* get(void) { return p; }
+	inline char* get(void) { return static_cast<char*>(p); }
 	/**
 	 * Get constant pointer to buffer content
 	 * @return constant pointer to buffer content
 	 */
-	inline const void* get(void) const { return p; }
+	inline const char* get(void) const { return static_cast<char*>(p); }
 	/**
 	 * Get size of the buffer
 	 * @return size of the buffer

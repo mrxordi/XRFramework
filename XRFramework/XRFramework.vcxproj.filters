@@ -175,6 +175,9 @@
     <ClInclude Include="core\VideoRenderers\TransformMatrix.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
+    <ClInclude Include="dvdplayer\VideoRenderers\YUV2RGBMatrix.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
     <ClInclude Include="core\VideoRenderers\WinShader.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
@@ -184,18 +187,7 @@
     <ClInclude Include="window\RenderControl.h">
       <Filter>window</Filter>
     </ClInclude>
-    <ClInclude Include="core\VideoRenderers\YUV2RGBMatrix.h">
-      <Filter>core\VideoRenderers</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Rect.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="core\VideoRenderers\YUV2RGBShader.h">
-      <Filter>core\VideoRenderers</Filter>
-    </ClInclude>
-    <ClInclude Include="core\VideoRenderers\WinRenderer.h">
-      <Filter>core\VideoRenderers</Filter>
-    </ClInclude>
+    <ClInclude Include="core\VideoRenderers\YUV2RGBShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -347,6 +339,9 @@
     <ClCompile Include="utils\BitstreamStats.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp">
+      <Filter>core\VideoRenderers</Filter>
+    </ClCompile>
     <ClCompile Include="core\VideoRenderers\WinShader.cpp">
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
@@ -356,18 +351,7 @@
     <ClCompile Include="window\RenderControl.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp">
-      <Filter>core\VideoRenderers</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\Rect.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp">
-      <Filter>core\VideoRenderers</Filter>
-    </ClCompile>
-    <ClCompile Include="core\VideoRenderers\WinRenderer.cpp">
-      <Filter>core\VideoRenderers</Filter>
-    </ClCompile>
+    <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="log">

@@ -83,9 +83,7 @@
     <ClInclude Include="core\VideoRenderers\RenderModes.h" />
     <ClInclude Include="core\VideoRenderers\TestShader.h" />
     <ClInclude Include="core\VideoRenderers\TransformMatrix.h" />
-    <ClInclude Include="core\VideoRenderers\WinRenderer.h" />
     <ClInclude Include="core\VideoRenderers\WinShader.h" />
-    <ClInclude Include="core\VideoRenderers\YUV2RGBMatrix.h" />
     <ClInclude Include="core\VideoRenderers\YUV2RGBShader.h" />
     <ClInclude Include="DLLoader\DllPaths_win32.h" />
     <ClInclude Include="DLLoader\DynamicDll.h" />
@@ -93,6 +91,7 @@
     <ClInclude Include="DLLoader\LoaderContainer.h" />
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
+    <ClInclude Include="dvdplayer\VideoRenderers\YUV2RGBMatrix.h" />
     <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\Directory.h" />
@@ -134,7 +133,6 @@
     <ClInclude Include="utils\IJobCallback.h" />
     <ClInclude Include="utils\Job.h" />
     <ClInclude Include="utils\JobManager.h" />
-    <ClInclude Include="utils\Rect.h" />
     <ClInclude Include="utils\RingBuffer.h" />
     <ClInclude Include="utils\Singleton.h" />
     <ClInclude Include="utils\StdString.h" />
@@ -151,7 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\VideoRenderers\TestShader.cpp" />
-    <ClCompile Include="core\VideoRenderers\WinRenderer.cpp" />
     <ClCompile Include="core\VideoRenderers\WinShader.cpp" />
     <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp" />
     <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp" />
@@ -201,7 +198,6 @@
     <ClCompile Include="utils\HttpHeader.cpp" />
     <ClCompile Include="utils\Job.cpp" />
     <ClCompile Include="utils\JobManager.cpp" />
-    <ClCompile Include="utils\Rect.cpp" />
     <ClCompile Include="utils\RingBuffer.cpp" />
     <ClCompile Include="utils\StringConverter.cpp" />
     <ClCompile Include="utils\StringUtils.cpp" />

@@ -10,8 +10,6 @@
 #include "../XRFramework/window/WindowEvents.h"
 #include "../XRFramework/window/RenderControl.h"
 #include "../XRFramework/render/RenderSystemDX.h"
-#include "../XRFramework/core/VideoRenderers/WinRenderer.h"
-#include "../XRFramework/core/VideoRenderers/YUV2RGBShader.h"
 
 
 
@@ -24,7 +22,6 @@ Application::Application() : m_bRunning(false), IApplication(this)
 
 Application::~Application()
 {
-	g_DXRendererPtr->Destroy();
 }
 
 bool Application::Initialize(HINSTANCE hInstance, int nCmdShow) {
@@ -43,7 +40,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow) {
 		return false;
 	}
 
-	//CurlJsonCharsetConverterLoggerTests();
+	CurlJsonCharsetConverterLoggerTests();
 
 	return true;
 }
@@ -59,8 +56,7 @@ void Application::Run() {
 			CWindowEvents::MessagePump();
 
 		if (g_DXRendererPtr->BeginRender()) {
-			//m_testshader.Render();
-			m_yuvshader.Render(XRect(5, 5, 635, 475), XRect(10, 10, 770, 570), 50.0f, 50.0f, CONF_FLAGS_YUVCOEF_BT601, &m_yuvbuffer);
+			m_testshader.Render();
 		}
 		g_DXRendererPtr->PresentRender();
 		g_DXRendererPtr->EndRender();
@@ -112,100 +108,13 @@ bool Application::OnCreate(HWND hWnd) {
 	g_DXRendererPtr->InitRenderSystem(&m_rendercontrol);
 	m_testshader.Create();
 
-
-	m_yuvshader.Create(640, 480, RENDER_FMT_YUV420P);
-
-	m_yuvbuffer.Create(RENDER_FMT_YUV420P, 640, 480);
-	m_yuvbuffer.StartDecode();
-	//m_yuvbuffer.Clear();
-
-	UINT dstPitch[3], dstPitchBefore[3];
-	unsigned char* dstData[3], *dstDataBefore[3];
-
-	for (UINT i = 0; i < 3; i++) {
-		dstPitchBefore[i] = dstPitch[i] = m_yuvbuffer.planes[i].rect.RowPitch;
-		dstDataBefore[i] = dstData[i] = (unsigned char*)m_yuvbuffer.planes[i].rect.pData;
-	}
-
-	File fe;
-	auto_buffer buff;
-	const char* filelist[3] = { "special://app/system/frame.yyy", "special://app/system/frame.uuu", "special://app/system/frame.vvv" };
-	YV12Image image;
-	{
-		fe.LoadFile(filelist[0], buff);
-		uint8_t* dataY = new uint8_t[buff.size()];
-		memcpy(dataY, buff.get(), buff.size());
-		image.plane[0] = dataY;
-		image.planesize[0] = buff.size();
-		image.stride[0] = 640;
-
-		fe.LoadFile(filelist[1], buff);
-		uint8_t* dataU = new uint8_t[buff.size()];
-		memcpy(dataU, buff.get(), buff.size());
-		image.plane[1] = dataU;
-		image.planesize[1] = buff.size();
-		image.stride[1] = 320;
-
-
-		fe.LoadFile(filelist[2], buff);
-		uint8_t* dataV = new uint8_t[buff.size()];
-		memcpy(dataV, buff.get(), buff.size());
-		image.plane[2] = dataV;
-		image.planesize[2] = buff.size();
-		image.stride[2] = 320;
-
-		image.width = 640;
-		image.height = 480;
-		image.cshift_x = 1;
-		image.cshift_y = 1;
-	}
-
-	uint8_t* s = image.plane[0];
-	uint8_t* d = (BYTE*)m_yuvbuffer.planes[0].rect.pData;
-	int w = m_yuvbuffer.planes[0].texture.GetWidth();
-	int h = m_yuvbuffer.planes[0].texture.GetHeight();
-
-	for (int i = 0; i < h; i++) {
-		memcpy(d, s, w);
-		s += image.stride[0];
-		d += m_yuvbuffer.planes[0].rect.RowPitch;
-	}
-
-	s = image.plane[1];
-	d = (BYTE*)m_yuvbuffer.planes[1].rect.pData;
-	w = (m_yuvbuffer.planes[1].texture.GetWidth() >> 1);
-	h = (m_yuvbuffer.planes[1].texture.GetHeight() >> 1);
-
-	for (int i = 0; i < h; i++) {
-		memcpy(d, s, w);
-		s += image.stride[1];
-		d += m_yuvbuffer.planes[1].rect.RowPitch;
-	}
-
-	s = image.plane[2];
-	d = (BYTE*)m_yuvbuffer.planes[2].rect.pData;
-
-	for (int i = 0; i < h; i++) {
-		memcpy(d, s, w);
-		s += image.stride[2];
-		d += m_yuvbuffer.planes[2].rect.RowPitch;
-	}
-
-
-	m_yuvbuffer.StartRender();
-
-	delete image.plane[0];
-	delete image.plane[1];
-	delete image.plane[2];
-
-
 	return true;
 }
 
 bool Application::OnDestroy() {
 	CJobManager::GetInstance().CancelJobs();
-	//m_yuvbuffer.Release();
 	g_DXRendererPtr->DestroyRenderSystem();
+	g_DXRendererPtr->Destroy();
 	m_Statusbar->OnDestory();
 	return true;
 }

@@ -25,21 +25,20 @@ public:
 	D3DTexture();
 	~D3DTexture();
 
-	bool Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels = 1);
+	bool Create(UINT width, UINT height, D3D10_BIND_FLAG bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels = 1);
 	void Release();
 
-	bool Lock(UINT level, D3D10_MAP typeofmap, D3D10_MAPPED_TEXTURE2D* mappedtexture);
+	bool Lock(UINT level, D3D10_MAP typeofmap, D3D10_MAPPED_TEXTURE2D & mappedtexture);
 	bool Unlock(UINT level);
 
 	ID3D10ShaderResourceView* Get() { return m_shaderResourceView; };
-	ID3D10Texture2D* GetResource() { return m_resource; }
 	UINT GetWidth()  const { return m_width; }
 	UINT GetHeight() const { return m_height; }
 	DXGI_FORMAT GetFormat() const { return m_format; }
 
 	virtual void OnDestroyDevice() override;
 private:
-	UINT m_bindflag;
+	D3D10_BIND_FLAG m_bindflag;
 	// creation parameters
 	UINT      m_width;
 	UINT      m_height;
@@ -68,7 +67,7 @@ public:
 	void Release();
 
 	bool SetFloatArray(std::string handle, const float* val, unsigned int count);
-	bool SetMatrix(std::string handle, const XMFLOAT4X4& mat);
+	bool SetMatrix(std::string handle, XMMATRIX& mat);
 	bool SetTechnique(std::string handle);
 	bool SetTexture(std::string handle, D3DTexture &texture);
 

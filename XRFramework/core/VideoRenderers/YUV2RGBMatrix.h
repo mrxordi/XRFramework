@@ -28,7 +28,7 @@ class YUV2RGBMatrix
 public:
 	YUV2RGBMatrix();
 	void SetParameters(float contrast, float blacklevel, unsigned int flags, ERenderFormat format);
-	XMFLOAT4X4* Matrix();
+	XMMATRIX* Matrix();
 
 private:
 	bool         m_NeedRecalc;
@@ -36,5 +36,5 @@ private:
 	float        m_blacklevel;
 	unsigned int m_flags;
 	ERenderFormat m_format;
-	XMFLOAT4X4  m_mat;
+	XMMATRIX  m_mat;
 };
