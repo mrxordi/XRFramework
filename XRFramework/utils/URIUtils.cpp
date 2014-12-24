@@ -192,7 +192,7 @@ bool URIUtils::HasEncodedHostname(const CURL& url)
 		|| url.IsProtocol("image");
 }
 
-bool URIUtils::IsHD(const CStdString& strFileName)
+bool URIUtils::IsHD(const std::string& strFileName)
 {
 	CURL url(strFileName);
 
