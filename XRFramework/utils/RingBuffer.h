@@ -23,7 +23,7 @@
 
 class CRingBuffer
 {
-  CCriticalSection m_critSection;
+  XR::CCriticalSection m_critSection;
   char *m_buffer;
   unsigned int m_size;
   unsigned int m_readPtr;
