@@ -1,5 +1,5 @@
 #pragma once
-#include "../XRFramework/utils/Singleton.h"
+#include "../XRCommon/utils/Singleton.h"
 #include "../XRFramework/IApplication.h"
 #include "../XRFramework/window/RenderControl.h"
 #include "../XRFramework/filesystem/File.h"

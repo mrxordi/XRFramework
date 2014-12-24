@@ -2,6 +2,7 @@
 #include "URL.h"
 #include "Util.h"
 #include "utils/StringUtils.h"
+#include "log/Log.h"
 
 
 CURL::CURL(const std::string& strURL1)

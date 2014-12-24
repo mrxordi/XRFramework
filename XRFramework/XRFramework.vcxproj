@@ -20,7 +20,8 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -28,6 +29,7 @@
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -52,13 +54,17 @@
       <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)XRCommon;$(ProjectDir);$(SolutionDir)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>libiconv.lib;d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -71,6 +77,10 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)XRCommon;$(ProjectDir);$(SolutionDir)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -79,7 +89,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>libiconv.lib;d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -109,30 +119,21 @@
     <ClInclude Include="filesystem\IFile.h" />
     <ClInclude Include="filesystem\IFileTypes.h" />
     <ClInclude Include="filesystem\MimeTypes.h" />
-    <ClInclude Include="filesystem\SpecialProtocol.h" />
     <ClInclude Include="filesystem\SpecialProtocolDirectory.h" />
-    <ClInclude Include="filesystem\URL.h" />
     <ClInclude Include="filesystem\Win32Directory.h" />
     <ClInclude Include="filesystem\Win32File.h" />
     <ClInclude Include="IApplication.h" />
     <ClInclude Include="LoggerContext.h" />
-    <ClInclude Include="log\FilePathUtils.h" />
-    <ClInclude Include="log\ilog.h" />
-    <ClInclude Include="log\Log.h" />
-    <ClInclude Include="log\LogDefines.h" />
-    <ClInclude Include="log\LogImplementation.h" />
     <ClInclude Include="render\D3D10Enumeration.h" />
     <ClInclude Include="render\dxerr.h" />
     <ClInclude Include="render\ID3DResource.h" />
     <ClInclude Include="render\RenderSystemDX.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="system\SysInfo.h" />
-    <ClInclude Include="Util.h" />
+    <ClInclude Include="FrameworkUtils.h" />
     <ClInclude Include="utils\AutoBuffer.h" />
     <ClInclude Include="utils\AutoPtrHandle.h" />
     <ClInclude Include="utils\BitstreamStats.h" />
-    <ClInclude Include="utils\Converter.h" />
-    <ClInclude Include="utils\ConverterFactory.h" />
     <ClInclude Include="utils\DateTime.h" />
     <ClInclude Include="utils\HttpHeader.h" />
     <ClInclude Include="utils\IJobCallback.h" />
@@ -140,15 +141,7 @@
     <ClInclude Include="utils\JobManager.h" />
     <ClInclude Include="utils\Rect.h" />
     <ClInclude Include="utils\RingBuffer.h" />
-    <ClInclude Include="utils\Singleton.h" />
-    <ClInclude Include="utils\StdString.h" />
-    <ClInclude Include="utils\StringConverter.h" />
-    <ClInclude Include="utils\StringUtils.h" />
     <ClInclude Include="utils\Timer.h" />
-    <ClInclude Include="utils\URIUtils.h" />
-    <ClInclude Include="utils\UrlOptions.h" />
-    <ClInclude Include="utils\Variant.h" />
-    <ClInclude Include="utils\WIN32Utils.h" />
     <ClInclude Include="window\RenderControl.h" />
     <ClInclude Include="window\StatusBar.h" />
     <ClInclude Include="window\WindowEvents.h" />
@@ -175,17 +168,11 @@
     <ClCompile Include="filesystem\IDirectory.cpp" />
     <ClCompile Include="filesystem\IFile.cpp" />
     <ClCompile Include="filesystem\MimeTypes.cpp" />
-    <ClCompile Include="filesystem\SpecialProtocol.cpp" />
     <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp" />
-    <ClCompile Include="filesystem\URL.cpp" />
     <ClCompile Include="filesystem\Win32Directory.cpp" />
     <ClCompile Include="filesystem\Win32File.cpp" />
     <ClCompile Include="IApplication.cpp" />
     <ClCompile Include="LoggerContext.cpp" />
-    <ClCompile Include="log\FilePathUtils.cpp" />
-    <ClCompile Include="log\ilog.cpp" />
-    <ClCompile Include="log\Log.cpp" />
-    <ClCompile Include="log\LogImplementation.cpp" />
     <ClCompile Include="render\D3D10Enumeration.cpp" />
     <ClCompile Include="render\dxerr.cpp" />
     <ClCompile Include="render\ID3DResource.cpp" />
@@ -195,30 +182,25 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\SysInfo.cpp" />
-    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="FrameworkUtils.cpp" />
     <ClCompile Include="utils\AutoBuffer.cpp" />
     <ClCompile Include="utils\AutoPtrHandle.cpp" />
     <ClCompile Include="utils\BitstreamStats.cpp" />
-    <ClCompile Include="utils\Converter.cpp" />
-    <ClCompile Include="utils\ConverterFactory.cpp" />
     <ClCompile Include="utils\DateTime.cpp" />
     <ClCompile Include="utils\HttpHeader.cpp" />
     <ClCompile Include="utils\Job.cpp" />
     <ClCompile Include="utils\JobManager.cpp" />
     <ClCompile Include="utils\Rect.cpp" />
     <ClCompile Include="utils\RingBuffer.cpp" />
-    <ClCompile Include="utils\StringConverter.cpp" />
-    <ClCompile Include="utils\StringUtils.cpp" />
     <ClCompile Include="utils\Timer.cpp" />
-    <ClCompile Include="utils\URIUtils.cpp" />
-    <ClCompile Include="utils\UrlOptions.cpp" />
-    <ClCompile Include="utils\Variant.cpp" />
-    <ClCompile Include="utils\WIN32Utils.cpp" />
     <ClCompile Include="window\RenderControl.cpp" />
     <ClCompile Include="window\StatusBar.cpp" />
     <ClCompile Include="window\WindowEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\XRCommon\XRCommon.vcxproj">
+      <Project>{95775c46-566d-43c6-b6c0-6363f892fc1a}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\XRThreads\XRThreads.vcxproj">
       <Project>{270efcf4-c8b7-405f-8ded-7c003d33c5b5}</Project>
       <Private>false</Private>

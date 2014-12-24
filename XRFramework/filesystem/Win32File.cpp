@@ -39,7 +39,7 @@
 #include <intsafe.h>
 #include <wchar.h>
 #include <limits.h>
-#include "URL.h"
+#include "utils/URL.h"
 
 
 CWin32File::CWin32File() : m_smbFile(false)

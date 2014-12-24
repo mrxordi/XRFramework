@@ -22,7 +22,7 @@
 #include "utils/URIUtils.h"
 //#include "utils/SysInfo.h"
 #include "Util.h"
-#include "URL.h"
+#include "utils/URL.h"
 #include <WinSock.h>
 #include "XRThreads/SystemClock.h"
 
@@ -30,7 +30,7 @@
 #include <climits>
 
 #include "DllLibCurl.h"
-#include "filesystem/SpecialProtocol.h"
+#include "utils/SpecialProtocol.h"
 #include "log/log.h"
 #include "utils/StringUtils.h"
 
@@ -54,7 +54,7 @@ extern "C" int debug_callback(CURL_HANDLE *handle, curl_infotype info, char *out
 	if (!g_LogPtr->IsLogExtraLogged(LOGCURL))
 		return 0;
 
-	CStdString strLine;
+	std::string strLine;
 	strLine.append(output, size);
 	std::vector<std::string> vecLines;
 	StringUtils::Tokenize(strLine, vecLines, "\r\n");
@@ -430,7 +430,7 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 	// set username and password for current handle
 	if (m_username.length() > 0 && m_password.length() > 0)
 	{
-		CStdString userpwd = m_username + ":" + m_password;
+		std::string userpwd = m_username + ":" + m_password;
 		m_curlInterface.easy_setopt(h, CURLOPT_USERPWD, userpwd.c_str());
 	}
 
@@ -446,9 +446,9 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 	m_curlInterface.easy_setopt(h, CURLOPT_MAXREDIRS, 5);
 
 	// Enable cookie engine for current handle to re-use them in future requests
-	CStdString strCookieFile;
-	//CStdString strTempPath = CSpecialProtocol::TranslatePath(special://);
-	CStdString strTempPath = CSpecialProtocol::TranslatePath("special://temp/");
+	std::string strCookieFile;
+	//std::string strTempPath = CSpecialProtocol::TranslatePath(special://);
+	std::string strTempPath = CSpecialProtocol::TranslatePath("special://temp/");
 	strCookieFile = URIUtils::AddFileToFolder(strTempPath, "cookies.dat");
 
 	m_curlInterface.easy_setopt(h, CURLOPT_COOKIEFILE, strCookieFile.c_str());
@@ -505,24 +505,24 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 	if (m_ftpauth.length() > 0)
 	{
 		m_curlInterface.easy_setopt(h, CURLOPT_FTP_SSL, CURLFTPSSL_TRY);
-		if (m_ftpauth.Equals("any"))
+		if (m_ftpauth =="any")
 			m_curlInterface.easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_DEFAULT);
-		else if (m_ftpauth.Equals("ssl"))
+		else if (m_ftpauth == "ssl")
 			m_curlInterface.easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_SSL);
-		else if (m_ftpauth.Equals("tls"))
+		else if (m_ftpauth == "tls")
 			m_curlInterface.easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS);
 	}
 
 	// setup requested http authentication method
 	if (m_httpauth.length() > 0)
 	{
-		if (m_httpauth.Equals("any"))
+		if (m_httpauth == "any")
 			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-		else if (m_httpauth.Equals("anysafe"))
+		else if (m_httpauth == "anysafe")
 			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
-		else if (m_httpauth.Equals("digest"))
+		else if (m_httpauth == "digest")
 			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-		else if (m_httpauth.Equals("ntlm"))
+		else if (m_httpauth == "ntlm")
 			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
 	}
 
@@ -604,7 +604,7 @@ void CCurlFile::SetRequestHeaders(CReadState* state)
 	MAPHTTPHEADERS::iterator it;
 	for (it = m_requestheaders.begin(); it != m_requestheaders.end(); it++)
 	{
-		CStdString buffer = it->first + ": " + it->second;
+		std::string buffer = it->first + ": " + it->second;
 		state->m_curlHeaderList = m_curlInterface.slist_append(state->m_curlHeaderList, buffer.c_str());
 	}
 
@@ -629,7 +629,7 @@ void CCurlFile::SetCorrectHeaders(CReadState* state)
 	if (StringUtils::EqualsNoCase(h.GetMimeType(), "text/html")
 		&& !h.GetValue("Content-Disposition").empty())
 	{
-		CStdString strValue = h.GetValue("Content-Disposition");
+		std::string strValue = h.GetValue("Content-Disposition");
 		if (strValue.find("filename=") != std::string::npos &&
 			strValue.find(".flv") != std::string::npos)
 			h.AddParam("Content-Type", "video/flv");
@@ -638,11 +638,11 @@ void CCurlFile::SetCorrectHeaders(CReadState* state)
 
 void CCurlFile::ParseAndCorrectUrl(CURL &url2)
 {
-	CStdString strProtocol = url2.GetTranslatedProtocol();
+	std::string strProtocol = url2.GetTranslatedProtocol();
 	url2.SetProtocol(strProtocol);
 
-	if (strProtocol.Equals("ftp")
-		|| strProtocol.Equals("ftps"))
+	if (strProtocol == "ftp"
+		|| strProtocol == "ftps")
 	{
 		// we was using url optons for urls, keep the old code work and warning
 		if (!url2.GetOptions().empty())
@@ -658,7 +658,7 @@ void CCurlFile::ParseAndCorrectUrl(CURL &url2)
 		/* url encoded. if handed from ftpdirectory */
 		/* it won't be so let's handle that case    */
 
-		CStdString filename(url2.GetFileName());
+		std::string filename(url2.GetFileName());
 		std::vector<std::string> array;
 
 		// if server sent us the filename in non-utf8, we need send back with same encoding.
@@ -698,8 +698,8 @@ void CCurlFile::ParseAndCorrectUrl(CURL &url2)
 		}
 		m_ftppasvip = url2.HasProtocolOption("pasvip") && url2.GetProtocolOption("pasvip") != "0";
 	}
-	else if (strProtocol.Equals("http")
-		|| strProtocol.Equals("https"))
+	else if (strProtocol == "http"
+		|| strProtocol == "https")
 	{
 		// 		if (CSettings::Get().GetBool("network.usehttpproxy")
 		// 			&& !CSettings::Get().GetString("network.httpproxyserver").empty()
@@ -731,32 +731,32 @@ void CCurlFile::ParseAndCorrectUrl(CURL &url2)
 			// set xbmc headers
 			for (std::map<std::string, std::string>::const_iterator it = options.begin(); it != options.end(); ++it)
 			{
-				const CStdString &name = it->first;
-				const CStdString &value = it->second;
+				const std::string &name = it->first;
+				const std::string &value = it->second;
 
-				if (name.Equals("auth"))
+				if (name == "auth")
 				{
 					m_httpauth = value;
 					if (m_httpauth.empty())
 						m_httpauth = "any";
 				}
-				else if (name.Equals("Referer"))
+				else if (name == "Referer")
 					SetReferer(value);
-				else if (name.Equals("User-Agent"))
+				else if (name == "User-Agent")
 					SetUserAgent(value);
-				else if (name.Equals("Cookie"))
+				else if (name == "Cookie")
 					SetCookie(value);
-				else if (name.Equals("Encoding"))
+				else if (name == "Encoding")
 					SetContentEncoding(value);
-				else if (name.Equals("noshout") && value.Equals("true"))
+				else if (name == "noshout" && value == "true")
 					m_skipshout = true;
-				else if (name.Equals("seekable") && value.Equals("0"))
+				else if (name == "seekable" && value == "0")
 					m_seekable = false;
-				else if (name.Equals("Accept-Charset"))
+				else if (name == "Accept-Charset")
 					SetAcceptCharset(value);
-				else if (name.Equals("HttpProxy"))
+				else if (name == "HttpProxy")
 					SetStreamProxy(value, PROXY_HTTP);
-				else if (name.Equals("SSLCipherList"))
+				else if (name == "SSLCipherList")
 					m_cipherlist = value;
 				else
 					SetRequestHeader(name, value);
@@ -770,7 +770,7 @@ void CCurlFile::ParseAndCorrectUrl(CURL &url2)
 		m_url = url2.Get();
 }
 
-void CCurlFile::SetStreamProxy(const CStdString &proxy, ProxyType type)
+void CCurlFile::SetStreamProxy(const std::string &proxy, ProxyType type)
 {
 	CURL url(proxy);
 	m_proxy = url.GetWithoutUserDetails();
@@ -781,21 +781,21 @@ void CCurlFile::SetStreamProxy(const CStdString &proxy, ProxyType type)
 	LOGDEBUG("Overriding proxy from URL parameter: %s, type %d", m_proxy.c_str(), proxyType2CUrlProxyType[m_proxytype]);
 }
 
-bool CCurlFile::Post(const CStdString& strURL, const CStdString& strPostData, std::string& strHTML)
+bool CCurlFile::Post(const std::string& strURL, const std::string& strPostData, std::string& strHTML)
 {
 	m_postdata = strPostData;
 	m_postdataset = true;
 	return Service(strURL, strHTML);
 }
 
-bool CCurlFile::Get(const CStdString& strURL, CStdString& strHTML)
+bool CCurlFile::Get(const std::string& strURL, std::string& strHTML)
 {
 	m_postdata = "";
 	m_postdataset = false;
 	return Service(strURL, strHTML);
 }
 
-bool CCurlFile::Service(const CStdString& strURL, std::string& strHTML)
+bool CCurlFile::Service(const std::string& strURL, std::string& strHTML)
 {
 	if (Open(strURL))
 	{
@@ -826,11 +826,11 @@ bool CCurlFile::ReadData(std::string& strHTML)
 	return true;
 }
 
-bool CCurlFile::Download(const CStdString& strURL, const CStdString& strFileName, LPDWORD pdwSize)
+bool CCurlFile::Download(const std::string& strURL, const std::string& strFileName, LPDWORD pdwSize)
 {
 	LOGINFO("Download started - %s->%s", strURL.c_str(), strFileName.c_str());
 
-	// 	CStdString strData;
+	// 	std::string strData;
 	// 	if (!Get(strURL, strData))
 	// 		return false;
 	// 
@@ -856,7 +856,7 @@ bool CCurlFile::Download(const CStdString& strURL, const CStdString& strFileName
 // Detect whether we are "online" or not! Very simple and dirty!
 bool CCurlFile::IsInternet()
 {
-	CStdString strURL = "http://www.google.com";
+	std::string strURL = "http://www.google.com";
 	bool found = Exists(strURL);
 	Close();
 
@@ -886,7 +886,7 @@ bool CCurlFile::Open(const CURL& url)
 	std::string redactPath = CURL::GetRedacted(m_url);
 	LOGDEBUG("CurlFile::Open(%p) %s", (void*)this, redactPath.c_str());
 
-	ASSERT(!(!m_state->m_easyHandle ^ !m_state->m_multiHandle));
+	assert(!(!m_state->m_easyHandle ^ !m_state->m_multiHandle));
 	if (m_state->m_easyHandle == NULL)
 		m_curlInterface.easy_aquire(url2.GetProtocol().c_str(), url2.GetHostName().c_str(), &m_state->m_easyHandle, &m_state->m_multiHandle);
 
@@ -1575,12 +1575,12 @@ void CCurlFile::ClearRequestHeaders()
 	m_requestheaders.clear();
 }
 
-void CCurlFile::SetRequestHeader(CStdString header, CStdString value)
+void CCurlFile::SetRequestHeader(std::string header, std::string value)
 {
 	m_requestheaders[header] = value;
 }
 
-void CCurlFile::SetRequestHeader(CStdString header, long value)
+void CCurlFile::SetRequestHeader(std::string header, long value)
 {
 	m_requestheaders[header] = StringUtils::Format("%ld", value);
 }
@@ -1633,28 +1633,6 @@ bool CCurlFile::GetHttpHeader(const CURL &url, CHttpHeader &headers)
 		LOGERR("%s - Exception thrown while trying to retrieve header url: %s", __FUNCTION__, url.GetRedacted().c_str());
 		return false;
 	}
-}
-
-bool CCurlFile::GetMimeType(const CURL &url, CStdString &content, CStdString useragent)
-{
-	CCurlFile file;
-	if (!useragent.empty())
-		file.SetUserAgent(useragent);
-
-	struct __stat64 buffer;
-	std::string redactUrl = url.GetRedacted();
-	if (file.Stat(url, &buffer) == 0)
-	{
-		if (buffer.st_mode == _S_IFDIR)
-			content = "x-directory/normal";
-		else
-			content = file.GetMimeType();
-		LOGDEBUG("CCurlFile::GetMimeType - %s -> %s", redactUrl.c_str(), content.c_str());
-		return true;
-	}
-	LOGDEBUG("CCurlFile::GetMimeType - %s -> failed", redactUrl.c_str());
-	content.clear();
-	return false;
 }
 
 bool CCurlFile::GetCookies(const CURL &url, std::string &cookies)

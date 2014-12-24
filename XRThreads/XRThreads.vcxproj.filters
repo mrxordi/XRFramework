@@ -12,22 +12,11 @@
     <ClInclude Include="SystemClock.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadImpl.h" />
-    <ClInclude Include="MFC\CritSection.h">
-      <Filter>MFC</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="SystemClock.cpp" />
     <ClCompile Include="Thread.cpp" />
-    <ClCompile Include="MFC\CritSection.cpp">
-      <Filter>MFC</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="MFC">
-      <UniqueIdentifier>{2629504b-a1c7-4f3e-9294-cbfb92b4bdb1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

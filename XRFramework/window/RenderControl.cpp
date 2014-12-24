@@ -17,20 +17,20 @@ RenderControl::~RenderControl()
 
 HWND RenderControl::Initialize(HWND parent, HINSTANCE hInst, RECT rc) {
 
-	WNDCLASS wc;
-	GetClassInfo(hInst, "static", &wc);
+	WNDCLASSA wc;
+	GetClassInfoA(hInst, "static", &wc);
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = "RenderControl";
 	wc.hInstance = hInst;
 	m_OldWndProc = wc.lpfnWndProc;
 	wc.lpfnWndProc = RenderControl::NewWndProc;
-	if (!RegisterClass(&wc))
+	if (!RegisterClassA(&wc))
 	{
-		MessageBox(parent, "Nie uda³o siê zarejestrowaæ nowej klasy.", "Yh...", MB_ICONSTOP);
+		MessageBoxA(parent, "Nie uda³o siê zarejestrowaæ nowej klasy.", "Yh...", MB_ICONSTOP);
 		DestroyWindow(parent);
 	}
 
-	m_hWnd = CreateWindowEx(0,                 //extended styles
+	m_hWnd = CreateWindowExA(0,                 //extended styles
 		"RenderControl",                 //control 'class' name
 		"static bla bla bla",         //control caption
 		WS_CHILD | WS_VISIBLE,        //control style 

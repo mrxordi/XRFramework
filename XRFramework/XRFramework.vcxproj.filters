@@ -2,31 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="stdafxf.h" />
-    <ClInclude Include="log\LogDefines.h">
-      <Filter>log</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Singleton.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\StdString.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\StringUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Util.h" />
-    <ClInclude Include="filesystem\SpecialProtocol.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\URIUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\UrlOptions.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Variant.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Timer.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -61,9 +36,6 @@
     <ClInclude Include="utils\RingBuffer.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\URL.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="DLLoader\DllPaths_win32.h">
       <Filter>dllloader</Filter>
     </ClInclude>
@@ -88,24 +60,6 @@
     <ClInclude Include="utils\HttpHeader.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="log\Log.h">
-      <Filter>log</Filter>
-    </ClInclude>
-    <ClInclude Include="log\LogImplementation.h">
-      <Filter>log</Filter>
-    </ClInclude>
-    <ClInclude Include="log\FilePathUtils.h">
-      <Filter>log</Filter>
-    </ClInclude>
-    <ClInclude Include="log\ilog.h">
-      <Filter>log</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\StringConverter.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Converter.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\AutoBuffer.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -113,9 +67,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="LoggerContext.h" />
-    <ClInclude Include="utils\ConverterFactory.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\DateTime.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -130,9 +81,6 @@
     </ClInclude>
     <ClInclude Include="filesystem\Win32File.h">
       <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\WIN32Utils.h">
-      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="Base.h" />
     <ClInclude Include="window\StatusBar.h">
@@ -153,13 +101,9 @@
     <ClInclude Include="filesystem\Directory.h">
       <Filter>filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\SpecialProtocolDirectory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="filesystem\Win32Directory.h">
       <Filter>filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\FileOperationJob.h" />
     <ClInclude Include="filesystem\CacheStrategy.h">
       <Filter>filesystem</Filter>
     </ClInclude>
@@ -196,25 +140,16 @@
     <ClInclude Include="core\VideoRenderers\WinRenderer.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
+    <ClInclude Include="FrameworkUtils.h" />
+    <ClInclude Include="filesystem\FileOperationJob.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\SpecialProtocolDirectory.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
-    <ClCompile Include="utils\StringUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Util.cpp" />
-    <ClCompile Include="filesystem\SpecialProtocol.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\URIUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\UrlOptions.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\Variant.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="utils\Timer.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -245,9 +180,6 @@
     <ClCompile Include="utils\RingBuffer.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem\URL.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="DLLoader\DynamicDll.cpp">
       <Filter>dllloader</Filter>
     </ClCompile>
@@ -269,24 +201,6 @@
     <ClCompile Include="utils\HttpHeader.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="log\Log.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
-    <ClCompile Include="log\LogImplementation.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
-    <ClCompile Include="log\FilePathUtils.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
-    <ClCompile Include="log\ilog.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\StringConverter.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\Converter.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="filesystem\File.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
@@ -294,9 +208,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="LoggerContext.cpp" />
-    <ClCompile Include="utils\ConverterFactory.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="utils\DateTime.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -311,9 +222,6 @@
     </ClCompile>
     <ClCompile Include="filesystem\Win32File.cpp">
       <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\WIN32Utils.cpp">
-      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="window\StatusBar.cpp">
       <Filter>window</Filter>
@@ -330,13 +238,9 @@
     <ClCompile Include="filesystem\Directory.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="filesystem\Win32Directory.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem\FileOperationJob.cpp" />
     <ClCompile Include="IApplication.cpp" />
     <ClCompile Include="filesystem\CacheStrategy.cpp">
       <Filter>filesystem</Filter>
@@ -368,11 +272,15 @@
     <ClCompile Include="core\VideoRenderers\WinRenderer.cpp">
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
+    <ClCompile Include="FrameworkUtils.cpp" />
+    <ClCompile Include="filesystem\FileOperationJob.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="log">
-      <UniqueIdentifier>{b626f908-cebe-42e6-92d7-8a0fab3c073a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="utils">
       <UniqueIdentifier>{2217abaa-9fcc-44a7-af21-8a7f85cc9568}</UniqueIdentifier>
     </Filter>

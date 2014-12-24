@@ -12,9 +12,9 @@ SysInfo::~SysInfo(void)
 {
 }
 
-CStdString SysInfo::GetUserAgent()
+std::string SysInfo::GetUserAgent()
 {
-	CStdString result;
+	std::string result;
 	result = "XRLib/ (";
 	result += GetUAWindowsVersion();
 	result += "; http://xbmc.org)";
@@ -22,14 +22,14 @@ CStdString SysInfo::GetUserAgent()
 	return result;
 }
 
-CStdString SysInfo::GetUAWindowsVersion()
+std::string SysInfo::GetUAWindowsVersion()
 {
 	OSVERSIONINFOEX osvi = {};
 
 	osvi.dwOSVersionInfoSize = sizeof(osvi);
-	CStdString strVersion = "Windows NT";
+	std::string strVersion = "Windows NT";
 
-	if (GetVersionEx((OSVERSIONINFO *)&osvi))
+	if (GetVersionEx((LPOSVERSIONINFO)&osvi))
 	{
 		strVersion += StringUtils::Format(" %d.%d", osvi.dwMajorVersion, osvi.dwMinorVersion);
 	}

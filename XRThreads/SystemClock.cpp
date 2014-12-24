@@ -21,6 +21,8 @@
 
 #include "stdafx.h"
 #include <windows.h>
+#include <timeapi.h>
+#include <ctime>
 #include "SystemClock.h"
 #include "../XRFramework/utils/DateTime.h"
 

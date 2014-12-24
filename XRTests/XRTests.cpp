@@ -7,10 +7,10 @@
 #include "LoggerContext.h"
 #include "DLLoader/LoaderFactory.h"
 #include "filesystem/DllLibCurl.h"
-#include "../XRFramework/filesystem/SpecialProtocol.h"
-#include "../XRFramework/log/Log.h"
-#include "../XRFramework/Util.h"
-#include "../XRFramework/utils/ConverterFactory.h"
+#include "../XRCommon/utils/SpecialProtocol.h"
+#include "../XRCommon/log/Log.h"
+#include "../XRCommon/Util.h"
+#include "../XRCommon/utils/ConverterFactory.h"
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -22,7 +22,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	Context context;
 
-	CStdString appPath, tempPath, docPath, homePath;
+	std::string appPath, tempPath, docPath, homePath;
 
 	appPath = CUtil::ResolveExecutablePath();
 	tempPath = CUtil::ResolveSystemTempPath();

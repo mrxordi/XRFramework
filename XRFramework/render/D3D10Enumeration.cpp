@@ -70,14 +70,14 @@ bool D3D10Enumeration::EnsureD3D10APIs(void)
 		return true;
 
 	// This may fail if Direct3D 10 isn't installed
-	s_hModD3D10 = LoadLibrary("d3d10.dll");
+	s_hModD3D10 = LoadLibrary(_T("d3d10.dll"));
 	if (s_hModD3D10 == NULL)
 	{
 		LOGERR("Enumeration - Failed to get d3d10.dll module");
 	}
 
 
-	s_hModDXGI = LoadLibrary("dxgi.dll");
+	s_hModDXGI = LoadLibrary(_T("dxgi.dll"));
 	if (s_hModDXGI)
 	{
 		s_DynamicCreateDXGIFactory = (LPCREATEDXGIFACTORY)GetProcAddress(s_hModDXGI, "CreateDXGIFactory");

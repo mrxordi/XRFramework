@@ -1,7 +1,7 @@
 #include "stdafxf.h"
 #include "Directory.h"
 #include "FileItem.h"
-#include "SpecialProtocolDirectory.h"
+#include "filesystem/SpecialProtocolDirectory.h"
 #include "Win32Directory.h"
 #include "IApplication.h"
 #include "log/Log.h"

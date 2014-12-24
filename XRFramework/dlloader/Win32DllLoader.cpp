@@ -3,7 +3,7 @@
 #include "LoaderContainer.h"
 #include "utils/StringUtils.h"
 #include "log/Log.h"
-#include "filesystem/SpecialProtocol.h"
+#include "utils/SpecialProtocol.h"
 
 
 Win32DllLoader::Win32DllLoader(const char *dll) : iLibraryLoader(dll)
@@ -31,15 +31,15 @@ bool Win32DllLoader::Load()
 	std::string strDll;
 	strDll = CSpecialProtocol::TranslatePath(strFileName);
 
-	m_dllHandle = LoadLibraryEx(strDll.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+	m_dllHandle = LoadLibraryExA(strDll.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 
 	if (!m_dllHandle)
 	{
 		DWORD dw = GetLastError();
 		char* lpMsgBuf = NULL;
-		DWORD strLen = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dw, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), (LPSTR)&lpMsgBuf, 0, NULL);
+		DWORD strLen = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dw, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), (LPSTR)&lpMsgBuf, 0, NULL);
 		if (strLen == 0)
-			strLen = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), (LPSTR)&lpMsgBuf, 0, NULL);
+			strLen = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), (LPSTR)&lpMsgBuf, 0, NULL);
 
 		if (strLen != 0)
 		{

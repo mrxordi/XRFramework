@@ -1,6 +1,4 @@
 #pragma once
-#include <d3d10.h>
-#include <dxgi.h>
 #include "render\dxerr.h"
 #include "log\Log.h"
 

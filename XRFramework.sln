@@ -7,6 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRThreads", "XRThreads\XRTh
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRFramework", "XRFramework\XRFramework.vcxproj", "{B2975FEF-C980-4311-9C8A-766851CA53A6}"
 	ProjectSection(ProjectDependencies) = postProject
+		{95775C46-566D-43C6-B6C0-6363F892FC1A} = {95775C46-566D-43C6-B6C0-6363F892FC1A}
 		{270EFCF4-C8B7-405F-8DED-7C003D33C5B5} = {270EFCF4-C8B7-405F-8DED-7C003D33C5B5}
 	EndProjectSection
 EndProject
@@ -21,6 +22,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRTestMFC", "XRTestMFC\XRTestMFC.vcxproj", "{EBF3F302-D569-46E6-B8A8-C8F6F6FBF636}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRCommon", "XRCommon\XRCommon.vcxproj", "{95775C46-566D-43C6-B6C0-6363F892FC1A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{270EFCF4-C8B7-405F-8DED-7C003D33C5B5} = {270EFCF4-C8B7-405F-8DED-7C003D33C5B5}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
