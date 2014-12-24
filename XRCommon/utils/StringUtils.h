@@ -25,7 +25,7 @@
 //  Purpose:   ATL split string utility
 //  Author:    Paul J. Weiss
 //
-//  Modified to support J O'Leary's CStdString class by kraqh3d
+//  Modified to support J O'Leary's std::string class by kraqh3d
 //
 //------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ public:
 	\return the formatted time
 	\sa TIME_FORMAT
 	*/
-	//static CStdString SecondsToTimeString(long seconds, TIME_FORMAT format = TIME_FORMAT_GUESS);
+	//static std::string SecondsToTimeString(long seconds, TIME_FORMAT format = TIME_FORMAT_GUESS);
 
 	/*! \brief check whether a string is a natural number.
 	Matches [ \t]*[0-9]+[ \t]*

@@ -2,7 +2,7 @@
 #include <algorithm>
 
 #include "MimeTypes.h"
-#include "URL.h"
+#include "utils/URL.h"
 #include "CurlFile.h"
 #include "FileItem.h"
 #include "utils/StringUtils.h"
@@ -516,7 +516,7 @@ std::string Mime::GetMimeType(const CURL& url, bool lookup) {
 		if (!lookup)
 			return strMimeType;
 
-		CStdString strmime;
+		std::string strmime;
 		CCurlFile::GetMimeType(url, strmime);
 
 		// make sure there are no options set in mime-type

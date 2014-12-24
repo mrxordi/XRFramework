@@ -25,7 +25,7 @@
 //  Purpose:   ATL split string utility
 //  Author:    Paul J. Weiss
 //
-//  Modified to use J O'Leary's CStdString class by kraqh3d
+//  Modified to use J O'Leary's std::string class by kraqh3d
 //
 //------------------------------------------------------------------------
 
@@ -681,7 +681,7 @@ long StringUtils::TimeStringToSeconds(const std::string &timeString)
 	}
 }
 
-/*CStdString StringUtils::SecondsToTimeString(long lSeconds, TIME_FORMAT format)
+/*std::string StringUtils::SecondsToTimeString(long lSeconds, TIME_FORMAT format)
 {
 int hh = lSeconds / 3600;
 lSeconds = lSeconds % 3600;
@@ -690,7 +690,7 @@ int ss = lSeconds % 60;
 
 if (format == TIME_FORMAT_GUESS)
 format = (hh >= 1) ? TIME_FORMAT_HH_MM_SS : TIME_FORMAT_MM_SS;
-CStdString strHMS;
+std::string strHMS;
 if (format & TIME_FORMAT_HH)
 strHMS += StringUtils::Format("%02.2i", hh);
 else if (format & TIME_FORMAT_H)

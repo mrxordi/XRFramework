@@ -25,10 +25,10 @@ public:
 	FileOperationJob();
 
 	FileOperationJob(FileAction action, FileItemList & items,
-		const CStdString& strDestFile,
+		const std::string& strDestFile,
 		bool displayProgress = false);
 
-	void SetFileOperation(FileAction action, FileItemList &items, const CStdString &strDestFile);
+	void SetFileOperation(FileAction action, FileItemList &items, const std::string &strDestFile);
 
 	virtual bool DoWork();
 
@@ -47,13 +47,13 @@ private:
 	class FileOperation : public IFileCallback
 	{
 	public:
-		FileOperation(FileAction action, const CStdString &strFileA, const CStdString &strFileB, int64_t time);
+		FileOperation(FileAction action, const std::string &strFileA, const std::string &strFileB, int64_t time);
 		bool ExecuteOperation(FileOperationJob *base, double &current, double opWeight);
 		void Debug();
 		virtual bool OnFileCallback(void* pContext, int ipercent, float avgSpeed);
 	private:
 		FileAction m_action;
-		CStdString m_strFileA, m_strFileB;
+		std::string m_strFileA, m_strFileB;
 		int64_t m_time;
 	};
 
@@ -64,7 +64,7 @@ private:
 	bool DoProcessFolder(FileAction action, const std::string& strPath, const std::string& strDestFile, FileOperationList &fileOperations, double &totalTime);
 	bool DoProcessFile(FileAction action, const std::string& strFileA, const std::string& strFileB, FileOperationList &fileOperations, double &totalTime);
 
-	static inline bool CanBeRenamed(const CStdString &strFileA, const CStdString &strFileB);
+	static inline bool CanBeRenamed(const std::string &strFileA, const std::string &strFileB);
 
 private:
 	StatusBarPtr m_hStatusBar;

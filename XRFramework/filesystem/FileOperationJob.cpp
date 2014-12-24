@@ -13,14 +13,14 @@ FileOperationJob::FileOperationJob()
 }
 
 FileOperationJob::FileOperationJob(FileAction action, FileItemList & items,
-									const CStdString& strDestFile,
+									const std::string& strDestFile,
 									bool displayProgress)
 {
 	m_bDisplayProgress = displayProgress;
 	SetFileOperation(action, items, strDestFile);
 }
 
-void FileOperationJob::SetFileOperation(FileAction action, FileItemList &items, const CStdString &strDestFile)
+void FileOperationJob::SetFileOperation(FileAction action, FileItemList &items, const std::string &strDestFile)
 {
   m_fileaction = action;
   m_strDestFile = strDestFile;
@@ -113,7 +113,7 @@ bool FileOperationJob::DoProcess(FileAction action, FileItemList & items, const 
 		URIUtils::RemoveSlashAtEnd(strNoSlash);
 		std::string strFileName = URIUtils::GetFileName(strNoSlash);
 
-		CStdString strnewDestFile;
+		std::string strnewDestFile;
 		if (!strDestFile.empty()) // only do this if we have a destination
 			strnewDestFile = URIUtils::ChangeBasePath(pItem->GetPath(), strFileName, strDestFile); // Convert (URL) encoding + slashes (if source / target differ)
 
@@ -180,7 +180,7 @@ bool FileOperationJob::DoProcessFile(FileAction action, const std::string& strFi
 	return true;
 }
 
-inline bool FileOperationJob::CanBeRenamed(const CStdString &strFileA, const CStdString &strFileB)
+inline bool FileOperationJob::CanBeRenamed(const std::string &strFileA, const std::string &strFileB)
 {
 	if (URIUtils::IsHD(strFileA) && URIUtils::IsHD(strFileB))
 		return true;
@@ -192,7 +192,7 @@ inline bool FileOperationJob::CanBeRenamed(const CStdString &strFileA, const CSt
 // FileOperation
 ////////////////////////////////////////////////////////////////////////////////////
 
-FileOperationJob::FileOperation::FileOperation(FileAction action, const CStdString &strFileA, const CStdString &strFileB, int64_t time) : m_action(action), m_strFileA(strFileA), m_strFileB(strFileB), m_time(time)
+FileOperationJob::FileOperation::FileOperation(FileAction action, const std::string &strFileA, const std::string &strFileB, int64_t time) : m_action(action), m_strFileA(strFileA), m_strFileB(strFileB), m_time(time)
 {
 }
 
@@ -286,7 +286,7 @@ bool FileOperationJob::FileOperation::OnFileCallback(void* pContext, int ipercen
 
 	if (data->base->m_hStatusBar)
 	{
-		CStdString line;
+		std::string line;
 		line = StringUtils::Format("%s...(%s) %f",
 			data->base->GetCurrentFile().c_str(),
 			data->base->GetAverageSpeed().c_str(), 

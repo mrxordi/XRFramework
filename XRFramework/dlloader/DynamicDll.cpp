@@ -21,8 +21,8 @@
 #include "DynamicDll.h"
 #include "LoaderFactory.h"
 #include "log/Log.h"
-#include "filesystem/URL.h"
-#include "filesystem/SpecialProtocol.h"
+#include "utils/URL.h"
+#include "utils/SpecialProtocol.h"
 
 DllDynamic::DllDynamic()
 {
@@ -30,7 +30,7 @@ DllDynamic::DllDynamic()
 	m_DelayUnload = true;
 }
 
-DllDynamic::DllDynamic(const CStdString& strDllName)
+DllDynamic::DllDynamic(const std::string& strDllName)
 {
 	m_strDllName = strDllName;
 	m_dll = NULL;
@@ -72,8 +72,8 @@ void DllDynamic::Unload()
 
 bool DllDynamic::CanLoad()
 {
-	CStdString szPath = CSpecialProtocol::TranslatePath(m_strDllName);
-	DWORD dwAttrib = GetFileAttributes(szPath.c_str());
+	std::string szPath = CSpecialProtocol::TranslatePath(m_strDllName);
+	DWORD dwAttrib = GetFileAttributesA(szPath.c_str());
 
 	return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 	//return CFile::Exists(m_strDllName);
@@ -89,7 +89,7 @@ bool DllDynamic::EnableDelayedUnload(bool bOnOff)
 	return true;
 }
 
-bool DllDynamic::SetFile(const CStdString& strDllName)
+bool DllDynamic::SetFile(const std::string& strDllName)
 {
 	if (m_dll)
 		return false;

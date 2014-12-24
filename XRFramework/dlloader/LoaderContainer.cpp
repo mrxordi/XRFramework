@@ -4,7 +4,7 @@
 #include "log\Log.h"
 #include "utils\StringUtils.h"
 #include "Win32DllLoader.h"
-#include "filesystem\URL.h"
+#include "utils\URL.h"
 
 //#define LOGALL
 
@@ -162,7 +162,7 @@ LibraryLoader* LoaderContainer::FindModule(const char* sName, const char* sCurre
 	}
 
 	//  in environment variable?
-	CStdStringArray vecEnv;
+	StringArray vecEnv;
 
 	StringUtils::SplitString(ENV_PATH, ";", vecEnv);
 	LibraryLoader* pDll = NULL;

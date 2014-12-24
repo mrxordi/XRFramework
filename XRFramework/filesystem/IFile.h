@@ -29,7 +29,6 @@
 #include <stdint.h>
 #include <sys/stat.h>
 
-#include "utils/StdString.h"
 #include "IFileTypes.h"
 #include "Base.h"
 

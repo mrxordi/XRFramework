@@ -1,21 +1,21 @@
 #include "stdafxf.h"
-#include "Util.h"
+#include "FrameworkUtils.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
-#include "filesystem/SpecialProtocol.h"
+#include "utils/SpecialProtocol.h"
 #include "filesystem/File.h"
 #include "filesystem/FileItem.h"
 #include "filesystem/Directory.h"
 #include <shlobj.h>
 
-std::string CUtil::GetNextFilename(const std::string &fn_template, int max)
+std::string CFUtil::GetNextFilename(const std::string &fn_template, int max)
 {
 	if (fn_template.find("%03d") == std::string::npos)
 		return "";
 
-	CStdString searchPath = URIUtils::GetDirectory(fn_template);
-	CStdString mask = URIUtils::GetExtension(fn_template);
-	CStdString name = StringUtils::Format(fn_template.c_str(), 0);
+	std::string searchPath = URIUtils::GetDirectory(fn_template);
+	std::string mask = URIUtils::GetExtension(fn_template);
+	std::string name = StringUtils::Format(fn_template.c_str(), 0);
 
 	FileItemList items;
 	if (!Directory::GetDirectory(searchPath, items, mask, DIR_FLAG_NO_FILE_DIRS))
@@ -24,28 +24,29 @@ std::string CUtil::GetNextFilename(const std::string &fn_template, int max)
 	items.SetFastLookup(true);
 	for (int i = 0; i <= max; i++)
 	{
-		CStdString name = StringUtils::Format(fn_template.c_str(), i);
+		std::string name = StringUtils::Format(fn_template.c_str(), i);
 		if (!items.Get(name))
 			return name;
 	}
 	return "";
 }
 
-std::string CUtil::GetNextPathname(const std::string &path_template, int max)
+std::string CFUtil::GetNextPathname(const std::string &path_template, int max)
 {
 	if (path_template.find("%04d") == std::string::npos)
 		return "";
 
 	for (int i = 0; i <= max; i++)
 	{
-		CStdString name = StringUtils::Format(path_template.c_str(), i);
+		std::string name = StringUtils::Format(path_template.c_str(), i);
 		if (!File::Exists(name) && !Directory::Exists(name))
 			return name;
 	}
 	return "";
 }
+/*
 
-std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes /*= false*/)
+std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes / *= false* /)
 {
 	std::string result = path;
 
@@ -66,10 +67,10 @@ std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes 
 	if (URIUtils::IsDOSPath(path))
 	{
 		StringUtils::Replace(result, '/', '\\');
-		/* The double slash correction should only be used when *absolutely*
+		/ * The double slash correction should only be used when *absolutely*
 		   necessary! This applies to certain DLLs or use from Python DLLs/scripts
 		   that incorrectly generate double (back) slashes.
-		   */
+		   * /
 		if (bFixDoubleSlashes && !result.empty())
 		{
 			// Fixup for double back slashes (but ignore the \\ of unc-paths)
@@ -83,10 +84,10 @@ std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes 
 	else if (path.find("://") != std::string::npos || path.find(":\\\\") != std::string::npos)
 	{
 		StringUtils::Replace(result, '\\', '/');
-		/* The double slash correction should only be used when *absolutely*
+		/ * The double slash correction should only be used when *absolutely*
 		   necessary! This applies to certain DLLs or use from Python DLLs/scripts
 		   that incorrectly generate double (back) slashes.
-		   */
+		   * /
 		if (bFixDoubleSlashes && !result.empty())
 		{
 			// Fixup for double forward slashes(/) but don't touch the :// of URLs
@@ -168,7 +169,7 @@ std::string CUtil::ResolveDocPath()
 	return strDocPath;
 }
 
-bool CUtil::IsPicture(const CStdString& strFile)
+bool CUtil::IsPicture(const std::string& strFile)
 {
 	return URIUtils::HasExtension(strFile,
 		std::string(URIUtils::pictureExtensions));
@@ -231,4 +232,4 @@ bool CUtil::GetFocussedProcess(std::string &strProcessFile)
 	CloseHandle(hproc);
 
 	return true;
-}
+}*/

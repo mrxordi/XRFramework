@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\includes;D:\ProgramFiles\VisualLeakDetector\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\includes;D:\ProgramFiles\VisualLeakDetector\include;$(IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\lib\debug;D:\ProgramFiles\VisualLeakDetector\lib\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
