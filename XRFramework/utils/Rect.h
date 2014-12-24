@@ -23,70 +23,71 @@ public:
 	XRect()
 		: x(0), y(0), x2(0), y2(0)
 	{ }
-	XRect(float xx, float yy, float ww, float hh)
-		: x(xx), y(yy), x2(ww), y2(hh)
-	{ }
+	XRect(float xx, float yy, float xx2, float yy2)
+//		: x(xx), y(yy), x2(ww), y2(hh)
+	{
+		if (yy2 < yy) { y = yy2; y2 = yy; } else { y = yy; y2 = yy2; }
+		if (xx2 < xx) { x = xx2; x2 = xx; } else { x = xx; x2 = xx2; }
+	}
 	XRect(const XPoint& topLeft, const XPoint& bottomRight);
 	XRect(const XPoint& pt, const XSize& size)
-		: x(pt.m_x), y(pt.m_y), x2(size.m_w), y2(size.m_h)
+		: x(pt.m_x), y(pt.m_y), x2(pt.m_x+size.m_w), y2(pt.m_y+size.m_h)
 	{ }
 	XRect(const XSize& size)
 		: x(0), y(0), x2(size.m_w), y2(size.m_h)
 	{ }
 
-	// default copy ctor and assignment operators ok
+	float GetWidth() const { return x2 - x; }
+	void SetWidth(float w) { x2 = x+w; }
 
-	float GetX() const { return x; }
-	void SetX(float xx) { x = xx; }
+	float GetHeight() const { return y2 - y; }
+	void SetHeight(float h) { y2 = y+h; }
 
-	float GetY() const { return y; }
-	void SetY(float yy) { y = yy; }
+	XPoint GetPosition() const { return XPoint(x, y); }
+	void SetPosition(const XPoint &p) {
+		float w = GetWidth(), h = GetHeight();
+		x = p.m_x;
+		y = p.m_y;
+		x2 = x + w;
+		y2 = x + h;
+	}
+	void SetPosition(float xx, float yy) {
+		float w = GetWidth(), h = GetHeight();
+		x = xx;
+		y = yy;
+		x2 = x + w;
+		y2 = x + h;
+	}
 
-	float GetWidth() const { return x2; }
-	void SetWidth(float w) { x2 = w; }
+	XSize GetSize() const { return XSize(GetWidth(), GetHeight()); }
+	void SetSize(const XSize &s) { SetWidth(s.m_w); SetHeight(s.m_h); }
 
-	float GetHeight() const { return y2; }
-	void SetHeight(float h) { y2 = h; }
-
-	XPoint GetPosition() const { XPoint a;  a.m_x = x, a.m_y = y; return a; }
-	void SetPosition(const XPoint &p) { x = p.m_x; y = p.m_y; }
-
-	XSize GetSize() const { return XSize(x2, y2); }
-	void SetSize(const XSize &s) { x2 = s.m_w; y2 = s.m_h; }
-
-	bool IsEmpty() const { return (x2 <= 0) || (y2 <= 0); }
+	bool IsEmpty() const { return ((x == x2) || (y == y2)); }
 
 	float GetLeft()   const { return x; }
 	float GetTop()    const { return y; }
-	float GetBottom() const { return y + y2 - 1; }
-	float GetRight()  const { return x + x2 - 1; }
+	float GetBottom() const { return y2; }
+	float GetRight()  const { return x2; }
 
-	void SetLeft(float left) { x = left; }
-	void SetRight(float right) { x2 = right - x + 1; }
-	void SetTop(float top) { y = top; }
-	void SetBottom(float bottom) { y2 = bottom - y + 1; }
+	void SetLeft(float left) { if (left > x2) { x2 = x; } x = left; }
+	void SetRight(float right) { if (right < x) { x = x2; } x2 = right; }
+	void SetTop(float top) { if (top > y2) { y2 = y; } y = top; }
+	void SetBottom(float bottom) { if (bottom < y) { y = y2; } y2 = bottom; }
 
 	XPoint GetTopLeft() const { return GetPosition(); }
-	XPoint GetLeftTop() const { return GetTopLeft(); }
 	void SetTopLeft(const XPoint &p) { SetPosition(p); }
-	void SetLeftTop(const XPoint &p) { SetTopLeft(p); }
 
-	XPoint GetBottomRight() const { return XPoint(GetRight(), GetBottom()); }
-	XPoint GetRightBottom() const { return GetBottomRight(); }
-	void SetBottomRight(const XPoint &p) { SetRight(x); SetBottom(y); }
-	void SetRightBottom(const XPoint &p) { SetBottomRight(p); }
+	XPoint GetBottomRight() const { return XPoint(x2, y2); }
+	void SetBottomRight(const XPoint &p) { SetRight(p.m_x); SetBottom(p.m_y); }
 
-	XPoint GetTopRight() const { return XPoint(GetRight(), GetTop()); }
-	XPoint GetRightTop() const { return GetTopRight(); }
+	XPoint GetTopRight() const { return XPoint(GetTop(), GetRight()); }
 	void SetTopRight(const XPoint &p) { SetRight(p.m_x); SetTop(p.m_y); }
-	void SetRightTop(const XPoint &p) { SetTopRight(p); }
 
 	XPoint GetBottomLeft() const { return XPoint(GetLeft(), GetBottom()); }
-	XPoint GetLeftBottom() const { return GetBottomLeft(); }
-	void SetBottomLeft(const XPoint &p) { SetLeft(x); SetBottom(y); }
-	void SetLeftBottom(const XPoint &p) { SetBottomLeft(p); }
+	void SetBottomLeft(const XPoint &p) { SetLeft(p.m_x); SetBottom(p.m_y); }
 
 	// operations with rect
+/*
 	XRect& Inflate(float dx, float dy);
 	XRect& Inflate(const XSize& d) { return Inflate(d.m_w, d.m_h); }
 	XRect& Inflate(float d) { return Inflate(d, d); }
@@ -96,7 +97,9 @@ public:
 		r.Inflate(dx, dy);
 		return r;
 	}
+*/
 
+/*
 	XRect& Deflate(float dx, float dy) { return Inflate(-dx, -dy); }
 	XRect& Deflate(const XSize& d) { return Inflate(-d.m_w, -d.m_h); }
 	XRect& Deflate(float d) { return Inflate(-d); }
@@ -133,7 +136,7 @@ public:
 	bool Contains(const XRect& rect) const;
 
 	// return true if the rectangles have a non empty intersection
-	bool Intersects(const XRect& rect) const;
+	bool Intersects(const XRect& rect) const;*/
 
 	// like Union() but don't ignore empty rectangles
 	XRect& operator+=(const XRect& rect);
