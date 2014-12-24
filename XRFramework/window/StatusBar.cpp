@@ -1,5 +1,6 @@
 #include "stdafxf.h"
 #include "StatusBar.h"
+#include "log/Log.h"
 
 
 StatusBar::StatusBar()
@@ -21,7 +22,7 @@ bool StatusBar::Initialize() {
 
 void StatusBar::OnCreate(HWND parent, HINSTANCE hInstance) {
 	if (m_hwnd)
-		LOGERR("StatusBar already created.")
+		LOGERR("StatusBar already created.");
 	m_hwnd = CreateWindowEx(0, STATUSCLASSNAME, NULL, SBARS_SIZEGRIP | WS_CHILD | WS_VISIBLE
 		, 0, 0, 0, 0, parent, (HMENU)200, hInstance, NULL);
 	int iStatusBarWidths[] = { 200, 300 };

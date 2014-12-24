@@ -1,7 +1,7 @@
 #pragma once
 #include "Event.h"
 #include "ThreadImpl.h"
-#include "../XRFramework/log/ilog.h"
+#include "log/ilog.h"
 #include "SystemClock.h"
 #include <stdint.h>
 
@@ -88,7 +88,7 @@ private:
 	CEvent m_StopEvent;
 	CEvent m_TermEvent;
 	CEvent m_StartEvent;
-	CCriticalSection m_CriticalSection;
+	XR::CCriticalSection m_CriticalSection;
 	IRunnable* m_pRunnable;
 	uint64_t m_iLastUsage;
 	uint64_t m_iLastTime;

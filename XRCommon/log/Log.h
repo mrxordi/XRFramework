@@ -41,7 +41,7 @@ public:
 private:
 	bool WriteLogString(int logLevel, const char* file, const int lineNumber, const char* functionName, const std::string& logString);
 
-	CCriticalSection m_CritSection;
+	XR::CCriticalSection m_CritSection;
 
 	LogImplementation_t m_Iplementation;
 

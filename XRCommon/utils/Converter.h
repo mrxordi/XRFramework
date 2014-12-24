@@ -7,14 +7,14 @@
 
 #define NO_ICONV ((iconv_t)-1)
 
-class Converter : public CCriticalSection
+class Converter : public XR::CCriticalSection
 {
 public:
 	Converter(const std::string&  sourceCharset, const std::string&  targetCharset, unsigned int targetSingleCharMaxLen = 1, unsigned int timeOfExist = CONVERTER_ALIVE_TIME);
 	Converter(const Converter& other);
 	~Converter();
 
-	iconv_t GetConverter(CSingleLock& converterLock);
+	iconv_t GetConverter(XR::CSingleLock& converterLock);
 	unsigned int GetTimeOfExist() { return m_timeOfExist; }
 
 	std::string GetSourceCharset(void) const  { return m_sourceCharset; }

@@ -29,7 +29,7 @@
 
 void CEvent::addGroup(XR::CEventGroup* group)
 {
-  CSingleLock lock(groupListMutex);
+  XR::CSingleLock lock(groupListMutex);
   if (groups == NULL)
     groups = new std::vector<XR::CEventGroup*>();
 
@@ -38,7 +38,7 @@ void CEvent::addGroup(XR::CEventGroup* group)
 
 void CEvent::removeGroup(XR::CEventGroup* group)
 {
-  CSingleLock lock(groupListMutex);
+  XR::CSingleLock lock(groupListMutex);
   if (groups)
   {
     for (std::vector<XR::CEventGroup*>::iterator iter = groups->begin(); iter != groups->end(); iter++)
@@ -68,13 +68,13 @@ void CEvent::Set()
   // CEvent class. This now perfectly matches the boost example here:
   // http://www.boost.org/doc/libs/1_41_0/doc/html/thread/synchronization.html#thread.synchronization.condvar_ref
   {
-    CSingleLock slock(mutex);
+    XR::CSingleLock slock(mutex);
     signaled = true; 
   }
 
   condVar.notifyAll();
 
-  CSingleLock l(groupListMutex);
+  XR::CSingleLock l(groupListMutex);
   if (groups)
   {
     for (std::vector<XR::CEventGroup*>::iterator iter = groups->begin(); 
@@ -109,7 +109,7 @@ namespace XR
   // CEvent::mutex's
   CEvent* CEventGroup::wait(unsigned int milliseconds)  
   { 
-    CSingleLock lock(mutex); // grab CEventGroup::mutex
+    XR::CSingleLock lock(mutex); // grab CEventGroup::mutex
     numWaits++; 
 
     // ==================================================

@@ -47,7 +47,7 @@ class CEvent : public XR::NonCopyable
   volatile bool signaled;
   unsigned int numWaits;
 
-  CCriticalSection groupListMutex; // lock for the groups list
+  XR::CCriticalSection groupListMutex; // lock for the groups list
   std::vector<XR::CEventGroup*> * groups;
 
   /**
@@ -57,7 +57,7 @@ class CEvent : public XR::NonCopyable
    */
   XR::ConditionVariable actualCv;
   XR::TightConditionVariable<volatile bool&> condVar;
-  CCriticalSection mutex;
+  XR::CCriticalSection mutex;
 
   friend class XR::CEventGroup;
 
@@ -71,7 +71,7 @@ public:
   inline CEvent(bool manual = false, bool signaled_ = false) : 
     manualReset(manual), signaled(signaled_), numWaits(0), groups(NULL), condVar(actualCv,signaled) {}
 
-  inline void Reset() { CSingleLock lock(mutex); signaled = false; }
+  inline void Reset() { XR::CSingleLock lock(mutex); signaled = false; }
   void Set();
 
   /**
@@ -80,7 +80,7 @@ public:
    *  was triggered. Otherwise it will return false.
    */
   inline bool WaitMSec(unsigned int milliSeconds) 
-  { CSingleLock lock(mutex); numWaits++; condVar.wait(mutex,milliSeconds); numWaits--; return prepReturn(); }
+  { XR::CSingleLock lock(mutex); numWaits++; condVar.wait(mutex,milliSeconds); numWaits--; return prepReturn(); }
 
   /**
    * This will wait for the Event to be triggered. The method will return 
@@ -88,13 +88,13 @@ public:
    * it will return false. Otherwise it will return false.
    */
   inline bool Wait()
-  { CSingleLock lock(mutex); numWaits++; condVar.wait(mutex); numWaits--; return prepReturn(); }
+  { XR::CSingleLock lock(mutex); numWaits++; condVar.wait(mutex); numWaits--; return prepReturn(); }
 
   /**
    * This is mostly for testing. It allows a thread to make sure there are 
    *  the right amount of other threads waiting.
    */
-  inline int getNumWaits() { CSingleLock lock(mutex); return numWaits; }
+  inline int getNumWaits() { XR::CSingleLock lock(mutex); return numWaits; }
 
 };
 
@@ -116,7 +116,7 @@ namespace XR
     unsigned int numWaits;
 
     // This is ONLY called from CEvent::Set.
-    inline void Set(CEvent* child) { CSingleLock l(mutex); signaled = child; condVar.notifyAll(); }
+    inline void Set(CEvent* child) { XR::CSingleLock l(mutex); signaled = child; condVar.notifyAll(); }
 
     friend class CEvent;
 
@@ -158,7 +158,7 @@ namespace XR
      * This is mostly for testing. It allows a thread to make sure there are 
      *  the right amount of other threads waiting.
      */
-    inline int getNumWaits() { CSingleLock lock(mutex); return numWaits; }
+    inline int getNumWaits() { XR::CSingleLock lock(mutex); return numWaits; }
 
   };
 }

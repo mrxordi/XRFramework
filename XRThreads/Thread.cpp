@@ -105,7 +105,7 @@ THREADFUNC CThread::staticThread(void *data) {
 	pThread->Action();
 
 	// lock during termination
-	CSingleLock lock(pThread->m_CriticalSection);
+	XR::CSingleLock lock(pThread->m_CriticalSection);
 
 	pThread->m_ThreadId = 0;
 	pThread->m_TermEvent.Set();
@@ -127,7 +127,7 @@ THREADFUNC CThread::staticThread(void *data) {
 void CThread::StopThread(bool bWait /*= true*/) {
 	m_bStop = true;
 	m_StopEvent.Set();
-	CSingleLock lock(m_CriticalSection);
+	XR::CSingleLock lock(m_CriticalSection);
 	if (m_ThreadId && bWait) {
 		lock.Leave();
 		WaitForThreadExit(0xFFFFFFFF);
@@ -178,7 +178,7 @@ void CThread::Action() {
 bool CThread::WaitForThreadExit(unsigned int milliseconds) {
 	bool bReturn = true;
 
-	CSingleLock lock(m_CriticalSection);
+	XR::CSingleLock lock(m_CriticalSection);
 	if (m_ThreadId && m_ThreadOpaque.handle != NULL)
 	{
 		// boost priority of thread we are waiting on to same as caller
@@ -203,7 +203,7 @@ int CThread::GetSchedRRPriority(void) {
 }
 
 int CThread::GetPriority(void) {
-	CSingleLock lock(m_CriticalSection);
+	XR::CSingleLock lock(m_CriticalSection);
 
 	int iReturn = THREAD_PRIORITY_NORMAL;
 	if (m_ThreadOpaque.handle)
@@ -216,7 +216,7 @@ int CThread::GetPriority(void) {
 bool CThread::SetPriority(const int iPriority) {
 	bool bReturn = false;
 
-	CSingleLock lock(m_CriticalSection);
+	XR::CSingleLock lock(m_CriticalSection);
 	if (m_ThreadOpaque.handle) {
 		bReturn = SetThreadPriority(m_ThreadOpaque.handle, iPriority) == TRUE;
 	}
@@ -264,7 +264,7 @@ float CThread::GetRelativeUsage() {
 
 int64_t CThread::GetAbsoluteUsage()
 {
-	CSingleLock lock(m_CriticalSection);
+	XR::CSingleLock lock(m_CriticalSection);
 
 	if (!m_ThreadOpaque.handle)
 		return 0;

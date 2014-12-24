@@ -205,14 +205,14 @@ const FileItemPtr FileItemList::operator[] (const std::string& strPath) const
 }
 
 void FileItemList::Clear() {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	m_items.clear();
 	m_map.clear();
 }
 
 void FileItemList::Add(const FileItemPtr &pItem)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	m_items.push_back(pItem);
 	if (m_fastLookup) {
@@ -222,7 +222,7 @@ void FileItemList::Add(const FileItemPtr &pItem)
 
 void FileItemList::AddFront(const FileItemPtr &pItem, int itemPosition)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (itemPosition >= 0)
 	{
@@ -240,7 +240,7 @@ void FileItemList::AddFront(const FileItemPtr &pItem, int itemPosition)
 
 void FileItemList::Remove(FileItem* pItem)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	for (IVECFILEITEMS it = m_items.begin(); it != m_items.end(); ++it)
 	{
@@ -258,7 +258,7 @@ void FileItemList::Remove(FileItem* pItem)
 
 void FileItemList::Remove(int iItem)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (iItem >= 0 && iItem < (int)Size())
 	{
@@ -273,7 +273,7 @@ void FileItemList::Remove(int iItem)
 
 void FileItemList::Append(const FileItemList& itemlist)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	for (int i = 0; i < itemlist.Size(); ++i)
 		Add(itemlist[i]);
@@ -281,7 +281,7 @@ void FileItemList::Append(const FileItemList& itemlist)
 
 void FileItemList::Assign(const FileItemList& itemlist, bool append)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	if (!append)
 		Clear();
 	Append(itemlist);
@@ -309,7 +309,7 @@ bool FileItemList::Copy(const FileItemList& items, bool copyItems /* = true */)
 
 FileItemPtr FileItemList::Get(int iItem)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (iItem > -1 && iItem < (int)m_items.size())
 		return m_items[iItem];
@@ -319,7 +319,7 @@ FileItemPtr FileItemList::Get(int iItem)
 
 const FileItemPtr FileItemList::Get(int iItem) const
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (iItem > -1 && iItem < (int)m_items.size())
 		return m_items[iItem];
@@ -329,7 +329,7 @@ const FileItemPtr FileItemList::Get(int iItem) const
 
 FileItemPtr FileItemList::Get(const std::string& strPath)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (m_fastLookup)
 	{
@@ -352,7 +352,7 @@ FileItemPtr FileItemList::Get(const std::string& strPath)
 
 const FileItemPtr FileItemList::Get(const std::string& strPath) const
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (m_fastLookup)
 	{
@@ -375,25 +375,25 @@ const FileItemPtr FileItemList::Get(const std::string& strPath) const
 
 int FileItemList::Size() const
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	return (int)m_items.size();
 }
 
 bool FileItemList::IsEmpty() const
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	return (m_items.size() <= 0);
 }
 
 void FileItemList::Reserve(int iCount)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	m_items.reserve(iCount);
 }
 
 int FileItemList::GetFolderCount() const
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	int nFolderCount = 0;
 	for (int i = 0; i < (int)m_items.size(); i++)
 	{
@@ -407,7 +407,7 @@ int FileItemList::GetFolderCount() const
 
 int FileItemList::GetFileCount() const
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	int nFileCount = 0;
 	for (int i = 0; i < (int)m_items.size(); i++)
 	{
@@ -421,7 +421,7 @@ int FileItemList::GetFileCount() const
 
 void FileItemList::SetFastLookup(bool fastLookup)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (fastLookup && !m_fastLookup)
 	{ // generate the map
@@ -439,7 +439,7 @@ void FileItemList::SetFastLookup(bool fastLookup)
 
 bool FileItemList::Contains(const std::string& fileName) const
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (m_fastLookup)
 		return m_map.find(fileName) != m_map.end();

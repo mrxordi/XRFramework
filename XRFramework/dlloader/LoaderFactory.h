@@ -34,7 +34,7 @@ public:
 
 protected:
 	static std::vector<CDll> m_vecLoadedDLLs;
-	static CCriticalSection m_critSect;
+	static XR::CCriticalSection m_critSect;
 private:
 	static LoaderFactory_t m_thisInstance;
 };

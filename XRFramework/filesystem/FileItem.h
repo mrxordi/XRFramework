@@ -1,6 +1,6 @@
 #pragma once
 #include "File.h"
-#include "URL.h"
+#include "utils/URL.h"
 #include "utils/Variant.h"
 #include "utils/DateTime.h"
 #include <boost/shared_ptr.hpp>
@@ -150,5 +150,5 @@ private:
 
 	bool m_fastLookup;
 	bool m_bIsFolder;
-	CCriticalSection m_critSect;
+	XR::CCriticalSection m_critSect;
 };

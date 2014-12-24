@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CritSection.h"
 
+/*
 namespace XR {
 
 #ifdef DEBUG
@@ -23,4 +24,4 @@ namespace XR {
 
 #endif // DEBUG
 
-}
+}*/

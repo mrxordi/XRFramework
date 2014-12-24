@@ -149,13 +149,13 @@ bool cRenderSystemDX::DestroyRenderSystem()
 
 void cRenderSystemDX::Register(ID3DResource *resource)
 {
-	CSingleLock lock(m_resourceSection);
+	XR::CSingleLock lock(m_resourceSection);
 	m_resources.push_back(resource);
 }
 
 void cRenderSystemDX::Unregister(ID3DResource *resource)
 {
-	CSingleLock lock(m_resourceSection);
+	XR::CSingleLock lock(m_resourceSection);
 	std::vector<ID3DResource*>::iterator i = find(m_resources.begin(), m_resources.end(), resource);
 	if (i != m_resources.end())
 		m_resources.erase(i);

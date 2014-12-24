@@ -1,5 +1,6 @@
 #pragma once
 
+/*
 namespace XR {
 	//Critical section implementation for MFC
 
@@ -67,7 +68,7 @@ namespace XR {
 #define DbgLockTrace(pc, fT)
 #endif
 
-}
+}*/
 
 
 

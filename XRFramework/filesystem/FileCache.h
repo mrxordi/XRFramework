@@ -54,6 +54,6 @@ private:
 	unsigned     m_writeRate;
 	unsigned     m_writeRateActual;
 	bool         m_cacheFull;
-	CCriticalSection m_sync;
+	XR::CCriticalSection m_sync;
 };
 

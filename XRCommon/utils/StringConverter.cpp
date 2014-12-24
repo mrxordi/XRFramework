@@ -125,7 +125,7 @@ bool StringConverter::Convert(const std::string& sourceCharset, const std::strin
 	const int dstMultp = (targetCharset.compare(0, 5, "UTF-8") == 0) ? 4 : 1;
 
 	Converter* converter = ConverterFactory::CreateConverter(sourceCharset, targetCharset, dstMultp);
-	CSingleLock converterLock(*converter);
+	XR::CSingleLock converterLock(*converter);
 
 	return InnerConvert(converter->GetConverter(converterLock), converter->GetTargetSingleCharMaxLen(), strSource, strDest, failOnInvalidChar);
 }

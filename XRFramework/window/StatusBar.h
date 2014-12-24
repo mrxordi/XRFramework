@@ -5,7 +5,7 @@
 #include <string>
 
 
-class StatusBar : public CCriticalSection
+class StatusBar : public XR::CCriticalSection
 {
 public:
 	StatusBar();

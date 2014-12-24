@@ -1,5 +1,4 @@
 #pragma once
-#include <windows.h>
 #include "Lockables.h"
 
 namespace XR {
@@ -42,5 +41,6 @@ namespace XR {
  * This is not a typedef because of a number of "class CCriticalSection;" 
  *  forward declarations in the code that break when it's done that way.
  */
-class CCriticalSection : public XR::CountingLockable<XR::RecursiveMutex> {};
-		
+namespace XR {
+	class CCriticalSection : public XR::CountingLockable < XR::RecursiveMutex > {};
+}

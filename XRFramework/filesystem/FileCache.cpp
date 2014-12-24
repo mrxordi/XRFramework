@@ -119,7 +119,7 @@ bool FileCache::Open(const CURL& url)
 {
 	Close();
 
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 
 	LOGDEBUG("CFileCache::Open - opening <%s> using cache", url.GetRedacted().c_str());
 
@@ -324,7 +324,7 @@ int FileCache::Stat(const CURL& url, struct __stat64* buffer)
 
 ssize_t FileCache::Read(void* lpBuf, int64_t uiBufSize)
 {
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 	if (!m_pCache)
 	{
 		LOGERR("Sanity failed. no cache strategy!");
@@ -368,7 +368,7 @@ retry:
 
 int64_t FileCache::Seek(int64_t iFilePosition, int iWhence)
 {
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 
 	if (!m_pCache)
 	{
@@ -427,7 +427,7 @@ void FileCache::Close()
 {
 	StopThread();
 
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 	if (m_pCache)
 		m_pCache->Close();
 

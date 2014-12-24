@@ -29,7 +29,7 @@
 
 bool DllLibCurlGlobal::Load()
 {
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 	if (m_curlReferences > 0)
 	{
 		m_curlReferences++;
@@ -56,7 +56,7 @@ bool DllLibCurlGlobal::Load()
 
 void DllLibCurlGlobal::Unload()
 {
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 	if (--m_curlReferences == 0)
 	{
 		if (!IsLoaded())
@@ -77,7 +77,7 @@ void DllLibCurlGlobal::CheckIdle()
 	if (m_curlReferences == 0)
 		return;
 
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 	/* 20 seconds idle time before closing handle */
 	const unsigned int idletime = 30000;
 
@@ -110,7 +110,7 @@ void DllLibCurlGlobal::easy_aquire(const char *protocol, const char *hostname, C
 {
 	assert(easy_handle != NULL);
 
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 
 	VEC_CURLSESSIONS::iterator it;
 	for (it = m_sessions.begin(); it != m_sessions.end(); it++)
@@ -174,7 +174,7 @@ void DllLibCurlGlobal::easy_aquire(const char *protocol, const char *hostname, C
 
 void DllLibCurlGlobal::easy_release(CURL_HANDLE** easy_handle, CURLM** multi_handle)
 {
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 
 	CURL_HANDLE* easy = NULL;
 	CURLM*       multi = NULL;
@@ -208,7 +208,7 @@ void DllLibCurlGlobal::easy_release(CURL_HANDLE** easy_handle, CURLM** multi_han
 
 CURL_HANDLE* DllLibCurlGlobal::easy_duphandle(CURL_HANDLE* easy_handle)
 {
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 
 	VEC_CURLSESSIONS::iterator it;
 	for (it = m_sessions.begin(); it != m_sessions.end(); it++)
@@ -227,7 +227,7 @@ CURL_HANDLE* DllLibCurlGlobal::easy_duphandle(CURL_HANDLE* easy_handle)
 
 void DllLibCurlGlobal::easy_duplicate(CURL_HANDLE* easy, CURLM* multi, CURL_HANDLE** easy_out, CURLM** multi_out)
 {
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 
 	if (easy_out && easy)
 		*easy_out = DllLibCurl::easy_duphandle(easy);
@@ -261,14 +261,14 @@ void DllLibCurlGlobal::easy_duplicate(CURL_HANDLE* easy, CURLM* multi, CURL_HAND
 
 DllLibCurlGlobal& DllLibCurlGlobal::Get()
 {
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 	static DllLibCurlGlobal m_this;
 	return m_this;
 }
 
 void DllLibCurlGlobal::UnloadAll()
 {
-	CSingleLock lock(m_critSection);
+	XR::CSingleLock lock(m_critSection);
 
 	CURL_HANDLE* easy = NULL;
 	CURLM*       multi = NULL;
@@ -297,6 +297,6 @@ void DllLibCurlGlobal::UnloadAll()
 	}
 }
 
-CCriticalSection DllLibCurlGlobal::m_critSection;
+XR::CCriticalSection DllLibCurlGlobal::m_critSection;
 DllLibCurlGlobal::VEC_CURLSESSIONS DllLibCurlGlobal::m_sessions;
 long DllLibCurlGlobal::m_curlReferences = 0;

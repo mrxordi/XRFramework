@@ -95,7 +95,7 @@ protected:
 
 	D3D10Enumeration m_enumeration;
 
-	CCriticalSection            m_resourceSection;
+	XR::CCriticalSection            m_resourceSection;
 	std::vector<ID3DResource*>  m_resources;
 
 	ID3D10Device*		  m_pDevice;

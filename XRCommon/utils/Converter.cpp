@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Converter.h"
 #include "ConverterFactory.h"
+#include "log/log.h"
 
 
 Converter::Converter(const std::string&  sourceCharset, const std::string&  targetCharset, unsigned int targetSingleCharMaxLen, unsigned int timeOfExist) :
@@ -11,13 +12,13 @@ m_sourceCharset(sourceCharset), m_targetCharset(targetCharset), m_targetSingleCh
 
 Converter::~Converter()
 {
-	CSingleLock lock(*this);
+	XR::CSingleLock lock(*this);
 	if (m_iconv != NO_ICONV)
 		iconv_close(m_iconv);
 	lock.Leave(); // ensure unlocking before final destruction
 }
 
-iconv_t Converter::GetConverter(CSingleLock& converterLock) {
+iconv_t Converter::GetConverter(XR::CSingleLock& converterLock) {
 	// ensure that this unique instance is locked externally
 	if (&converterLock.get_underlying() != this)
 		return NO_ICONV;

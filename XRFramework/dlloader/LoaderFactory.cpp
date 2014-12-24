@@ -22,7 +22,7 @@ LoaderFactory::~LoaderFactory(void)
 }
 
 LoaderFactory_t LoaderFactory::GetSharedPtr() {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (!m_thisInstance) {
 		m_thisInstance.reset(new LoaderFactory);
@@ -33,7 +33,7 @@ LoaderFactory_t LoaderFactory::GetSharedPtr() {
 
 LoaderFactory* LoaderFactory::Get()
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	if (!m_thisInstance) {
 		m_thisInstance.reset(new LoaderFactory);
 	}
@@ -42,7 +42,7 @@ LoaderFactory* LoaderFactory::Get()
 
 LibraryLoader* LoaderFactory::LoadDLL(const std::string& strDllName, bool bDelayUnload/*=true*/, bool bLoadSymbols/*=false*/)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (strDllName.empty()) return NULL;
 	//	check if it's already loaded, and increase the reference count if so
@@ -76,7 +76,7 @@ LibraryLoader* LoaderFactory::LoadDLL(const std::string& strDllName, bool bDelay
 
 void LoaderFactory::UnloadDLL(const std::string& strDllName)
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (strDllName.empty()) return;
 	// check if it's already loaded, and decrease the reference count if so
@@ -107,7 +107,7 @@ void LoaderFactory::UnloadDLL(const std::string& strDllName)
 
 void LoaderFactory::UnloadDelayed()
 {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	// check if we can unload any unreferenced dlls
 	for (int i = 0; i < (int)m_vecLoadedDLLs.size(); ++i)
@@ -129,7 +129,7 @@ void LoaderFactory::UnloadDelayed()
 void LoaderFactory::UnloadAll()
 {
 	// delete the dll's
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	std::vector<CDll>::iterator it = m_vecLoadedDLLs.begin();
 	while (it != m_vecLoadedDLLs.end())
 	{
@@ -143,6 +143,6 @@ void LoaderFactory::UnloadAll()
 
 std::vector<LoaderFactory::CDll> LoaderFactory::m_vecLoadedDLLs;
 
-CCriticalSection LoaderFactory::m_critSect;
+XR::CCriticalSection LoaderFactory::m_critSect;
 
 LoaderFactory_t LoaderFactory::m_thisInstance = NULL;

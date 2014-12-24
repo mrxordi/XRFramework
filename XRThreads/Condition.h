@@ -65,8 +65,8 @@ namespace XR
       return SleepConditionVariableCS(&cond,&lock.get_underlying().mutex,milliseconds) ? true : false;
     }
 
-    inline void wait(CSingleLock& lock) { wait(lock.get_underlying()); }
-    inline bool wait(CSingleLock& lock, unsigned long milliseconds) { return wait(lock.get_underlying(), milliseconds); }
+    inline void wait(XR::CSingleLock& lock) { wait(lock.get_underlying()); }
+    inline bool wait(XR::CSingleLock& lock, unsigned long milliseconds) { return wait(lock.get_underlying(), milliseconds); }
     inline void notifyAll() { WakeAllConditionVariable(&cond); }
     inline void notify() { WakeConditionVariable(&cond); }
   };

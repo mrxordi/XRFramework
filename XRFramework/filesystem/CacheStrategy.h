@@ -149,7 +149,7 @@ protected:
 	uint8_t          *m_buf;       /**< buffer holding data */
 	size_t            m_size;      /**< size of data buffer used (m_buf) */
 	size_t            m_size_back; /**< guaranteed size of back buffer (actual size can be smaller, or larger if front buffer doesn't need it) */
-	CCriticalSection  m_sync;
+	XR::CCriticalSection  m_sync;
 	CEvent            m_written;
 	HANDLE            m_handle;
 };

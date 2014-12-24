@@ -24,7 +24,7 @@ CLog::~CLog() {
 }
 
 bool CLog::Init(std::string& path) {
-	CSingleLock waitlock(m_CritSection);
+	XR::CSingleLock waitlock(m_CritSection);
 
 	std::string pathFileName;
 
@@ -70,7 +70,7 @@ bool CLog::Init(std::string& path) {
 }
 
 void CLog::Close() {
-	CSingleLock lock(m_CritSection);
+	XR::CSingleLock lock(m_CritSection);
 
 	m_Iplementation->CloseLogFile();
 	m_repeatLine.clear();
@@ -92,7 +92,7 @@ void CLog::LogString(int loglevel, const char* file, const int lineNumber, const
 	//Check that our CLog object existing
 	//Otherwise send only WriteLogString which will output only in Debug Window in that case.
 	if (this) {
-		CSingleLock waitLock(m_CritSection);
+		XR::CSingleLock waitLock(m_CritSection);
 
 		std::string strData(logString);
 		StringUtils::TrimRight(strData);
@@ -168,7 +168,7 @@ void CLog::PrintDebugString(const std::string& line) {
 
 void CLog::SetLogLevel(int level)
 {
-	CSingleLock waitLock(m_CritSection);
+	XR::CSingleLock waitLock(m_CritSection);
 	if (level >= LOG_LEVEL_NONE && level <= LOG_LEVEL_MAX)
 	{
 		m_logLevel = level;
@@ -180,7 +180,7 @@ void CLog::SetLogLevel(int level)
 
 void CLog::SetExtraLogLevels(int level)
 {
-	CSingleLock waitLock(m_CritSection);
+	XR::CSingleLock waitLock(m_CritSection);
 	m_extraLogLevels = level;
 }
 
@@ -200,13 +200,8 @@ bool CLog::IsLogLevelLogged(int loglevel)
 #if defined(_DEBUG) || defined(PROFILE)
 	return true;
 #else
-	if (s_globals.m_logLevel >= LOG_LEVEL_DEBUG)
-		return true;
-	if (s_globals.m_logLevel <= LOG_LEVEL_NONE)
-		return false;
-
 	// "m_logLevel" is "LOG_LEVEL_NORMAL"
-	return (loglevel & LOGMASK) >= LOGNOTICE;
+	return (loglevel & LOGMASK) >= LOG_NOTICE;
 #endif
 }
 

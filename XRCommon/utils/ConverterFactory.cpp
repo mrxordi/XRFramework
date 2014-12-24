@@ -5,10 +5,10 @@
 #include "../XRThreads/SystemClock.h"
 
 ConverterFactory::VectorConverter ConverterFactory::m_vConverters;
-CCriticalSection ConverterFactory::m_critSect;
+XR::CCriticalSection ConverterFactory::m_critSect;
 
 Converter* ConverterFactory::GetConverter(const std::string&  sourceCharset, const std::string&  targetCharset) {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (sourceCharset.empty() || sourceCharset.empty()) {
 		LOGERR("One of the charsets missing!");
@@ -41,7 +41,7 @@ Converter* ConverterFactory::GetConverter(const std::string&  sourceCharset, con
 }
 
 Converter* ConverterFactory::CreateConverter(const std::string&  sourceCharset, const std::string&  targetCharset, unsigned int targetSingleCharMaxLen, unsigned int timeOfExist) {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	if (targetCharset == "UTF-8" && targetSingleCharMaxLen != 4) {
 		LOGFATAL("Failed to create converter (%s --> %s) as single character max Lenght for UTF-8 is 4.", sourceCharset.c_str(), targetCharset.c_str());
@@ -63,7 +63,7 @@ Converter* ConverterFactory::CreateConverter(const std::string&  sourceCharset, 
 
 
 	pNewConverter = new Converter(sourceCharset, targetCharset, targetSingleCharMaxLen, timeOfExist);
-	CSingleLock convLock(*pNewConverter);
+	XR::CSingleLock convLock(*pNewConverter);
 	if (NO_ICONV == pNewConverter->GetConverter(convLock)) {
 		convLock.Leave();
 		delete pNewConverter;
@@ -98,7 +98,7 @@ void ConverterFactory::DestroyConverter(const std::string&  sourceCharset, const
 
 
 void ConverterFactory::CheckIdleDestroy() {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 
 	for (unsigned int i = 0; i < m_vConverters.size(); ++i)
 	{
@@ -120,7 +120,7 @@ void ConverterFactory::CheckIdleDestroy() {
 }
 
 void ConverterFactory::DestroyAll() {
-	CSingleLock lock(m_critSect);
+	XR::CSingleLock lock(m_critSect);
 	LOGDEBUG("Deleting %i converters.", m_vConverters.size());
 
 	unsigned int i = 0;

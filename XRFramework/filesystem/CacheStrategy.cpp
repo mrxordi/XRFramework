@@ -1,9 +1,10 @@
 #include "stdafxf.h"
 #include "CacheStrategy.h"
 #include "Win32File.h"
-#include "SpecialProtocol.h"
+#include "utils/SpecialProtocol.h"
 #include "Util.h"
-#include "URL.h"
+#include "FrameworkUtils.h"
+#include "utils/URL.h"
 #include "utils/StringConverter.h"
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +57,7 @@ int SimpleFileCache::Open()
 
 	m_hDataAvailEvent = new CEvent;
 
-	m_filename = CSpecialProtocol::TranslatePath(CUtil::GetNextFilename("special://temp/filecache%03d.cache", 999));
+	m_filename = CSpecialProtocol::TranslatePath(CFUtil::GetNextFilename("special://temp/filecache%03d.cache", 999));
 	if (m_filename.empty())
 	{
 		LOGERR("Unable to generate a new filename");
@@ -429,7 +430,7 @@ void CircularCache::Close()
 */
 int CircularCache::WriteToCache(const char *buf, size_t len)
 {
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 
 	// where are we in the buffer
 	size_t pos = m_end % m_size;
@@ -470,7 +471,7 @@ int CircularCache::WriteToCache(const char *buf, size_t len)
 */
 int CircularCache::ReadFromCache(char *buf, size_t len)
 {
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 
 	size_t pos = m_cur % m_size;
 	size_t front = (size_t)(m_end - m_cur);
@@ -500,7 +501,7 @@ int CircularCache::ReadFromCache(char *buf, size_t len)
 
 int64_t CircularCache::WaitForData(unsigned int minumum, unsigned int millis)
 {
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 	int64_t avail = m_end - m_cur;
 
 	if (millis == 0 || IsEndOfInput())
@@ -523,7 +524,7 @@ int64_t CircularCache::WaitForData(unsigned int minumum, unsigned int millis)
 
 int64_t CircularCache::Seek(int64_t pos)
 {
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 
 	// if seek is a bit over what we have, try to wait a few seconds for the data to be available.
 	// we try to avoid a (heavy) seek on the source
@@ -545,7 +546,7 @@ int64_t CircularCache::Seek(int64_t pos)
 
 void CircularCache::Reset(int64_t pos, bool clearAnyway)
 {
-	CSingleLock lock(m_sync);
+	XR::CSingleLock lock(m_sync);
 	if (!clearAnyway && IsCachedPosition(pos))
 	{
 		m_cur = pos;

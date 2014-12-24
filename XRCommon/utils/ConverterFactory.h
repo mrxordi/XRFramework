@@ -23,6 +23,6 @@ public:
 
 private:
 	static VectorConverter m_vConverters;
-	static CCriticalSection m_critSect;
+	static XR::CCriticalSection m_critSect;
 };
 
