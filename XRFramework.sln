@@ -18,6 +18,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRTests", "XRTests\XRTests.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRTestMDI", "XRTestMDI\XRTestMDI.vcxproj", "{EF509850-326F-439C-A92F-6F09B182BE09}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRTestMFC", "XRTestMFC\XRTestMFC.vcxproj", "{EBF3F302-D569-46E6-B8A8-C8F6F6FBF636}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XRCommon", "XRCommon\XRCommon.vcxproj", "{95775C46-566D-43C6-B6C0-6363F892FC1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -40,6 +44,14 @@ Global
 		{EF509850-326F-439C-A92F-6F09B182BE09}.Debug|Win32.Build.0 = Debug|Win32
 		{EF509850-326F-439C-A92F-6F09B182BE09}.Release|Win32.ActiveCfg = Release|Win32
 		{EF509850-326F-439C-A92F-6F09B182BE09}.Release|Win32.Build.0 = Release|Win32
+		{EBF3F302-D569-46E6-B8A8-C8F6F6FBF636}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EBF3F302-D569-46E6-B8A8-C8F6F6FBF636}.Debug|Win32.Build.0 = Debug|Win32
+		{EBF3F302-D569-46E6-B8A8-C8F6F6FBF636}.Release|Win32.ActiveCfg = Release|Win32
+		{EBF3F302-D569-46E6-B8A8-C8F6F6FBF636}.Release|Win32.Build.0 = Release|Win32
+		{95775C46-566D-43C6-B6C0-6363F892FC1A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{95775C46-566D-43C6-B6C0-6363F892FC1A}.Debug|Win32.Build.0 = Debug|Win32
+		{95775C46-566D-43C6-B6C0-6363F892FC1A}.Release|Win32.ActiveCfg = Release|Win32
+		{95775C46-566D-43C6-B6C0-6363F892FC1A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

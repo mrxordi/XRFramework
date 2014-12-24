@@ -2,7 +2,6 @@
 #include "LogDefines.h"
 
 
-/*
 namespace XR {
 
 	class ILogger {
@@ -15,4 +14,4 @@ namespace XR {
 			const char* function, const char* message) = 0;
 	};
 
-}*/
+}

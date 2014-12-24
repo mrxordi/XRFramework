@@ -1,9 +1,8 @@
-#include "stdafxf.h"
+#include "stdafx.h"
 #include "ilog.h"
 #include "utils/StringUtils.h"
 
 
-/*
 void XR::ILogger::Log(int loglevel, const char* file, const int linenumber, const char* function, const char* message, ...)
 {
 	std::string strData;
@@ -16,4 +15,3 @@ void XR::ILogger::Log(int loglevel, const char* file, const int linenumber, cons
 
 	log(loglevel, file, linenumber, function, strData.c_str());
 }
-*/

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="log\FilePathUtils.cpp" />
+    <ClCompile Include="log\ilog.cpp" />
+    <ClCompile Include="log\Log.cpp" />
+    <ClCompile Include="log\LogImplementation.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="threads\CritSection.cpp" />
+    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="utils\Converter.cpp" />
+    <ClCompile Include="utils\ConverterFactory.cpp" />
+    <ClCompile Include="utils\SpecialProtocol.cpp" />
+    <ClCompile Include="utils\StringConverter.cpp" />
+    <ClCompile Include="utils\StringUtils.cpp" />
+    <ClCompile Include="utils\URIUtils.cpp" />
+    <ClCompile Include="utils\URL.cpp" />
+    <ClCompile Include="utils\UrlOptions.cpp" />
+    <ClCompile Include="utils\Variant.cpp" />
+    <ClCompile Include="utils\WIN32Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="log\FilePathUtils.h" />
+    <ClInclude Include="log\ilog.h" />
+    <ClInclude Include="log\Log.h" />
+    <ClInclude Include="log\LogDefines.h" />
+    <ClInclude Include="log\LogImplementation.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="threads\CritSection.h" />
+    <ClInclude Include="Util.h" />
+    <ClInclude Include="utils\Converter.h" />
+    <ClInclude Include="utils\ConverterFactory.h" />
+    <ClInclude Include="utils\Singleton.h" />
+    <ClInclude Include="utils\SpecialProtocol.h" />
+    <ClInclude Include="utils\StringConverter.h" />
+    <ClInclude Include="utils\StringUtils.h" />
+    <ClInclude Include="utils\URIUtils.h" />
+    <ClInclude Include="utils\URL.h" />
+    <ClInclude Include="utils\UrlOptions.h" />
+    <ClInclude Include="utils\Variant.h" />
+    <ClInclude Include="utils\WIN32Utils.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{95775C46-566D-43C6-B6C0-6363F892FC1A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>XRCommon</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\XRFrameworkDef.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\XRFrameworkDef.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

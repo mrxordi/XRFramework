@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="log">
+      <UniqueIdentifier>{7c4f41c9-273c-4e39-8566-4a442dd8d792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="threads">
+      <UniqueIdentifier>{7b853e41-0d5a-4710-a3f4-80135e2e4fe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{de471790-b704-48f9-8010-9530c16b1f6d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="log\FilePathUtils.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\ilog.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\Log.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\LogImplementation.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\StringConverter.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\URIUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\StringUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="threads\CritSection.cpp">
+      <Filter>threads</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\SpecialProtocol.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\URL.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\UrlOptions.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Variant.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Converter.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\ConverterFactory.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\WIN32Utils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="log\FilePathUtils.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\ilog.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\Log.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\LogDefines.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\LogImplementation.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\StringConverter.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\URIUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\StringUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\CritSection.h">
+      <Filter>threads</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\SpecialProtocol.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Singleton.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\URL.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\UrlOptions.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Variant.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Converter.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\ConverterFactory.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\WIN32Utils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h" />
+  </ItemGroup>
+</Project>
