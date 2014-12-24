@@ -278,15 +278,7 @@ void YUV2RGBShader::Render(XRect sourceRect, XRect destRect, float contrast, flo
 	PrepareParameters(sourceRect, destRect, contrast, brightness, flags);
 	UploadToGPU(YUVbuf);
 	SetShaderParameters(YUVbuf);
-	ID3D10RenderTargetView* state_rtv;
-	ID3D10DepthStencilView* state_dsv;
-	g_DXRendererPtr->GetDevice()->OMGetRenderTargets(1, &state_rtv, &state_dsv);
-	g_DXRendererPtr->GetDevice()->OMSetRenderTargets(1, &state_rtv, NULL);
 	Execute(NULL, 0);
-	g_DXRendererPtr->GetDevice()->OMSetRenderTargets(1, &state_rtv, state_dsv);
-	state_rtv->Release();
-	state_dsv->Release();
-
 }
 
 void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float contrast, float brightness, unsigned int flags)
@@ -312,31 +304,31 @@ void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float co
 		v[0].tuv.y = v[0].tvv.y = (sourceRect.y / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		//right top corner of destination
-		v[1].coord.x = destRect.width;
+		v[1].coord.x = destRect.x2;
 		v[1].coord.y = destRect.y;
 		//right top corner of source UAV surfaces
-		v[1].tyv.x = sourceRect.width / m_sourceWidth;
+		v[1].tyv.x = sourceRect.GetWidth() / m_sourceWidth;
 		v[1].tyv.y = sourceRect.y / m_sourceHeight;
-		v[1].tuv.x = v[1].tvv.x = (sourceRect.width / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
+		v[1].tuv.x = v[1].tvv.x = (sourceRect.GetWidth() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
 		v[1].tuv.y = v[1].tvv.y = (sourceRect.y / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		//right bottom corner of destination
-		v[2].coord.x = destRect.width;
-		v[2].coord.y = destRect.height;
+		v[2].coord.x = destRect.x2;
+		v[2].coord.y = destRect.y2;
 		//right bottom corner of source UAV surfaces
-		v[2].tyv.x = sourceRect.width / m_sourceWidth;
-		v[2].tyv.y = sourceRect.height / m_sourceHeight;
-		v[2].tuv.x = v[2].tvv.x = (sourceRect.width / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
-		v[2].tuv.y = v[2].tvv.y = (sourceRect.height / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
+		v[2].tyv.x = sourceRect.GetWidth() / m_sourceWidth;
+		v[2].tyv.y = sourceRect.GetHeight() / m_sourceHeight;
+		v[2].tuv.x = v[2].tvv.x = (sourceRect.GetWidth() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
+		v[2].tuv.y = v[2].tvv.y = (sourceRect.GetHeight() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		//left bottom corner of destination
 		v[3].coord.x = destRect.x;
-		v[3].coord.y = destRect.height;
+		v[3].coord.y = destRect.y2;
 		//left bottom corner of source UAV surfaces
 		v[3].tyv.x = sourceRect.x / m_sourceWidth;
-		v[3].tyv.y = sourceRect.height / m_sourceHeight;
+		v[3].tyv.y = sourceRect.GetHeight() / m_sourceHeight;
 		v[3].tuv.x = v[3].tvv.x = (sourceRect.x / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
-		v[3].tuv.y = v[3].tvv.y = (sourceRect.height / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
+		v[3].tuv.y = v[3].tvv.y = (sourceRect.GetHeight() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		UINT f = (m_sourceHeight >> 1);
 		// -0.5 offset to compensate for D3D rasterization
@@ -399,9 +391,9 @@ bool YUV2RGBShader::BuildVertexLayout()
 	D3D10_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D10_APPEND_ALIGNED_ELEMENT, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, D3D10_APPEND_ALIGNED_ELEMENT, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT, 0, D3D10_APPEND_ALIGNED_ELEMENT, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 16, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT, 0, 32, D3D10_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
