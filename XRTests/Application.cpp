@@ -60,7 +60,7 @@ void Application::Run() {
 
 		if (g_DXRendererPtr->BeginRender()) {
 			//m_testshader.Render();
-			m_yuvshader.Render(XRect(5, 5, 635, 475), XRect(10, 10, 770, 570), 50.0f, 50.0f, CONF_FLAGS_YUVCOEF_BT601, &m_yuvbuffer);
+			m_yuvshader.Render(XRect(0, 0, 1280, 534), XRect(10, 10, 770, 570), 50.0f, 50.0f, CONF_FLAGS_YUVCOEF_BT601, &m_yuvbuffer);
 		}
 		g_DXRendererPtr->PresentRender();
 		g_DXRendererPtr->EndRender();
@@ -113,9 +113,9 @@ bool Application::OnCreate(HWND hWnd) {
 	m_testshader.Create();
 
 
-	m_yuvshader.Create(640, 480, RENDER_FMT_YUV420P);
+	m_yuvshader.Create(1280, 534, RENDER_FMT_YUV420P);
 
-	m_yuvbuffer.Create(RENDER_FMT_YUV420P, 640, 480);
+	m_yuvbuffer.Create(RENDER_FMT_YUV420P, 1280, 534);
 	m_yuvbuffer.StartDecode();
 	//m_yuvbuffer.Clear();
 
@@ -137,14 +137,14 @@ bool Application::OnCreate(HWND hWnd) {
 		memcpy(dataY, buff.get(), buff.size());
 		image.plane[0] = dataY;
 		image.planesize[0] = buff.size();
-		image.stride[0] = 640;
+		image.stride[0] = 1280;
 
 		fe.LoadFile(filelist[1], buff);
 		uint8_t* dataU = new uint8_t[buff.size()];
 		memcpy(dataU, buff.get(), buff.size());
 		image.plane[1] = dataU;
 		image.planesize[1] = buff.size();
-		image.stride[1] = 320;
+		image.stride[1] = 640;
 
 
 		fe.LoadFile(filelist[2], buff);
@@ -152,10 +152,10 @@ bool Application::OnCreate(HWND hWnd) {
 		memcpy(dataV, buff.get(), buff.size());
 		image.plane[2] = dataV;
 		image.planesize[2] = buff.size();
-		image.stride[2] = 320;
+		image.stride[2] = 640;
 
-		image.width = 640;
-		image.height = 480;
+		image.width = 1280;
+		image.height = 534;
 		image.cshift_x = 1;
 		image.cshift_y = 1;
 	}
@@ -173,8 +173,8 @@ bool Application::OnCreate(HWND hWnd) {
 
 	s = image.plane[1];
 	d = (BYTE*)m_yuvbuffer.planes[1].rect.pData;
-	w = (m_yuvbuffer.planes[1].texture.GetWidth() >> 1);
-	h = (m_yuvbuffer.planes[1].texture.GetHeight() >> 1);
+	w = (m_yuvbuffer.planes[1].texture.GetWidth());
+	h = (m_yuvbuffer.planes[1].texture.GetHeight());
 
 	for (int i = 0; i < h; i++) {
 		memcpy(d, s, w);
