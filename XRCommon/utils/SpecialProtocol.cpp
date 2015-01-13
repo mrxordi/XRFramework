@@ -8,7 +8,7 @@
 
 using namespace std;
 
-map<std::string, std::string> CSpecialProtocol::m_pathMap;
+map<string, string> CSpecialProtocol::m_pathMap;
 
 void CSpecialProtocol::SetAPPPath(const std::string &dir)
 {
@@ -127,13 +127,13 @@ std::string CSpecialProtocol::TranslatePathConvertCase(const std::string& path)
 
 void CSpecialProtocol::LogPaths()
 {
-	LOGINFO("/---- System paths are initialised  ----\\");
+	LOGINFO("/---- System paths are initialised  ----------------------------------------------------\\");
 	LOGINFO("**special://app/ is mapped to: %s", GetPath("app").c_str());
 	LOGINFO("**special://appbin/ is mapped to: %s", GetPath("appbin").c_str());
 	LOGINFO("**special://home/ is mapped to: %s", GetPath("home").c_str());
 	LOGINFO("**special://temp/ is mapped to: %s", GetPath("temp").c_str());
 	LOGINFO("--special://doc/ is mapped to: %s", GetPath("doc").c_str());
-	LOGINFO("\\-------------------------------------/");
+	LOGINFO("\\---------------------------------------------------------------------------------------/");
 
 }
 
@@ -141,6 +141,7 @@ void CSpecialProtocol::LogPaths()
 void CSpecialProtocol::SetPath(const std::string &key, const std::string &path)
 {
 	m_pathMap[key] = path;
+//		m_pathMap.insert(std::pair<string, string>(key, path));
 }
 
 std::string CSpecialProtocol::GetPath(const std::string &key)
