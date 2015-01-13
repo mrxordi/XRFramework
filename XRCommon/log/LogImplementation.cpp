@@ -76,9 +76,9 @@ void LogImplementation::PrintDebugString(const std::string& debugString)
 	//	if (MultiByteToWideChar(CP_UTF8, 0, debugString.c_str(), debugString.length(), (wchar_t*)buf, sizebuf / sizeof(wchar_t)) == bufSize)
 	//		::OutputDebugStringW(std::wstring((wchar_t*)buf, bufSize).c_str());
 	//	else
-	std::string outStr;
-	StringConverter::Utf8ToWin1250(debugString, outStr, false);
-	::OutputDebugStringA(outStr.c_str());
+	//std::string outStr;
+	//StringConverter::Utf8ToWin1250(debugString, outStr, false);
+	::OutputDebugStringA(debugString.c_str());
 	::OutputDebugStringW(L"\n");
 	//	free(buf);
 #endif // _DEBUG
