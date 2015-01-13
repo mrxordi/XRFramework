@@ -1,6 +1,6 @@
 #pragma once
 #include <commctrl.h>
-#include <windows.h>
+//#include <windows.h>
 #include "../XRThreads/CriticalSection.h"
 #include <string>
 

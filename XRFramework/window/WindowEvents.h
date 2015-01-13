@@ -1,5 +1,5 @@
 #pragma once
-#include <windows.h>
+//#include <windows.h>
 #include "../IApplication.h"
 //#include "WEvent.h"
 

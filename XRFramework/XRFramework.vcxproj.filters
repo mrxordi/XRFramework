@@ -279,6 +279,9 @@
     <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
+    <ClCompile Include="dlloader\DelayedDllLoad.cpp">
+      <Filter>dllloader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">

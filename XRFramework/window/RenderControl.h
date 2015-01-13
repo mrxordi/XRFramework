@@ -1,6 +1,5 @@
 #pragma once
-#include <Windows.h>
-#include "Windowsx.h"
+//#include <Windows.h>
 
 
 class RenderControl

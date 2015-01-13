@@ -1,6 +1,6 @@
 #pragma once
 
-#include <windows.h>
+//#include <windows.h>
 #include "iLibraryLoader.h"
 
 #define ENV_PARTIAL_PATH "special://app/system;" \

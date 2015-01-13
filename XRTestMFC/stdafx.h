@@ -22,5 +22,9 @@
 #include <memory.h>
 #include <tchar.h>
 
+#include "resource.h"
+#include <string>
+#include <afx.h>
+
 
 // TODO: reference additional headers your program requires here

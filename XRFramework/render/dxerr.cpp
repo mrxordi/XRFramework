@@ -30,7 +30,6 @@
 #endif
 
 #include <d3d10_1.h>
-#include <d3d11_1.h>
 
 #if !defined(WINAPI_FAMILY) || WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
 #include <wincodec.h>
@@ -3281,10 +3280,10 @@ const WCHAR* WINAPI DXGetErrorStringW(_In_ HRESULT hr)
 			// -------------------------------------------------------------
 			// d3d11.h error codes
 			// -------------------------------------------------------------
-			CHK_ERRA(D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS)
-			CHK_ERRA(D3D11_ERROR_FILE_NOT_FOUND)
-			CHK_ERRA(D3D11_ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS)
-			CHK_ERRA(D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD)
+			//CHK_ERRA(D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS)
+			//CHK_ERRA(D3D11_ERROR_FILE_NOT_FOUND)
+			//CHK_ERRA(D3D11_ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS)
+			//CHK_ERRA(D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD)
 
 #if !defined(WINAPI_FAMILY) || WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
 
@@ -3721,10 +3720,10 @@ void WINAPI DXGetErrorDescriptionW(_In_ HRESULT hr, _Out_cap_(count) WCHAR* desc
 			// -------------------------------------------------------------
 			// d3d11.h error codes
 			// -------------------------------------------------------------
-			CHK_ERR(D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS, "There are too many unique state objects.")
-			CHK_ERR(D3D11_ERROR_FILE_NOT_FOUND, "File not found")
-			CHK_ERR(D3D11_ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS, "Therea are too many unique view objects.")
-			CHK_ERR(D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD, "Deferred context requires Map-Discard usage pattern")
+			//CHK_ERR(D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS, "There are too many unique state objects.")
+			//CHK_ERR(D3D11_ERROR_FILE_NOT_FOUND, "File not found")
+			//CHK_ERR(D3D11_ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS, "Therea are too many unique view objects.")
+			//CHK_ERR(D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD, "Deferred context requires Map-Discard usage pattern")
 
 #if !defined(WINAPI_FAMILY) || WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
 
@@ -3893,7 +3892,7 @@ HRESULT WINAPI DXTraceW(_In_z_ const WCHAR* strFile, _In_ DWORD dwLine, _In_ HRE
 		swprintf_s(strBuffer, BUFFER_SIZE, L"File: %s\nLine: %s\nError Code: %s\n%sDo you want to debug the application?",
 			strBufferFile, strBufferLine, strBufferError, strBufferMsg);
 
-		int nResult = MessageBoxW(GetForegroundWindow(), strBuffer, L"Unexpected error encountered", MB_YESNO | MB_ICONERROR);
+		int nResult = MessageBoxW(NULL, strBuffer, L"Unexpected error encountered", MB_YESNO | MB_ICONERROR);
 		if (nResult == IDYES)
 			DebugBreak();
 	}

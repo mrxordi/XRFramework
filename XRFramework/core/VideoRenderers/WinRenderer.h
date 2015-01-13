@@ -22,15 +22,24 @@ typedef struct YV12Image
 } YV12Image;
 
 typedef struct {
-	RenderMethods  method;
+	ERenderMethod  method;
 	const char   *name;
 } RenderMethodDetail;
 
 static RenderMethodDetail RenderMethodDetails[] = {
-		{ RENDER_METHOD_SW, "Software" },
-		{ RENDER_METHOD_D3D_PS, "Pixel Shaders" },
-		{ RENDER_METHOD_AUTO, "AUTO" },
+		{ RENDER_SW, "Software" },
+		{ RENDER_PS, "Pixel Shaders" },
+		{ RENDER_INVALID, NULL },
 };
+
+static RenderMethodDetail *FindRenderMethod(ERenderMethod m)
+{
+	for (unsigned i = 0; RenderMethodDetails[i].method != RENDER_INVALID; i++) {
+		if (RenderMethodDetails[i].method == m)
+			return &RenderMethodDetails[i];
+	}
+	return NULL;
+}
 
 class WinRenderer
 {
@@ -38,11 +47,36 @@ public:
 	WinRenderer();
 	~WinRenderer();
 
+	bool Configure(UINT width, UINT height, UINT d_width, UINT d_height, float fps, unsigned flags, ERenderFormat format);
+
+
+
 private:
 	int  m_iYV12RenderBuffer;
 	int  m_NumYV12Buffers;
 
+	D3DTexture			m_IntermediateTarget;
+
 	bool                 m_bConfigured;
 	YUVBuffer	        *m_VideoBuffers[NUM_BUFFERS];
+	float				m_fps;
+	ERenderFormat		m_format;
+	YUV2RGBShader*		m_colorShader;
+	int					m_requestedMethod;
+	ERenderMethod		m_renderMethod;
+	EScalingMethod		m_scalingMethod;
+	
+
+	// clear colour for "black" bars
+	DWORD               m_clearColour;
+
+	// Width and height of the render target
+	// the separable HQ scalers need this info, but could the m_destRect be used instead?
+	unsigned int         m_destWidth;
+	unsigned int         m_destHeight;
+
+
+	int                  m_neededBuffers;
+	unsigned int         m_frameIdx;
 };
 

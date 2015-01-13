@@ -418,7 +418,7 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 
 #ifdef _DEBUG 
 	m_curlInterface.easy_setopt(h, CURLOPT_VERBOSE, TRUE);
-#elif
+#else
 	m_curlInterface.easy_setopt(h, CURLOPT_VERBOSE, FALSE);
 #endif
 	m_curlInterface.easy_setopt(h, CURLOPT_WRITEDATA, state);

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <vld.h>
-
+#include <Windowsx.h>
 #include "Application.h"
 #include "CurlJsonCConverterLoggerT.h"
 #include "utils\JobManager.h"
@@ -109,8 +109,10 @@ bool Application::OnCreate(HWND hWnd) {
 	RECT rc = { 20, 20, 800, 600 };
 
 	m_rendercontrol.Initialize(hWnd, hInst, rc);
-	g_DXRendererPtr->InitRenderSystem(&m_rendercontrol);
-	m_testshader.Create();
+	if (!g_DXRendererPtr->InitRenderSystem(&m_rendercontrol)) {
+		LOGFATAL("Failed To init directx renderer");
+	}
+	//m_testshader.Create();
 
 
 	m_yuvshader.Create(1280, 534, RENDER_FMT_YUV420P);

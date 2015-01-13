@@ -17,7 +17,7 @@
 #pragma once
 #endif
 
-#include <windows.h>
+//#include <windows.h>
 #include <sal.h>
 
 #ifdef __cplusplus

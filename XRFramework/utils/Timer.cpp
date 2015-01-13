@@ -3,7 +3,7 @@
 //=======================================================================================
 #include "stdafxf.h"
 #include "Timer.h"
-#include <Windows.h>
+//#include <Windows.h>
 #include "log\Log.h"
 
 //cTimer* cTimer::m_pTimer = NULL;

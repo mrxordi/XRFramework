@@ -1,6 +1,8 @@
 #include "stdafxf.h"
 #include "RenderControl.h"
 #include "render/RenderSystemDX.h"
+#include "Windowsx.h"
+
 
 RenderControl* RenderControl::m_pThis = nullptr;
 WNDPROC RenderControl::m_OldWndProc = nullptr;

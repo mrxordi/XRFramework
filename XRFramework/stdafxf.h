@@ -4,17 +4,15 @@
 //
 
 #pragma once
-
-
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define LOGQUIETMODE
 #define TARGET_WINDOWS
 #include <afx.h>
+#include <afxwin.h>
 #include <algorithm>
 #include <assert.h>
 #include <vector>
-#include <Windows.h>
 #include <d3d10_1.h>
 #include <d3d10.h>
 #include <dxgi.h>

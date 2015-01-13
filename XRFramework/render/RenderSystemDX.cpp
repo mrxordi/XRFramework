@@ -38,7 +38,7 @@ cRenderSystemDX::~cRenderSystemDX(void)
 {
 }
 
-bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl)
+bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl, HWND hWnd)
 {
 	m_enumeration.Initialize();
 
@@ -47,16 +47,25 @@ bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl)
 		return false;
 	}
 
-	if (!pControl)
-		return false;
+	if (pControl) {
 
-	m_hFocusWnd = m_hDeviceWnd = pControl->GetHWND();
+		m_hFocusWnd = m_hDeviceWnd = pControl->GetHWND();
+
+		pControl->GetWH(m_width, m_height);
+		m_renderControl = pControl;
+	}
+
+	else if (hWnd) {
+		m_hFocusWnd = m_hDeviceWnd = hWnd;
+
+		RECT rect;
+		GetClientRect(hWnd, &rect);
+		m_width = rect.right - rect.left;
+		m_height = rect.bottom - rect.top;
+	}
 
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
-
-	pControl->GetWH(m_width, m_height);
-	m_renderControl = pControl;
 
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
 	sd.BufferDesc.Width = m_width;
@@ -166,7 +175,16 @@ bool cRenderSystemDX::OnResize()
 	if (!m_pDevice)
 		return false;
 
-	m_renderControl->GetWH(m_width, m_height);
+	if (m_renderControl) {
+		m_renderControl->GetWH(m_width, m_height);
+	}
+	else if (m_hDeviceWnd) {
+		RECT rect;
+		GetClientRect(m_hDeviceWnd, &rect);
+		m_width = rect.right - rect.left;
+		m_height = rect.bottom - rect.top;
+	}
+
 
 	if (m_bRenderCreated) {
 		for (std::vector<ID3DResource *>::iterator i = m_resources.begin(); i != m_resources.end(); i++)

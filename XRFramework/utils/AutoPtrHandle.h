@@ -19,7 +19,6 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-#include <handleapi.h>
 #include <WinSock2.h>
 #include <stdlib.h>
 /*

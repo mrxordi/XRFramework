@@ -28,7 +28,7 @@ public:
 	static cRenderSystemDX& Create() { return *new cRenderSystemDX(); }
 	static void				Destroy() { delete cRenderSystemDX::getSingletonPtr(); }
 
-	virtual bool InitRenderSystem(RenderControl* pControl);
+	virtual bool InitRenderSystem(RenderControl* pControl = NULL, HWND hwnd = NULL);
 	virtual bool DestroyRenderSystem();
 	bool OnResize();
 	virtual bool OnMove();

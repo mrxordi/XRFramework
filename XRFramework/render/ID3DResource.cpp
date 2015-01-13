@@ -303,6 +303,7 @@ D3DVertexBuffer::D3DVertexBuffer()
 	m_indexBuffer = NULL;
 	m_type = NONINDEXED_BUFFER;
 	m_indexBuffer = NULL;
+	m_vertexBuffer = NULL;
 }
 
 D3DVertexBuffer::~D3DVertexBuffer()
