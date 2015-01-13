@@ -4,7 +4,6 @@
 // 
 #include "stdafx.h"
 #include "FilePathUtils.h"
-#include <windows.h>	// for GetFileAttributes()
 #include <cstdlib>
 #include <exception>
 #include <new>
