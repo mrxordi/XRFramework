@@ -41,12 +41,15 @@ dlldata.c
 *.meta
 *.obj
 *.pch
+*.ffpreset
+*.xsd
 *.pdb
 *.pgc
 *.pgd
 *.rsp
 *.sbr
 *.tlb
+*.pc
 *.tli
 *.tlh
 *.tmp
@@ -58,6 +61,7 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
+*.old
 
 # Chutzpah Test files
 _Chutzpah*
