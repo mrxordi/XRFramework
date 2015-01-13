@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <json/json.h>
+#include <../XRCommon/json/json.h>
 
 #include "CurlJsonCConverterLoggerT.h"
 
@@ -59,13 +59,13 @@ void CurlJsonCharsetConverterLoggerTests(void) {
 	Json::ValueIterator it = root.begin();
 	for (i = 0; i < root.size(); ++i, it++) {
 		std::string buff = (*it)["channel_title"].asString();
-
 		LOGINFO("%i - %s", i + 1, (*it)["channel_title"].asString().c_str());
-		utfString += StringUtils::Format("%i - %s\n", i + 1, (*it)["channel_title"].asString().c_str());
+		utfString = StringUtils::Format("%i - %s\n", i + 1, ((*it)["channel_title"].asString().c_str()));
+
 	}
-
-
 	StringConverter::utf8ToW(utfString, wStrConv, false);
+
+
 
 
 	LOGINFO("*----------------------------------------------------------------------------*");
