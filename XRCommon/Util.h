@@ -18,3 +18,5 @@ public:
 private:
 
 };
+
+void SetThreadName(DWORD dwThreadID, LPCSTR szThreadName);
