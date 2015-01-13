@@ -20,8 +20,8 @@
 #undef max
 
 #include "stdafx.h"
-#include <windows.h>
-#include <timeapi.h>
+//#include <windows.h>
+#include <Mmsystem.h>
 #include <ctime>
 #include "SystemClock.h"
 #include "../XRFramework/utils/DateTime.h"

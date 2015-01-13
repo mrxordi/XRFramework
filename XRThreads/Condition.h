@@ -24,7 +24,7 @@
 #include "Helpers.h"
 #include "SystemClock.h"
 
-#include <windows.h>
+//#include <windows.h>
 
 namespace XR
 {

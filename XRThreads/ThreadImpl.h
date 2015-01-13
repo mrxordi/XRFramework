@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <windows.h>
+//#include <windows.h>
 
 
 struct threadOpaque
