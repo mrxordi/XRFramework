@@ -10,6 +10,12 @@
     <Filter Include="utils">
       <UniqueIdentifier>{de471790-b704-48f9-8010-9530c16b1f6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="settings">
+      <UniqueIdentifier>{99c21960-3e27-40b7-b823-a51e8ce59009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="settings\helpers">
+      <UniqueIdentifier>{2676c7fe-f636-4f50-a490-097bc14f4623}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -34,9 +40,6 @@
     <ClCompile Include="utils\StringUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="threads\CritSection.cpp">
-      <Filter>threads</Filter>
-    </ClCompile>
     <ClCompile Include="utils\SpecialProtocol.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -59,6 +62,26 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="Util.cpp" />
+    <ClCompile Include="jsoncpp.cpp" />
+    <ClCompile Include="settings\Setting.cpp">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\SettingManager.cpp">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\ISettingCreator.cpp">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\AppSettings.cpp" />
+    <ClCompile Include="settings\SettingSection.cpp">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\helpers\Monitors.cpp">
+      <Filter>settings\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\CSetting.cpp">
+      <Filter>settings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -86,9 +109,6 @@
     <ClInclude Include="utils\StringUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="threads\CritSection.h">
-      <Filter>threads</Filter>
-    </ClInclude>
     <ClInclude Include="utils\SpecialProtocol.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -114,5 +134,38 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="Util.h" />
+    <ClInclude Include="json\json.h" />
+    <ClInclude Include="json\json-forwards.h" />
+    <ClInclude Include="settings\Setting.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\SettingManager.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\ISettingCallback.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\ISettingHandler.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\ISettingCreator.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\SettingsDefines.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\AppSettings.h" />
+    <ClInclude Include="settings\SettingSection.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\helpers\Monitors.h">
+      <Filter>settings\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\CSetting.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\ISubSetting.h">
+      <Filter>settings</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
