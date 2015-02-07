@@ -20,7 +20,9 @@ class FileStreamBuffer;
 
 File::File(){}
 
-File::~File(){}
+File::~File(){
+	SAFE_DELETE(m_pFile);
+}
 
 bool File::Open(const std::string& strFileName, const unsigned int flags)
 {

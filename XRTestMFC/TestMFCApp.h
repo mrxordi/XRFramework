@@ -2,6 +2,7 @@
 #include "afxwin.h"
 #include <atlsync.h>
 #include <memory>
+#include "../XRCommon/settings/helpers/Monitors.h"
 #include "../XRCommon/utils/SpecialProtocol.h"
 #include "../XRCommon/settings/AppSettings.h"
 
@@ -23,6 +24,8 @@ public:
 
 
 	std::unique_ptr<CAppSettings> m_settings;
+	std::unique_ptr<CMonitors> m_monitors;
+
 	DECLARE_MESSAGE_MAP()
 
 private:

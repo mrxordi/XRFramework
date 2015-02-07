@@ -1,11 +1,19 @@
 #pragma once
+#include <memory>
+
 #include "YUV2RGBShader.h"
 #include "WinShader.h"
 #include "RenderModes.h"
+#include "wx/window.h"
+#include "dvdplayer/Codecs/VideoCodec.h"
+#include "../XRThreads/CriticalSection.h"
 
 #define MAX_PLANES 3
 #define MAX_FIELDS 3
 #define NUM_BUFFERS 6
+#define AUTOSOURCE -1
+
+class cRenderSystemDX;
 
 typedef struct YV12Image
 {
@@ -45,24 +53,44 @@ class WinRenderer
 {
 public:
 	WinRenderer();
-	~WinRenderer();
+	virtual ~WinRenderer();
 
-	bool Configure(UINT width, UINT height, UINT d_width, UINT d_height, float fps, unsigned flags, ERenderFormat format);
+	bool Configure(UINT width, UINT height, float fps, unsigned int flags, ERenderFormat format, wxWindow* window);
+	void Render();
+	void RenderPS();
+	
+	void CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height);
+	void ManageDisplay();
+	int AddVideoPicture(DVDVideoPicture& pic);
+	int GetImage(YV12Image* image, int source, bool readonly);
+	int NextYV12Texture();
+	void DeleteYV12Texture(int index);
+	bool CreateYV12Texture(int index);
 
+	void UpdatePSVideoFilter();
 
-
+	void SetBufferSize(int size) { m_neededBuffers = size; }
+	int  GetMaxBufferSize() { return NUM_BUFFERS; }
+protected:
+	void Stage1();
+	void Stage2();
 private:
+	wxWindow* m_contextWindow;
 	int  m_iYV12RenderBuffer;
 	int  m_NumYV12Buffers;
+	int  m_neededBuffers;
 
-	D3DTexture			m_IntermediateTarget;
+	//D3DTexture			m_IntermediateTarget;
+	bool				m_bUseHQScaler;
+	bool                m_bConfigured;
+	bool				 m_bFiltersInitialized;
 
-	bool                 m_bConfigured;
+	unsigned int		m_iFlags;
+	int					m_requestedMethod;
 	YUVBuffer	        *m_VideoBuffers[NUM_BUFFERS];
 	float				m_fps;
 	ERenderFormat		m_format;
 	YUV2RGBShader*		m_colorShader;
-	int					m_requestedMethod;
 	ERenderMethod		m_renderMethod;
 	EScalingMethod		m_scalingMethod;
 	
@@ -70,13 +98,22 @@ private:
 	// clear colour for "black" bars
 	DWORD               m_clearColour;
 
+	unsigned int m_sourceWidth;
+	unsigned int m_sourceHeight;
+	float        m_sourceFrameRatio;
+
 	// Width and height of the render target
-	// the separable HQ scalers need this info, but could the m_destRect be used instead?
 	unsigned int         m_destWidth;
 	unsigned int         m_destHeight;
 
+	XRect				m_sourceRect;
+	XRect				m_destRect;
+	XRect				m_olddestRest;
 
-	int                  m_neededBuffers;
+
 	unsigned int         m_frameIdx;
+
+	XR::CCriticalSection m_sharedSection;
+	XR::CCriticalSection m_presentLock;
 };
 

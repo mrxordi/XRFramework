@@ -5,13 +5,13 @@ class CSetting;
 class ISettingCallback
 {
 public:
-	virtual ~ISettingCallback();
+	virtual ~ISettingCallback() {};
 
 	//callback fired when setting state is going to change
-	virtual bool OnSettingChanging(CSetting* setting) = 0;
+	virtual bool OnSettingChanging(const CSetting* setting) = 0;
 
 	//callback fired when setting has been changed
-	virtual bool OnSettingChanged(CSetting* setting) = 0;
+	virtual void OnSettingChanged(const CSetting* setting) = 0;
 
 };
 

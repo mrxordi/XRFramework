@@ -82,6 +82,7 @@
     <ClCompile Include="settings\CSetting.cpp">
       <Filter>settings</Filter>
     </ClCompile>
+    <ClCompile Include="utils\XMLFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -145,9 +146,6 @@
     <ClInclude Include="settings\ISettingCallback.h">
       <Filter>settings</Filter>
     </ClInclude>
-    <ClInclude Include="settings\ISettingHandler.h">
-      <Filter>settings</Filter>
-    </ClInclude>
     <ClInclude Include="settings\ISettingCreator.h">
       <Filter>settings</Filter>
     </ClInclude>
@@ -164,8 +162,9 @@
     <ClInclude Include="settings\CSetting.h">
       <Filter>settings</Filter>
     </ClInclude>
-    <ClInclude Include="settings\ISubSetting.h">
-      <Filter>settings</Filter>
+    <ClInclude Include="utils\XMLFile.h" />
+    <ClInclude Include="utils\XRect.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

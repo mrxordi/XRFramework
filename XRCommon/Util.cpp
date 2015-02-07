@@ -3,9 +3,6 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/SpecialProtocol.h"
-// #include "filesystem/File.h"
-// #include "filesystem/FileItem.h"
-// #include "filesystem/Directory.h"
 #include <shlobj.h>
 
 std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes /*= false*/)

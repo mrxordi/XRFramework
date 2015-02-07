@@ -21,7 +21,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -29,7 +29,7 @@
     <PlatformToolset>v120_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -49,12 +49,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)XRCommon;$(ProjectDir);$(SolutionDir)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)XRCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
@@ -62,9 +62,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxWidgetsd.lib;d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -74,14 +75,15 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)XRCommon;$(ProjectDir);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)XRCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,7 +92,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxWidgets.lib;d3d10.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -108,6 +111,8 @@
     <ClInclude Include="DLLoader\LoaderContainer.h" />
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
+    <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
+    <ClInclude Include="dvdplayer\FFmpeg.h" />
     <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\Directory.h" />
@@ -140,9 +145,9 @@
     <ClInclude Include="utils\IJobCallback.h" />
     <ClInclude Include="utils\Job.h" />
     <ClInclude Include="utils\JobManager.h" />
-    <ClInclude Include="utils\Rect.h" />
     <ClInclude Include="utils\RingBuffer.h" />
     <ClInclude Include="utils\Timer.h" />
+    <ClInclude Include="utils\XRect.h" />
     <ClInclude Include="window\RenderControl.h" />
     <ClInclude Include="window\StatusBar.h" />
     <ClInclude Include="window\WindowEvents.h" />
@@ -153,12 +158,13 @@
     <ClCompile Include="core\VideoRenderers\WinShader.cpp" />
     <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp" />
     <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp" />
-    <ClCompile Include="dlloader\DelayedDllLoad.cpp" />
     <ClCompile Include="DLLoader\DynamicDll.cpp" />
     <ClCompile Include="DLLoader\iLibraryLoader.cpp" />
     <ClCompile Include="DLLoader\LoaderContainer.cpp" />
     <ClCompile Include="DLLoader\LoaderFactory.cpp" />
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
+    <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
+    <ClCompile Include="dvdplayer\FFmpeg.cpp" />
     <ClCompile Include="filesystem\CacheStrategy.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp" />
     <ClCompile Include="filesystem\Directory.cpp" />
@@ -192,7 +198,6 @@
     <ClCompile Include="utils\HttpHeader.cpp" />
     <ClCompile Include="utils\Job.cpp" />
     <ClCompile Include="utils\JobManager.cpp" />
-    <ClCompile Include="utils\Rect.cpp" />
     <ClCompile Include="utils\RingBuffer.cpp" />
     <ClCompile Include="utils\Timer.cpp" />
     <ClCompile Include="window\RenderControl.cpp" />
@@ -202,6 +207,11 @@
   <ItemGroup>
     <ProjectReference Include="..\XRCommon\XRCommon.vcxproj">
       <Project>{95775c46-566d-43c6-b6c0-6363f892fc1a}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\XRThreads\XRThreads.vcxproj">
       <Project>{270efcf4-c8b7-405f-8ded-7c003d33c5b5}</Project>

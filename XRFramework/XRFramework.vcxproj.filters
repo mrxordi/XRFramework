@@ -131,9 +131,6 @@
     <ClInclude Include="core\VideoRenderers\YUV2RGBMatrix.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Rect.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="core\VideoRenderers\YUV2RGBShader.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
@@ -146,6 +143,13 @@
     </ClInclude>
     <ClInclude Include="filesystem\SpecialProtocolDirectory.h">
       <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\FFmpeg.h">
+      <Filter>dvdplayer</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
+    <ClInclude Include="utils\XRect.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -263,9 +267,6 @@
     <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp">
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
-    <ClCompile Include="utils\Rect.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp">
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
@@ -279,9 +280,10 @@
     <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="dlloader\DelayedDllLoad.cpp">
-      <Filter>dllloader</Filter>
+    <ClCompile Include="dvdplayer\FFmpeg.cpp">
+      <Filter>dvdplayer</Filter>
     </ClCompile>
+    <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">

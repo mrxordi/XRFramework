@@ -20,6 +20,7 @@
     <ClCompile Include="TestMFCApp.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="FullscreenWnd.cpp" />
+    <ClCompile Include="DelayedDllLoad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="xr_test_mfc.rc">

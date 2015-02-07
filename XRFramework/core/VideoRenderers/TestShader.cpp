@@ -20,7 +20,7 @@ bool TestShader::Create()
 		return false;
 	}
 
-	if (!LoadEffect("special://app/system/test.fx", nullptr)) {
+	if (!LoadEffect("special://app/data/test.fx", nullptr)) {
 		m_effect.Release();
 		return false;
 	}

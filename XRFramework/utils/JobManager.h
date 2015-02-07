@@ -311,6 +311,6 @@ private:
 	Workers    m_workers;
 
 	XR::CCriticalSection m_section;
-	CEvent           m_jobEvent;
+	::CEvent           m_jobEvent;
 	bool             m_running;
 };

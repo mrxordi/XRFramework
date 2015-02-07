@@ -16,7 +16,7 @@ struct Resolution
 };
 
 
-class CMonitor : public CObject
+class CMonitor
 {
 public:
 	CMonitor() : m_hMonitor(nullptr), m_ordinalMonitor(-1) {};
@@ -28,7 +28,7 @@ public:
 
 	void ClipRectToMonitor(LPRECT lprc, const BOOL UseWorkAreaRect = FALSE) const;
 	void CenterRectToMonitor(LPRECT lprc, const BOOL UseWorkAreaRect = FALSE) const;
-	void CenterWindowToMonitor(CWnd* const pWnd, const BOOL UseWorkAreaRect = FALSE) const;
+	void CenterWindowToMonitor(const HWND pWnd, const BOOL UseWorkAreaRect = FALSE) const;
 
 	HDC CreateDC() const;
 
@@ -36,7 +36,7 @@ public:
 	void GetMonitorRect(LPRECT lprc) const;
 	void GetWorkAreaRect(LPRECT lprc) const;
 
-	void GetName(CString& string) const;
+	void GetName(std::wstring& string) const;
 	int GetOrdinal() const {
 		return m_ordinalMonitor;
 	};
@@ -44,7 +44,7 @@ public:
 	int GetBitsPerPixel() const;
 
 	BOOL IsOnMonitor(const POINT& pt) const;
-	BOOL IsOnMonitor(const CWnd* pWnd) const;
+	BOOL IsOnMonitor(const HWND pWnd) const;
 	BOOL IsOnMonitor(const LPRECT lprc) const;
 
 	BOOL IsPrimaryMonitor() const;
@@ -86,7 +86,7 @@ private:
 
 
 
-class CMonitors : public CObject
+class CMonitors
 {
 public:
 	CMonitors();
@@ -102,16 +102,15 @@ public:
 	//static members
 	CMonitor* GetNearestMonitor(const LPRECT lprc);
 	CMonitor* GetNearestMonitor(const POINT& pt);
-	CMonitor* GetNearestMonitor(const CWnd* pWnd);
+	CMonitor* GetNearestMonitor(const HWND pWnd);
 
-	BOOL IsOnScreen(const POINT& pt);
-	BOOL IsOnScreen(const CWnd* pWnd);
-	BOOL IsOnScreen(const LPRECT lprc);
-
-	void GetVirtualDesktopRect(LPRECT lprc);
-
+	static BOOL IsOnScreen(const POINT& pt);
+	static BOOL IsOnScreen(const HWND pWnd);
+	static BOOL IsOnScreen(const LPRECT lprc);
 	static BOOL IsMonitor(const HMONITOR hMonitor);
 
+	static void GetVirtualDesktopRect(LPRECT lprc);
+	
 	CMonitor* GetPrimaryMonitor();
 	BOOL AllMonitorsShareDisplayFormat();
 

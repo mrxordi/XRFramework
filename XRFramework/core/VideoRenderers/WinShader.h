@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include "render/ID3DResource.h"
+
+class cRenderSystemDX;
 
 class WinShader
 {
@@ -24,7 +27,6 @@ protected:
 	virtual bool LoadEffect(const std::string& filename, DefinesMap* defines);
 	virtual bool BuildVertexLayout() = 0;
 	virtual bool Execute(std::vector<ID3D10RenderTargetView*> *vecRT, unsigned int vertexIndexStep);
-
 
 	D3DEffect m_effect;
 	ID3D10InputLayout* m_inputLayout;

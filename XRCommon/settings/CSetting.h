@@ -28,25 +28,25 @@ public:
 	CSetting(const std::string &id, CSettingManager *settingsManager = nullptr);
 	virtual ~CSetting() {};
 
-	virtual bool Deserialize(const XMLNode *node, bool update = false)  {
-		return DeserializeIdentification(node, m_id);
-	};
+	virtual bool Deserialize(const XMLNode *node, bool update = false) { DeserializeIdentification(node, m_id); return true; };
 
-	std::string GetID() { return m_id; }
+	const std::string& GetID() const { return m_id; }
 	virtual SettingType GetType() { XR::CSingleLock lck(m_critical); return m_type; }
 	virtual void SetCallback(ISettingCallback* callback) { m_callback = callback; }
+	virtual void Reset() {}
 
-
-	virtual bool OnSettingChanging(CSetting* setting);
-	virtual bool OnSettingChanged(CSetting* setting);
+	virtual bool OnSettingChanging(const CSetting* setting);
+	virtual void OnSettingChanged(const CSetting* setting);
 	virtual bool FromString(const std::string &value) { return false; };
 	virtual std::string ToString() { return ""; };
+	virtual bool Serialize(XMLNode *node) = 0;
 
 	static bool DeserializeIdentification(const XMLNode *node, std::string &identification);
-	
-protected:
+
 	static SettingType GetTypeFromString(const std::string str);
 	static std::string GetStringFromType(const SettingType str);
+	
+protected:
 	static bool GetInt(const XMLNode* pRootNode, const char* strTag, int& iIntValue);
 	static bool GetBool(const XMLNode* pRootNode, const char* strTag, bool& bBoolValue);
 	static bool GetString(const XMLNode* pRootNode, const char* strTag, std::string& strStringValue);

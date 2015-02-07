@@ -10,7 +10,6 @@
 #include "XRThreads/CriticalSection.h"
 #include "XRThreads/SingleLock.h"
 #include "log/Log.h"
-//#include "window/Resolution.h"
 #include "window/RenderControl.h"
 
 
@@ -19,14 +18,14 @@ using namespace PackedVector;
 
 class ID3DResource;
 
-class cRenderSystemDX : public Singleton < cRenderSystemDX >
+class cRenderSystemDX : public Singleton < cRenderSystemDX >, public XR::CCriticalSection
 {
 public:
-	cRenderSystemDX(void);
-	virtual ~cRenderSystemDX(void);
+	cRenderSystemDX();
+	virtual ~cRenderSystemDX();
 
-	static cRenderSystemDX& Create() { return *new cRenderSystemDX(); }
-	static void				Destroy() { delete cRenderSystemDX::getSingletonPtr(); }
+	//static cRenderSystemDX& Create() { return *new cRenderSystemDX(); }
+	//static void				Destroy() { delete cRenderSystemDX::getSingletonPtr(); }
 
 	virtual bool InitRenderSystem(RenderControl* pControl = NULL, HWND hwnd = NULL);
 	virtual bool DestroyRenderSystem();
@@ -54,8 +53,6 @@ public:
 	*/
 	void Unregister(ID3DResource *resource);
 
-
-
 	ID3D10Device* GetDevice() { return m_pDevice; }
 	bool RendererCreated() { return m_bRenderCreated; }
 	void SetFocusWnd(HWND wnd) { m_hFocusWnd = wnd; }
@@ -76,7 +73,6 @@ public:
 		XMFLOAT4X4 m_view;
 		XMFLOAT4X4 m_world;
 	} m_matMVP;
-protected:
 
 
 protected:
@@ -95,7 +91,7 @@ protected:
 
 	D3D10Enumeration m_enumeration;
 
-	XR::CCriticalSection            m_resourceSection;
+	XR::CCriticalSection        m_resourceSection;
 	std::vector<ID3DResource*>  m_resources;
 
 	ID3D10Device*		  m_pDevice;
@@ -115,7 +111,6 @@ protected:
 
 	D3D10_VIEWPORT m_viewPort;
 };
-
 
 #define g_DXRenderer cRenderSystemDX::getSingleton()
 #define g_DXRendererPtr cRenderSystemDX::getSingletonPtr()

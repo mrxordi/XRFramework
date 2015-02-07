@@ -3,7 +3,10 @@
 #include <d3d10.h>
 #include <DirectXMath.h>
 #include <string>
+#include <memory>
 using namespace DirectX;
+
+class cRenderSystemDX;
 
 class ID3DResource
 {
@@ -23,7 +26,7 @@ class D3DTexture : public ID3DResource
 {
 public:
 	D3DTexture();
-	~D3DTexture();
+	virtual ~D3DTexture();
 
 	bool Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels = 1);
 	void Release();

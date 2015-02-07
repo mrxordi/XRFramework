@@ -65,9 +65,9 @@ protected:
 	*  stop is called on the thread the wait will return with a response
 	*  indicating what happened.
 	*/
-	inline WaitResponse AbortableWait(CEvent& event, int timeoutMillis = -1 /* indicates wait forever*/) {
+	inline WaitResponse AbortableWait(::CEvent& event, int timeoutMillis = -1 /* indicates wait forever*/) {
 		XR::CEventGroup group(&event, &m_StopEvent, NULL);
-		CEvent* result = timeoutMillis < 0 ? group.wait() : group.wait(timeoutMillis);
+		::CEvent* result = timeoutMillis < 0 ? group.wait() : group.wait(timeoutMillis);
 		return  result == &event ? WAIT_SIGNALED :
 			(result == NULL ? WAIT_TIMEDOUT : WAIT_INTERRUPTED);
 	}
@@ -85,9 +85,9 @@ private:
 	ThreadIdentifier m_ThreadId;
 	ThreadOpaque m_ThreadOpaque;
 	bool m_bAutoDelete;
-	CEvent m_StopEvent;
-	CEvent m_TermEvent;
-	CEvent m_StartEvent;
+	::CEvent m_StopEvent;
+	::CEvent m_TermEvent;
+	::CEvent m_StartEvent;
 	XR::CCriticalSection m_CriticalSection;
 	IRunnable* m_pRunnable;
 	uint64_t m_iLastUsage;

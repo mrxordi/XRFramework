@@ -1,7 +1,6 @@
 #include "stdafxf.h"
 #include "RenderControl.h"
 #include "render/RenderSystemDX.h"
-#include "Windowsx.h"
 
 
 RenderControl* RenderControl::m_pThis = nullptr;
@@ -65,7 +64,7 @@ LRESULT CALLBACK RenderControl::NewWndProc(HWND hwnd, UINT mesg, WPARAM wParam, 
 		// Save the new client area dimensions.
 		m_pThis->w = GET_X_LPARAM(lParam);
 		m_pThis->h = GET_Y_LPARAM(lParam);
-		g_DXRendererPtr->OnResize();
+		//g_DXRendererPtr->OnResize();
 
 		
 

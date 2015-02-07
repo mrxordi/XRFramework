@@ -7,9 +7,15 @@
 /*    YUVBuffer                                                         */
 /************************************************************************/
 
+YUVBuffer::YUVBuffer() : m_width(0), m_height(0), m_format(RENDER_FMT_NONE), m_activeplanes(0), m_locked(false)
+{
+	for (int i = 0; i > MAX_PLANES; ++i)
+		planes[i].texture = std::make_unique<D3DTexture>();
+}
+
 YUVBuffer::~YUVBuffer()
 {
-	if (planes[0].texture.GetResource() != NULL)
+	if (planes[0].texture->GetResource() != NULL)
 		Release();
 }
 
@@ -21,37 +27,37 @@ bool YUVBuffer::Create(ERenderFormat format, unsigned int width, unsigned int he
 
 	switch (m_format) {
 	case RENDER_FMT_YUV420P: {
-		if (!planes[PLANE_Y].texture.Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
-			|| !planes[PLANE_U].texture.Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
-			|| !planes[PLANE_V].texture.Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM))
+		if (!planes[PLANE_Y].texture->Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
+			|| !planes[PLANE_U].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
+			|| !planes[PLANE_V].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM))
 			return false;
 		m_activeplanes = 3;
 		break;
 	}
 	case RENDER_FMT_YUV420P10:
 	case RENDER_FMT_YUV420P16: {
-		if (!planes[PLANE_Y].texture.Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM)
-			|| !planes[PLANE_U].texture.Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM)
-			|| !planes[PLANE_V].texture.Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM))
+		if (!planes[PLANE_Y].texture->Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM)
+			|| !planes[PLANE_U].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM)
+			|| !planes[PLANE_V].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM))
 				return false;
 			m_activeplanes = 3;
 			break;
 		}	
 	case RENDER_FMT_NV12: {
-		if (!planes[PLANE_Y].texture.Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
-			|| !planes[PLANE_UV].texture.Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8G8_UNORM))
+		if (!planes[PLANE_Y].texture->Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
+			|| !planes[PLANE_UV].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8G8_UNORM))
 			return false;
 		m_activeplanes = 2;
 		break;
 	}
 	case RENDER_FMT_YUYV422: {
-		if (!planes[PLANE_Y].texture.Create(m_width >> 1, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_B8G8R8A8_UNORM))
+		if (!planes[PLANE_Y].texture->Create(m_width >> 1, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_B8G8R8A8_UNORM))
 			return false;
 		m_activeplanes = 1;
 		break;
 	}
 	case RENDER_FMT_UYVY422: {
-		if (!planes[PLANE_Y].texture.Create(m_width >> 1, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_B8G8R8A8_UNORM))
+		if (!planes[PLANE_Y].texture->Create(m_width >> 1, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_B8G8R8A8_UNORM))
 			return false;
 		m_activeplanes = 1;
 		break;
@@ -66,10 +72,10 @@ bool YUVBuffer::Create(ERenderFormat format, unsigned int width, unsigned int he
 
 void YUVBuffer::Release()
 {
-	if (planes[0].texture.GetResource() != 0)
+	if (planes[0].texture->GetResource() != 0)
 		for (unsigned i = 0; i < m_activeplanes; i++)
 		{
-		planes[i].texture.Release();
+		planes[i].texture->Release();
 		memset(&planes[i].rect, 0, sizeof(planes[i].rect));
 		}
 
@@ -85,8 +91,8 @@ void YUVBuffer::StartDecode()
 
 	for (unsigned i = 0; i < m_activeplanes; i++)
 	{
-		if (planes[i].texture.GetResource()
-			&& planes[i].texture.Lock(0, D3D10_MAP_WRITE_DISCARD, &planes[i].rect) == false)
+		if (planes[i].texture->GetResource()
+			&& planes[i].texture->Lock(0, D3D10_MAP_WRITE_DISCARD, &planes[i].rect) == false)
 		{
 			memset(&planes[i].rect, 0, sizeof(planes[i].rect));
 			LOGERR(" - failed to lock texture %d into memory", i);
@@ -103,8 +109,8 @@ void YUVBuffer::StartRender()
 
 	for (unsigned i = 0; i < m_activeplanes; i++)
 	{
-		if (planes[i].texture.Get() && planes[i].rect.pData)
-			if (!planes[i].texture.Unlock(0))
+		if (planes[i].texture->Get() && planes[i].rect.pData)
+			if (!planes[i].texture->Unlock(0))
 				LOGERR(" - failed to unlock texture %d", i);
 		memset(&planes[i].rect, 0, sizeof(planes[i].rect));
 	}
@@ -295,40 +301,40 @@ void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float co
 		LockVertexBuffer((void**)&v);
 
 		//left top corner of destination
-		v[0].coord.x = destRect.x;
-		v[0].coord.y = destRect.y;
+		v[0].coord.x = destRect.left;
+		v[0].coord.y = destRect.top;
 		//left top corner of source UAV surfaces
-		v[0].tyv.x = sourceRect.x / m_sourceWidth;
-		v[0].tyv.y = sourceRect.y / m_sourceHeight;
-		v[0].tuv.x = v[0].tvv.x = (sourceRect.x / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
-		v[0].tuv.y = v[0].tvv.y = (sourceRect.y / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
+		v[0].tyv.x = sourceRect.left / m_sourceWidth;
+		v[0].tyv.y = sourceRect.top / m_sourceHeight;
+		v[0].tuv.x = v[0].tvv.x = (sourceRect.left / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
+		v[0].tuv.y = v[0].tvv.y = (sourceRect.top / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		//right top corner of destination
-		v[1].coord.x = destRect.x2;
-		v[1].coord.y = destRect.y;
+		v[1].coord.x = destRect.right;
+		v[1].coord.y = destRect.top;
 		//right top corner of source UAV surfaces
-		v[1].tyv.x = sourceRect.GetWidth() / m_sourceWidth;
-		v[1].tyv.y = sourceRect.y / m_sourceHeight;
-		v[1].tuv.x = v[1].tvv.x = (sourceRect.GetWidth() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
-		v[1].tuv.y = v[1].tvv.y = (sourceRect.y / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
+		v[1].tyv.x = sourceRect.Width() / m_sourceWidth;
+		v[1].tyv.y = sourceRect.top / m_sourceHeight;
+		v[1].tuv.x = v[1].tvv.x = (sourceRect.Width() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
+		v[1].tuv.y = v[1].tvv.y = (sourceRect.top / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		//right bottom corner of destination
-		v[2].coord.x = destRect.x2;
-		v[2].coord.y = destRect.y2;
+		v[2].coord.x = destRect.right;
+		v[2].coord.y = destRect.bottom;
 		//right bottom corner of source UAV surfaces
-		v[2].tyv.x = sourceRect.GetWidth() / m_sourceWidth;
-		v[2].tyv.y = sourceRect.GetHeight() / m_sourceHeight;
-		v[2].tuv.x = v[2].tvv.x = (sourceRect.GetWidth() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
-		v[2].tuv.y = v[2].tvv.y = (sourceRect.GetHeight() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
+		v[2].tyv.x = sourceRect.Width() / m_sourceWidth;
+		v[2].tyv.y = sourceRect.Height() / m_sourceHeight;
+		v[2].tuv.x = v[2].tvv.x = (sourceRect.Width() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
+		v[2].tuv.y = v[2].tvv.y = (sourceRect.Height() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		//left bottom corner of destination
-		v[3].coord.x = destRect.x;
-		v[3].coord.y = destRect.y2;
+		v[3].coord.x = destRect.left;
+		v[3].coord.y = destRect.bottom;
 		//left bottom corner of source UAV surfaces
-		v[3].tyv.x = sourceRect.x / m_sourceWidth;
-		v[3].tyv.y = sourceRect.GetHeight() / m_sourceHeight;
-		v[3].tuv.x = v[3].tvv.x = (sourceRect.x / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
-		v[3].tuv.y = v[3].tvv.y = (sourceRect.GetHeight() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
+		v[3].tyv.x = sourceRect.left / m_sourceWidth;
+		v[3].tyv.y = sourceRect.Height() / m_sourceHeight;
+		v[3].tuv.x = v[3].tvv.x = (sourceRect.left / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceWidth >> 1);
+		v[3].tuv.y = v[3].tvv.y = (sourceRect.Height() / 2.0f + CHROMAOFFSET_HORIZ) / (m_sourceHeight >> 1);
 
 		UINT f = (m_sourceHeight >> 1);
 		// -0.5 offset to compensate for D3D rasterization
@@ -376,7 +382,7 @@ bool YUV2RGBShader::UploadToGPU(YUVBuffer* YUVbuf)
 
 	for (UINT i = 0; i < YUVbuf->GetActivePlanes(); i++) {
 		ID3D10Resource* src, *dest;
-		src = YUVbuf->planes[i].texture.GetResource();
+		src = YUVbuf->planes[i].texture->GetResource();
 		dest = m_YUVPlanes[i].GetResource();
 
 		g_DXRendererPtr->GetDevice()->CopyResource(dest, src);

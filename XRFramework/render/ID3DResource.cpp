@@ -26,6 +26,9 @@ D3DTexture::~D3DTexture()
 
 bool D3DTexture::Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels)
 {
+	if (!g_DXRendererPtr) {
+		LOGFATAL("Failed to create texture, no system ptr provided");
+	}
 	m_mipLevels = mipLevels;
 	m_format = format;
 	m_bindflag = bindflag;
@@ -51,7 +54,7 @@ bool D3DTexture::Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usag
 	d3d10Texture2DDesc.CPUAccessFlags = (usage == D3D10_USAGE_DYNAMIC || usage == D3D10_USAGE_STAGING) ? D3D10_CPU_ACCESS_WRITE : 0;
 	d3d10Texture2DDesc.MiscFlags = (mipLevels > 1) ? D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
 
-	if (!g_DXRenderer.getSingletonPtr()) {
+	if (!pDevice) {
 		LOGERR("Failed to create texture!");
 		return false;
 	}
@@ -148,7 +151,7 @@ void D3DTexture::OnDestroyDevice()
 /************************************************************************/
 /*    D3DEffect                                                         */
 /************************************************************************/
-D3DEffect::D3DEffect()
+D3DEffect::D3DEffect() 
 {
 	m_effect = NULL;
 	m_technique = NULL;
@@ -163,6 +166,9 @@ D3DEffect::~D3DEffect()
 
 bool D3DEffect::Create(const std::string &effectString, DefinesMap* defines)
 {
+	if (!g_DXRendererPtr) {
+		LOGFATAL("Failed to create effect. No render system provided.");
+	}
 	if (m_effect)
 		return false;
 
@@ -183,7 +189,7 @@ bool D3DEffect::Create(const std::string &effectString, DefinesMap* defines)
 
 void D3DEffect::Release()
 {
-	SAFE_DELETE(m_technique);
+	//SAFE_DELETE(m_technique);
 	SAFE_RELEASE(m_effect);
 	m_defines.clear();
 	g_DXRendererPtr->Unregister(this);
@@ -296,7 +302,7 @@ bool D3DEffect::CreateEffect()
 /************************************************************************/
 /*    D3DVertexBuffer                                                    */
 /************************************************************************/
-D3DVertexBuffer::D3DVertexBuffer()
+D3DVertexBuffer::D3DVertexBuffer() 
 {
 	m_bIsValid = false;
 	m_length = 0;
@@ -307,6 +313,7 @@ D3DVertexBuffer::D3DVertexBuffer()
 }
 
 D3DVertexBuffer::~D3DVertexBuffer()
+
 {
 	if (m_bIsValid)
 		Release();

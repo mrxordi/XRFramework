@@ -106,13 +106,16 @@ void CLog::LogString(int loglevel, const char* file, const int lineNumber, const
 					m_repeatCount);
 
 				WriteLogString(m_repeatLogLevel, "", 0, "", strData2);
+				WriteLogString(loglevel, file, lineNumber, functionName, strData);
+
 				m_repeatCount = 0;
 			}
+			else {
+				m_repeatLine = strData;
+				m_repeatLogLevel = loglevel;
 
-			m_repeatLine = strData;
-			m_repeatLogLevel = loglevel;
-
-			WriteLogString(loglevel, file, lineNumber, functionName, strData);
+				WriteLogString(loglevel, file, lineNumber, functionName, strData);
+			}
 		}
 	}
 	else {
@@ -148,8 +151,12 @@ bool CLog::WriteLogString(int logLevel, const char* file, const int lineNumber, 
 
 	if (!this)
 		strData = "[CAUTION CLOG NOT INITIALISED] " + strData;
-
+#if defined(_DEBUG)
 	PrintDebugString(strData);
+#else
+	//_CrtDbgReport(_CRT_WARN, file, lineNumber, nullptr, "%s\n", logString.c_str());
+#endif
+
 
 	if (!this)
 		return true;
@@ -181,7 +188,21 @@ void CLog::SetLogLevel(int level)
 void CLog::SetExtraLogLevels(int level)
 {
 	XR::CSingleLock waitLock(m_CritSection);
+	if (level == m_extraLogLevels)
+		return;
+
+	std::string msg { "" };
+	if (level & LOGCURL)
+		msg += "LOGCURL";
+	if (level & LOGFFMPEG) {
+		if (!msg.empty())
+			msg += " | ";
+		msg += "LOGFFMPEG";
+	}
 	m_extraLogLevels = level;
+	waitLock.Leave();
+
+	Log(LOG_INFO, "", 0, "", "Extra Log flags set to: %s", msg.c_str());
 }
 
 bool CLog::IsLogExtraLogged(int loglevel) {

@@ -3,10 +3,11 @@
 #include <d3d10.h>
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
+#include <memory>
 #include "RenderModes.h"
 #include "YUV2RGBMatrix.h"
 #include "render/ID3DResource.h"
-#include "utils/Rect.h"
+#include "utils/XRect.h"
 
 using namespace DirectX;
 
@@ -21,7 +22,7 @@ using namespace DirectX;
 //###############################################
 struct SVideoPlane
 {
-	D3DTexture    texture;
+	std::unique_ptr<D3DTexture> texture;
 	D3D10_MAPPED_TEXTURE2D rect;                  // rect.pBits != NULL is used to know if the texture is locked
 };
 
@@ -31,7 +32,7 @@ struct SVideoPlane
 class YUVBuffer
 {
 public:
-	YUVBuffer() : m_width(0), m_height(0), m_format(RENDER_FMT_NONE), m_activeplanes(0), m_locked(false) {};
+	YUVBuffer();
 	virtual ~YUVBuffer();
 	
 	bool Create(ERenderFormat format, unsigned int width, unsigned int height);

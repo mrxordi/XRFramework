@@ -107,18 +107,18 @@ namespace XR
    */
   class CEventGroup : public NonCopyable
   {
-    std::vector<CEvent*> events;
-    CEvent* signaled;
+    std::vector<::CEvent*> events;
+    ::CEvent* signaled;
     ConditionVariable actualCv;
-    TightConditionVariable<CEvent*&> condVar;
+    TightConditionVariable<::CEvent*&> condVar;
     CCriticalSection mutex;
 
     unsigned int numWaits;
 
     // This is ONLY called from CEvent::Set.
-    inline void Set(CEvent* child) { XR::CSingleLock l(mutex); signaled = child; condVar.notifyAll(); }
+    inline void Set(::CEvent* child) { XR::CSingleLock l(mutex); signaled = child; condVar.notifyAll(); }
 
-    friend class CEvent;
+    friend class ::CEvent;
 
   public:
 
@@ -128,7 +128,7 @@ namespace XR
      *
      *  CEventGroup g(3, event1, event2, event3);
      */
-    CEventGroup(int num, CEvent* v1, ...);
+    CEventGroup(int num, ::CEvent* v1, ...);
 
     /**
      * Create a CEventGroup from a number of CEvents. The parameters
@@ -136,7 +136,7 @@ namespace XR
      *
      *  CEventGroup g(event1, event2, event3, NULL);
      */
-    CEventGroup(CEvent* v1, ...);
+    CEventGroup(::CEvent* v1, ...);
     ~CEventGroup();
 
     /**
@@ -144,7 +144,7 @@ namespace XR
      * signaled at which point a pointer to that CEvents will be 
      * returned.
      */
-    CEvent* wait();
+    ::CEvent* wait();
 
     /**
      * This will block until any one of the CEvents in the group are
@@ -152,7 +152,7 @@ namespace XR
      * it will return a pointer to that CEvent, otherwise it will return
      * NULL.
      */
-    CEvent* wait(unsigned int milliseconds);
+    ::CEvent* wait(unsigned int milliseconds);
 
     /**
      * This is mostly for testing. It allows a thread to make sure there are 

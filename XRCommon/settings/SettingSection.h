@@ -10,6 +10,7 @@ public:
 	~CSettingSection();
 
 	virtual bool Deserialize(const XMLNode *node, bool update = false) override;
+	virtual bool Serialize(XMLNode *node) override { return false;  };
 
 	const SettingList& GetSettings() const { return m_settings; }
 

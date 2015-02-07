@@ -128,9 +128,9 @@ void CurlJsonCharsetConverterLoggerTests(void) {
 	Directory::Hints hints2;
 
 	//itemlist2.Add(FileItemPtr(new FileItem("https://code.msdn.microsoft.com/windowsapps/Universal-Windows-app-cb3248c3/file/111483/19/Universal%20Windows%20app%20samples.zip", false)));
-	//FileOperationJob* operation = new FileOperationJob(FileOperationJob::ActionCopy, itemlist2, "special://app/cache5", true);
+	FileOperationJob* operation = new FileOperationJob(FileOperationJob::ActionCopy, itemlist2, "special://app/cache5", true);
 	//operation.DoWork();
-	//CJobManager::GetInstance().AddJob(operation, operation, CJob::PRIORITY_HIGH);
+	CJobManager::GetInstance().AddJob(operation, nullptr, CJob::PRIORITY_HIGH);
 	//CJobManager::GetInstance().;
 	//File::Copy("http://www78.zippyshare.com/d/60151792/14326/Tiesto-Club-Life-Podcast-382-27-07-2014-www.HousePlanet.DJ.mp3", "special://app/cache/Tiesto-Club-Life-Podcast-382-27-07-2014-www.HousePlanet.DJ.mp3");
 

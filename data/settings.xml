@@ -1,0 +1,33 @@
+<settings>
+    <section id="rendering">
+        <setting id="renderer" type="string">
+            <default>DirectX</default>
+        </setting>
+        <setting id="contrast" type="float">
+            <default>0.50</default>
+        </setting>
+        <setting id="brightness" type="float">
+            <default>0.50</default>
+        </setting>
+    </section>
+    <section id="window">
+        <setting id="fullscreen" type="bool">
+            <default>0</default>
+        </setting>
+        <setting id="height" type="integer">
+            <value>533</value>
+            <step>1</step>
+            <default>480</default>
+        </setting>
+        <setting id="width" type="integer">
+            <value>689</value>
+            <step>1</step>
+            <default>640</default>
+        </setting>
+        <setting id="monitor" type="integer">
+            <step>1</step>
+            <default>0</default>
+        </setting>
+    </section>
+</settings>
+ 

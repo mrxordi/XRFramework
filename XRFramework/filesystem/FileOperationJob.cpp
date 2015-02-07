@@ -37,7 +37,7 @@ bool FileOperationJob::DoWork()
 
 	if (m_bDisplayProgress)
 	{
-		m_hStatusBar = g_iApplication->GetStatusBar();
+		//m_hStatusBar = g_iApplication->GetStatusBar();
 	}
 
 	bool success = DoProcess(m_fileaction, m_items, m_strDestFile, ops, totalTime);

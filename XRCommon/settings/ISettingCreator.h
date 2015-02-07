@@ -12,6 +12,6 @@ enum class SettingType;
 class ISettingCreator
 {
 public:
-	virtual CSetting* CreateSetting(SettingType settingtype, std::string &settingId, CSettingManager* settingManaget = nullptr) = 0;
+	virtual CSetting* CreateSetting(SettingType settingtype, const std::string &settingId, CSettingManager* settingManaget = nullptr) const = 0;
 };
 

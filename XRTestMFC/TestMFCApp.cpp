@@ -5,9 +5,11 @@
 #include "../XRCommon/Util.h"
 #include "../XRCommon/log/Log.h"
 #include "../XRCommon/utils/ConverterFactory.h"
+#include "../XRFramework/utils/JobManager.h"
+#include "../XRFramework/dvdplayer/FFmpeg.h"
 
 
-CTestMFCApp::CTestMFCApp() : m_mainFrame(NULL)
+CTestMFCApp::CTestMFCApp() : m_mainFrame(nullptr), m_monitors(nullptr)
 {
 }
 
@@ -34,15 +36,30 @@ BOOL CTestMFCApp::InitInstance()
 
 	CLog::Create();
 
-	if (!g_LogPtr->Init(std::string("special://app/log.txt")))
+		if (!g_LogPtr->Init(std::string("special://app/log.txt")))
 	{
 		fprintf(stderr, "Could not init logging classes. Permission errors on (%s)\n",
 			CSpecialProtocol::TranslatePath("special://home/").c_str());
 	}
+	g_LogPtr->SetExtraLogLevels(LOGCURL | LOGFFMPEG);
+	
 	LOGINFO("Start application initialization. Running on thread: %d", GetCurrentThreadId());
 	CSpecialProtocol::LogPaths();
-
+	m_monitors = std::make_unique<CMonitors>();
 	m_settings = std::make_unique<CAppSettings>();
+	m_settings->Initialize(std::string("special://app/system/settings.xml"));
+
+	// register ffmpeg lockmanager callback
+	av_lockmgr_register(&ffmpeg_lockmgr_cb);
+	// register avcodec
+	avcodec_register_all();
+	// register avformat
+	av_register_all();
+	// register avfilter
+	avfilter_register_all();
+	// set avutil callback
+	av_log_set_callback(ff_avutil_log);
+
 	// Be careful if you move that code: IDR_MAINFRAME icon can only be loaded from the executable,
 	// LoadIcon can't be used after the language DLL has been set as the main resource.
 	HICON icon = LoadIcon(IDR_MAINFRAME);
@@ -97,7 +114,7 @@ BOOL CTestMFCApp::InitInstance()
 		AfxMessageBox(_T("CMainFrame::LoadFrame failed!"));
 		return FALSE;
 	}
-
+	m_mainFrame->SetDefaultWindowSize();
 	m_mainFrame->SetIcon(icon, true);
 	m_mainFrame->ShowWindow(SW_SHOW);
 	m_mainFrame->UpdateWindow();
@@ -110,6 +127,9 @@ BOOL CTestMFCApp::InitInstance()
 
 int CTestMFCApp::ExitInstance()
 {
+	av_lockmgr_register(NULL);
+	CJobManager::GetInstance().CancelJobs();
+	m_settings->SaveSettings();
 	ConverterFactory::DestroyAll();
 	g_LogPtr->Destroy();
 	return __super::ExitInstance();

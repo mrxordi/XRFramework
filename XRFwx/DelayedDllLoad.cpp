@@ -1,6 +1,7 @@
 #include "stdafxf.h"
 #include <delayimp.h>
-#include "utils/SpecialProtocol.h"
+#include "../XRCommon/utils/SpecialProtocol.h"
+#include "../XRCommon/utils/StringUtils.h"
 
 FARPROC WINAPI delayHookNotifyFunc(unsigned dliNotify, PDelayLoadInfo pdli)
 {
@@ -62,9 +63,9 @@ FARPROC WINAPI delayHookFailureFunc(unsigned dliNotify, PDelayLoadInfo pdli)
 	switch (dliNotify)
 	{
 	case dliFailLoadLib:
-		CString strError;
-			strError.Format(L"Fatal Error: Uh oh, can't load %s, exiting.", pdli->szDll);
-		AfxMessageBox(strError, MB_OK);
+		std::string strError;
+			strError = StringUtils::Format("Fatal Error: Uh oh, can't load %s, exiting.", pdli->szDll);
+		MessageBoxA(nullptr, strError.c_str(), MB_OK, 0);
 		exit(1);
 		break;
 	}

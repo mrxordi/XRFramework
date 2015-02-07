@@ -47,7 +47,7 @@ bool CSettingSection::Deserialize(const XMLNode *node, bool update /*= false*/)
 					LOGERR("Unable to read setting type of \"%s\"", settingID.c_str());
 					return false;
 				}
-				setting = m_settingmanager->CreateSetting(GetTypeFromString(settingID), settingID, m_settingmanager);
+				setting = m_settingmanager->CreateSetting(GetTypeFromString(settingType), settingID, m_settingmanager);
 				if (setting == nullptr) {
 					LOGERR("CSettingGroup: unknown setting type \"%s\" of \"%s\"", settingType, settingID.c_str());
 				}

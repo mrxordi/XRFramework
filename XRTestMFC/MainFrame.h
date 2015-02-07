@@ -19,6 +19,9 @@ public:
 
 	bool CreateFullScreenWindow();
 	bool IsD3DFullScreenMode();
+	void SetDefaultWindowSize();
+
+	void SaveSettings();
 
 
 	DECLARE_MESSAGE_MAP()

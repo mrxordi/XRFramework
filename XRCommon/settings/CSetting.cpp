@@ -9,7 +9,7 @@ CSetting::CSetting(const std::string &id, CSettingManager *settingsManager /*= n
 
 }
 
-bool CSetting::OnSettingChanging(CSetting* setting)
+bool CSetting::OnSettingChanging(const CSetting* setting)
 {
 	if (!m_callback)
 		return true;
@@ -17,10 +17,10 @@ bool CSetting::OnSettingChanging(CSetting* setting)
 	return m_callback->OnSettingChanging(setting);
 }
 
-bool CSetting::OnSettingChanged(CSetting* setting)
+void CSetting::OnSettingChanged(const CSetting* setting)
 {
 	if (!m_callback)
-		return true;
+		return;
 	return m_callback->OnSettingChanged(setting);
 }
 
@@ -76,7 +76,7 @@ bool CSetting::GetString(const XMLNode* pRootNode, const char* strTag, std::stri
 	const char* encoded = pElement->Attribute("urlencoded");
 	if (pElement != NULL)
 	{
-		strStringValue = pElement->Value();
+		strStringValue = pElement->GetText();
 		if (encoded && _strcmpi(encoded, "yes") == 0)
 			strStringValue = CURL::Decode(strStringValue);
 		return true;
@@ -153,7 +153,7 @@ SettingType CSetting::GetTypeFromString(const std::string str)
 		return SettingType::ST_FLOAT;
 	else if (str == "string")
 		return SettingType::ST_STRING;
-	else if (str == "integer")
+	else if (str == "integer" || str == "int")
 		return SettingType::ST_INT;
 	else if (str == "bool")
 		return SettingType::ST_BOOL;

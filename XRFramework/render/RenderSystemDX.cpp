@@ -181,6 +181,9 @@ bool cRenderSystemDX::OnResize()
 	else if (m_hDeviceWnd) {
 		RECT rect;
 		GetClientRect(m_hDeviceWnd, &rect);
+		if (m_width == rect.right - rect.left && m_height == rect.bottom - rect.top && m_bRenderCreated){
+			return false;
+		}
 		m_width = rect.right - rect.left;
 		m_height = rect.bottom - rect.top;
 	}
@@ -191,6 +194,7 @@ bool cRenderSystemDX::OnResize()
 			(*i)->OnFreeResources();
 	}
 
+	XR::CSingleLock lock(*this);
 	// Release the old views, as they hold references to the buffers we
 	// will be destroying.  Also release the old depth/stencil buffer.
 	SAFE_RELEASE(m_pRenderTargetView);
@@ -282,7 +286,7 @@ bool cRenderSystemDX::OnResize()
 		for (std::vector<ID3DResource *>::iterator i = m_resources.begin(); i != m_resources.end(); i++)
 			(*i)->OnResizeDevice();
 	}
-
+	lock.Leave();
 	SetCameraPosition(XMFLOAT2(0, 0), m_width, m_height);
 
 	return true;
@@ -295,10 +299,11 @@ bool cRenderSystemDX::OnMove()
 
 bool cRenderSystemDX::BeginRender()
 {
+	lock();
 	if (!m_bRenderCreated)
 		return false;
 
-	float color[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	float color[] = { 0.2f, 0.9f, 0.2f, 1.0f };
 	m_pDevice->ClearRenderTargetView(m_pRenderTargetView, color);
 	m_pDevice->ClearDepthStencilView(m_pDepthStencilView, D3D10_CLEAR_DEPTH | D3D10_CLEAR_STENCIL, 1.0f, 0);
 
@@ -317,6 +322,7 @@ bool cRenderSystemDX::BeginRender()
 
 bool cRenderSystemDX::EndRender()
 {
+
 	m_inScene = false;
 
 	if (!m_bRenderCreated)
@@ -331,6 +337,7 @@ bool cRenderSystemDX::EndRender()
 		// Present as fast as possible.
 		m_pSwapChain->Present(0, 0);
 	}
+	unlock();
 
 	return true;
 }
@@ -348,8 +355,10 @@ void cRenderSystemDX::SetVSync(bool vsync)
 
 void cRenderSystemDX::SetCameraPosition(XMFLOAT2 &camera, int screenWidth, int screenHeight)
 {
+	XR::CSingleLock(*this);
 	if (!m_pDevice)
 		return;
+
 
 	float w = m_viewPort.Width*0.5f;
 	float h = m_viewPort.Height*0.5f;

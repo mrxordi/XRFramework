@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MainFrame.h"
+#include "TestMFCApp.h"
 #include "../XRCommon/log/Log.h"
 #include "../XRFramework/core/VideoRenderers/WinRenderer.h"
 #include "../XRFramework/filesystem/File.h"
@@ -49,7 +50,7 @@ int CTestMFCFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_fullScreenWnd = DEBUG_NEW CFullscreenWnd(this);
 
 	SetFocus();
-
+	
 	m_yuvshader.Create(1280, 534, RENDER_FMT_YUV420P);
 	m_yuvbuffer.Create(RENDER_FMT_YUV420P, 1280, 534);
 	m_yuvbuffer.StartDecode();
@@ -139,6 +140,7 @@ int CTestMFCFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CTestMFCFrame::OnDestroy() {
 
+	SaveSettings();
 	g_DXRendererPtr->DestroyRenderSystem();
 
 	if (m_fullScreenWnd) {
@@ -227,7 +229,7 @@ void CTestMFCFrame::OnSize(UINT nType, int cx, int cy)
 	if ((m_currentRect.Height() != cy || m_currentRect.Width() != cx) && !m_isMinimized && !m_isResizing)
 	{
 			g_DXRendererPtr->OnResize();
-			GetClientRect(&m_currentRect);
+			GetWindowRect(&m_currentRect);
 	}
 }
 
@@ -237,7 +239,7 @@ void CTestMFCFrame::OnEnterSizeMove()
 
 	//do not render while resizing window 
 	m_bRender = false;
-	GetClientRect(m_currentRect);
+	GetWindowRect(m_currentRect);
 
 	__super::OnEnterSizeMove();
 }
@@ -246,11 +248,11 @@ void CTestMFCFrame::OnExitSizeMove()
 {
 	m_isMoving = m_isResizing = false;
 	CRect newRect;
-	GetClientRect(&newRect);
+	GetWindowRect(&newRect);
 	if ((newRect.Width() != m_currentRect.Width() || newRect.Height() != m_currentRect.Height()) && !m_isMinimized)
 	{
-		g_DXRendererPtr->OnResize();
 		m_currentRect = newRect;
+		g_DXRendererPtr->OnResize();
 	}
 	m_bRender = true;
 
@@ -285,4 +287,39 @@ void CTestMFCFrame::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 		}
 	}
 	__super::OnWindowPosChanging(lpwndpos);
+}
+
+void CTestMFCFrame::SetDefaultWindowSize()
+{
+	CAppSettings& pSett = AfxGetAppSettings();
+	CTestMFCApp* pApp = AfxGetMyApp();
+
+	int monitor = pSett.GetInt("window.monitor");
+	int sw = pSett.GetInt("window.width");
+	int sh = pSett.GetInt("window.height");
+
+	m_currentRect.top = 0;
+	m_currentRect.bottom = 0;
+	m_currentRect.right = sw;
+	m_currentRect.bottom = sh;
+	pApp->m_monitors->GetMonitor(monitor)->CenterRectToMonitor(m_currentRect);
+
+	bool bRestoredWindowPosition = false;
+	if (CMonitors::IsOnScreen(m_currentRect)) {
+		MoveWindow(m_currentRect);
+		bRestoredWindowPosition = true;
+	}
+
+	if (!bRestoredWindowPosition) {
+		CMonitor* monitor = pApp->m_monitors->GetNearestMonitor(this);
+		SetWindowPos(nullptr, 0, 0, sw, sh, SWP_NOMOVE | SWP_NOZORDER);
+		monitor->CenterWindowToMonitor(this, TRUE);
+	}
+}
+
+void CTestMFCFrame::SaveSettings()
+{
+	CAppSettings& s = AfxGetAppSettings();
+	int monitor = AfxGetMyApp()->m_monitors->GetNearestMonitor(this)->GetOrdinal();
+	s.SaveCurrentRect(m_currentRect, monitor);
 }

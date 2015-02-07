@@ -5,6 +5,7 @@
 #include "log/Log.h"
 #include "settings/helpers/Monitors.h"
 #include "utils/StringUtils.h"
+#include "utils/XRect.h"
 
 /*!
  * \class CMonitor
@@ -51,15 +52,15 @@ HDC CMonitor::CreateDC() const
 {
 	ASSERT(IsMonitor());
 
-	CString name;
+	std::wstring name;
 	GetName(name);
 
 	//create a dc for this display
-	HDC hdc = ::CreateDC(name, name, nullptr, nullptr);
+	HDC hdc = ::CreateDC(name.c_str(), name.c_str(), nullptr, nullptr);
 	ASSERT(hdc != nullptr);
 
 	//set the viewport based on the monitor rect's relation to the primary monitor
-	CRect rect;
+	XRect rect;
 	GetMonitorRect(&rect);
 
 	::SetViewportOrgEx(hdc, -rect.left, -rect.top, nullptr);
@@ -72,12 +73,12 @@ int CMonitor::GetBitsPerPixel() const
 {
 	HDC hdc = CreateDC();
 	int ret = ::GetDeviceCaps(hdc, BITSPIXEL) * ::GetDeviceCaps(hdc, PLANES);
-	VERIFY(::DeleteDC(hdc));
+	ASSERT(::DeleteDC(hdc));
 
 	return ret;
 }
 
-void CMonitor::GetName(CString& string) const
+void CMonitor::GetName(std::wstring& string) const
 {
 	ASSERT(IsMonitor());
 
@@ -92,27 +93,27 @@ void CMonitor::GetName(CString& string) const
 // these methods return true if any part of the item intersects the monitor rect
 BOOL CMonitor::IsOnMonitor(const POINT& pt) const
 {
-	CRect rect;
+	XRect rect;
 	GetMonitorRect(rect);
 
 	return rect.PtInRect(pt);
 }
 
-BOOL CMonitor::IsOnMonitor(const CWnd* pWnd) const
+BOOL CMonitor::IsOnMonitor(const HWND pWnd) const
 {
-	CRect rect;
+	XRect rect;
 	GetMonitorRect(rect);
 
-	ASSERT(::IsWindow(pWnd->GetSafeHwnd()));
-	CRect wndRect;
-	pWnd->GetWindowRect(&wndRect);
+	ASSERT(::IsWindow(pWnd));
+	XRect wndRect;
+	GetWindowRect(pWnd, &wndRect);
 
 	return rect.IntersectRect(rect, wndRect);
 }
 
 BOOL CMonitor::IsOnMonitor(const LPRECT lprc) const
 {
-	CRect rect;
+	XRect rect;
 	GetMonitorRect(rect);
 
 	return rect.IntersectRect(rect, lprc);
@@ -155,7 +156,7 @@ void CMonitor::CenterRectToMonitor(LPRECT lprc, const BOOL UseWorkAreaRect) cons
 	int  w = lprc->right - lprc->left;
 	int  h = lprc->bottom - lprc->top;
 
-	CRect rect;
+	XRect rect;
 	if (UseWorkAreaRect) {
 		GetWorkAreaRect(&rect);
 	}
@@ -172,22 +173,27 @@ void CMonitor::CenterRectToMonitor(LPRECT lprc, const BOOL UseWorkAreaRect) cons
 	lprc->bottom = lprc->top + h;
 }
 
-void CMonitor::CenterWindowToMonitor(CWnd* const pWnd, const BOOL UseWorkAreaRect) const
+void CMonitor::CenterWindowToMonitor(const HWND pWnd, const BOOL UseWorkAreaRect) const
 {
 	ASSERT(IsMonitor());
 	ASSERT(pWnd);
-	ASSERT(::IsWindow(pWnd->m_hWnd));
+	ASSERT(::IsWindow(pWnd));
 
-	CRect rect;
-	pWnd->GetWindowRect(&rect);
+	XRect rect;
+	GetWindowRect(pWnd, &rect);
 	CenterRectToMonitor(&rect, UseWorkAreaRect);
 	// MPC-HC custom code start
 	// Check if we are a child window and modify the coordinates accordingly
-	if (pWnd->GetStyle() & WS_CHILD) {
-		pWnd->GetParent()->ScreenToClient(&rect);
+
+	if (GetWindowLong(pWnd, GWL_STYLE) & WS_CHILD) {
+		HWND parentHwnd = (HWND)GetWindowLongPtr(pWnd, GWL_HWNDPARENT);
+		POINT topleft, bottomright;
+		ScreenToClient(parentHwnd, &topleft);
+		ScreenToClient(parentHwnd, &bottomright);
+		rect.SetRect(topleft, bottomright);
 	}
 	// MPC-HC custom code end
-	pWnd->SetWindowPos(nullptr, rect.left, rect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+	SetWindowPos(pWnd, nullptr, rect.left, rect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 void CMonitor::ClipRectToMonitor(LPRECT lprc, const BOOL UseWorkAreaRect) const
@@ -195,7 +201,7 @@ void CMonitor::ClipRectToMonitor(LPRECT lprc, const BOOL UseWorkAreaRect) const
 	int w = lprc->right - lprc->left;
 	int h = lprc->bottom - lprc->top;
 
-	CRect rect;
+	XRect rect;
 	if (UseWorkAreaRect) {
 		GetWorkAreaRect(&rect);
 	}
@@ -285,7 +291,7 @@ BOOL CALLBACK CMonitors::AddMonitorsCallBack(HMONITOR hMonitor, HDC hdcMonitor, 
 {
 	LPADDMONITOR pAddMonitor = (LPADDMONITOR)dwData;
 
-	CMonitor* pMonitor = DEBUG_NEW CMonitor;
+	CMonitor* pMonitor = new CMonitor;
 	pMonitor->Attach(hMonitor, pAddMonitor->currentIndex);
 
 	MONITORINFOEX mi;
@@ -337,7 +343,7 @@ BOOL CALLBACK CMonitors::AddMonitorsCallBack(HMONITOR hMonitor, HDC hdcMonitor, 
 CMonitor* CMonitors::GetPrimaryMonitor()
 {
 	//the primary monitor always has its origin at 0,0
-	HMONITOR hMonitor = ::MonitorFromPoint(CPoint(0, 0), MONITOR_DEFAULTTOPRIMARY);
+	HMONITOR hMonitor = ::MonitorFromPoint(XPoint(0, 0), MONITOR_DEFAULTTOPRIMARY);
 	ASSERT(IsMonitor(hMonitor));
 
 	std::map<HMONITOR, CMonitor*>::iterator it = m_MonitorMap.find(hMonitor);
@@ -430,9 +436,9 @@ BOOL CMonitors::IsOnScreen(const POINT& pt)
 	return ::MonitorFromPoint(pt, MONITOR_DEFAULTTONULL) != nullptr;
 }
 
-BOOL CMonitors::IsOnScreen(const CWnd* pWnd)
+BOOL CMonitors::IsOnScreen(const HWND pWnd)
 {
-	return ::MonitorFromWindow(pWnd->GetSafeHwnd(), MONITOR_DEFAULTTONULL) != nullptr;
+	return ::MonitorFromWindow(pWnd, MONITOR_DEFAULTTONULL) != nullptr;
 }
 
 CMonitor* CMonitors::GetNearestMonitor(const LPRECT lprc)
@@ -454,12 +460,12 @@ CMonitor* CMonitors::GetNearestMonitor(const POINT& pt)
 	return nullptr;
 }
 
-CMonitor* CMonitors::GetNearestMonitor(const CWnd* pWnd)
+CMonitor* CMonitors::GetNearestMonitor(const HWND pWnd)
 {
 	ASSERT(pWnd);
-	ASSERT(::IsWindow(pWnd->m_hWnd));
+	ASSERT(::IsWindow(pWnd));
 
-	std::map<HMONITOR, CMonitor*>::iterator it = m_MonitorMap.find(::MonitorFromWindow(pWnd->GetSafeHwnd(), MONITOR_DEFAULTTONEAREST));
+	std::map<HMONITOR, CMonitor*>::iterator it = m_MonitorMap.find(::MonitorFromWindow(pWnd, MONITOR_DEFAULTTONEAREST));
 
 	if (it != m_MonitorMap.end())
 		return it->second;

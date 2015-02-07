@@ -8,8 +8,9 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define LOGQUIETMODE
 #define TARGET_WINDOWS
-#include <afx.h>
-#include <afxwin.h>
+#include <windows.h>
+#include <windowsx.h>
+#include <tchar.h>
 #include <algorithm>
 #include <assert.h>
 #include <vector>
@@ -17,6 +18,7 @@
 #include <d3d10.h>
 #include <dxgi.h>
 #define BOOST_LIB_TOOLSET "vc120"
+#define ASSERT(x) assert(x)
 
 
 
