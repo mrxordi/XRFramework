@@ -7,6 +7,7 @@
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU(ID_Quit, MyFrame::OnQuit)
 EVT_MENU(ID_About, MyFrame::OnAbout)
+EVT_MENU(ID_ResizeWideo, MyFrame::OnResizeWideo)
 EVT_CLOSE(MyFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -15,6 +16,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 {
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(ID_About, "&About...");
+	menuFile->Append(ID_ResizeWideo, "&Resize Wideo...");
 	menuFile->AppendSeparator();
 	menuFile->Append(ID_Quit, "E&xit");
 
@@ -27,7 +29,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	SetStatusText("Welcome to wxWindows!");
 
 	wxDX10renderer* widget = new wxDX10renderer(this, -1);
-	//wxGetApp().m_VideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, widget);
+	wxGetApp().m_VideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, widget);
 }
 
 
@@ -43,6 +45,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 		"About Hello World", wxOK | wxICON_INFORMATION, this);
 }
 
+void MyFrame::OnResizeWideo(wxCommandEvent& WXUNUSED(event)) 
+{
+	wxGetApp().m_VideoRenderer->Configure(640, 480, 24.0f, CONF_FLAGS_YUVCOEF_BT601, ERenderFormat::RENDER_FMT_NV12, NULL);
+}
+
 void MyFrame::OnCloseWindow(wxCloseEvent& event)
 {
 	wxSize size = GetSize();
@@ -50,6 +57,9 @@ void MyFrame::OnCloseWindow(wxCloseEvent& event)
 	if (monitor) {
 		GetAppSettings().SaveCurrentRect(XRect(0, 0, size.x, size.y), monitor->GetOrdinal());
 	}
+
+	wxVideoRendererEvent* ev = new wxVideoRendererEvent(wxGetApp().m_VideoRenderer.get(), wxVideoRendererEvent::VR_ACTION_DETACH);
+	QueueEvent(ev);
 
 	wxFrame::OnCloseWindow(event);
 }

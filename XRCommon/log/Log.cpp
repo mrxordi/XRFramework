@@ -25,7 +25,6 @@ CLog::~CLog() {
 
 bool CLog::Init(std::string& path) {
 	XR::CSingleLock waitlock(m_CritSection);
-
 	std::string pathFileName;
 
 	if (m_isInit)     //Check is already initialised
@@ -151,12 +150,8 @@ bool CLog::WriteLogString(int logLevel, const char* file, const int lineNumber, 
 
 	if (!this)
 		strData = "[CAUTION CLOG NOT INITIALISED] " + strData;
-#if defined(_DEBUG)
-	PrintDebugString(strData);
-#else
-	//_CrtDbgReport(_CRT_WARN, file, lineNumber, nullptr, "%s\n", logString.c_str());
-#endif
 
+	PrintDebugString(strData);
 
 	if (!this)
 		return true;
@@ -168,9 +163,9 @@ bool CLog::WriteLogString(int logLevel, const char* file, const int lineNumber, 
 }
 
 void CLog::PrintDebugString(const std::string& line) {
-#if defined(_DEBUG) || defined(PROFILE)
+//#if defined(_DEBUG) || defined(PROFILE)
 	LogImplementation::PrintDebugString(line);
-#endif // defined(_DEBUG) || defined(PROFILE)
+//#endif // defined(_DEBUG) || defined(PROFILE)
 }
 
 void CLog::SetLogLevel(int level)

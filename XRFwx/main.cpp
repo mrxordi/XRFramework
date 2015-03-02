@@ -14,6 +14,7 @@ IMPLEMENT_APP(MyApp)
 MyApp::~MyApp()
 {
 	m_settings->SaveSettings();
+	m_VideoRenderer.reset();
 	ConverterFactory::DestroyAll();
 	CLog::Destroy();
 }

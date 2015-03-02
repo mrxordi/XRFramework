@@ -53,7 +53,7 @@ private:
 	bool		m_isInit;
 	std::string m_errorMessage;
 	bool m_bConsoleOnly;
-
+	HANDLE m_hConsoleHandle;
 };
 
 #define g_Log CLog::getSingleton()

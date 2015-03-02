@@ -11,6 +11,8 @@ public:
 
 	void OnQuit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	void OnResizeWideo(wxCommandEvent& event);
+
 	void OnCloseWindow(wxCloseEvent& event);
 	
 	DECLARE_EVENT_TABLE()
@@ -19,5 +21,6 @@ public:
 enum
 {
 	ID_Quit = 1,
-	ID_About,
+	ID_ResizeWideo,
+	ID_About
 };

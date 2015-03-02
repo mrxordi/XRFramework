@@ -151,6 +151,7 @@
     <ClInclude Include="utils\XRect.h">
       <Filter>utils</Filter>
     </ClInclude>
+    <ClInclude Include="utils\MyEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -284,6 +285,7 @@
       <Filter>dvdplayer</Filter>
     </ClCompile>
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
+    <ClCompile Include="utils\MyEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">

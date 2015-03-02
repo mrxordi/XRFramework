@@ -3,6 +3,7 @@
 #include "main.h"
 #include <functional>
 #include "../XRFramework/render/RenderSystemDX.h"
+#include "../XRFramework/core/VideoRenderers/WinRenderer.h"
 #include "../XRCommon/log/Log.h"
 
 BEGIN_EVENT_TABLE(wxDX10renderer, wxWindow)
@@ -63,6 +64,7 @@ bool wxDX10renderer::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/
 	Bind(wxEVT_PAINT, std::bind(&wxDX10renderer::Render, this));
 	parent->Bind(wxEVT_MOVE_START, &wxDX10renderer::HandleEnterSizeMove, this);
 	parent->Bind(wxEVT_MOVE_END, &wxDX10renderer::HandleExitSizeMove, this);
+	Bind(wxEVT_VIDEO_RENDERER, &wxDX10renderer::OnVideoRendererEvent, this);
 	//Bind(wxEVT_SIZE, &wxDX10renderer::OnSizeEvent, this);
 	//Bind(wxEVT_MOVE_START, &wxDX10renderer::HandleEnterSizeMove, this);
 	//Bind(wxEVT_MOVE_END, &wxDX10renderer::HandleExitSizeMove, this);
@@ -72,22 +74,28 @@ bool wxDX10renderer::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/
 
 wxDX10renderer::~wxDX10renderer()
 {
-	if (GetAppDX().get() && GetAppDX()->GetDevice())
+	if (GetAppDX().get() && GetAppDX()->GetDevice()) {
+		if (m_pVideoRenderer)
+			m_pVideoRenderer->Release();
 		GetAppDX()->DestroyRenderSystem();
+	}
 
 	LOGDEBUG("DX10 render control destroing.");
 }
 
 void wxDX10renderer::Render()
 {
-	if(GetAppDX()->BeginRender())
+	if (GetAppDX()->BeginRender()) {
+		if (m_pVideoRenderer)
+			m_pVideoRenderer->Render();
 		GetAppDX()->EndRender();
+	}
 }
 
 void wxDX10renderer::OnSizeEvent(wxSizeEvent &event)
 {
-	if (m_bIsSizing)
-		return;
+	//if (m_bIsSizing)
+	//	return;
 	m_videoSize = event.GetSize();
 	GetAppDX()->OnResize();
 }
@@ -111,4 +119,20 @@ void wxDX10renderer::OnIdle(wxIdleEvent& event)
 {
 	Render();
 	event.RequestMore();
+}
+
+void wxDX10renderer::OnVideoRendererEvent(wxVideoRendererEvent &event)
+{
+	if (event.pVideoRenderer)
+		XR::CSingleLock lock(event.pVideoRenderer->m_eventlock);
+
+	switch (event.e_action)
+	{
+	case wxVideoRendererEvent::VR_ACTION_ATTACH:
+		m_pVideoRenderer = event.pVideoRenderer;
+		break;
+	case wxVideoRendererEvent::VR_ACTION_DETACH:
+		m_pVideoRenderer = nullptr;
+		break;
+	};
 }

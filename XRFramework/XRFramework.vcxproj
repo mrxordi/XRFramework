@@ -145,6 +145,7 @@
     <ClInclude Include="utils\IJobCallback.h" />
     <ClInclude Include="utils\Job.h" />
     <ClInclude Include="utils\JobManager.h" />
+    <ClInclude Include="utils\MyEvents.h" />
     <ClInclude Include="utils\RingBuffer.h" />
     <ClInclude Include="utils\Timer.h" />
     <ClInclude Include="utils\XRect.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="utils\HttpHeader.cpp" />
     <ClCompile Include="utils\Job.cpp" />
     <ClCompile Include="utils\JobManager.cpp" />
+    <ClCompile Include="utils\MyEvents.cpp" />
     <ClCompile Include="utils\RingBuffer.cpp" />
     <ClCompile Include="utils\Timer.cpp" />
     <ClCompile Include="window\RenderControl.cpp" />

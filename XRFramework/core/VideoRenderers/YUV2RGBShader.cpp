@@ -9,7 +9,7 @@
 
 YUVBuffer::YUVBuffer() : m_width(0), m_height(0), m_format(RENDER_FMT_NONE), m_activeplanes(0), m_locked(false)
 {
-	for (int i = 0; i > MAX_PLANES; ++i)
+	for (int i = 0; i < MAX_PLANES; ++i) 
 		planes[i].texture = std::make_unique<D3DTexture>();
 }
 
@@ -72,7 +72,7 @@ bool YUVBuffer::Create(ERenderFormat format, unsigned int width, unsigned int he
 
 void YUVBuffer::Release()
 {
-	if (planes[0].texture->GetResource() != 0)
+	if (planes[0].texture->GetResource() != NULL)
 		for (unsigned i = 0; i < m_activeplanes; i++)
 		{
 		planes[i].texture->Release();
@@ -105,7 +105,6 @@ void YUVBuffer::StartRender()
 	if (!m_locked)
 		return;
 
-	m_locked = false;
 
 	for (unsigned i = 0; i < m_activeplanes; i++)
 	{
@@ -114,6 +113,8 @@ void YUVBuffer::StartRender()
 				LOGERR(" - failed to unlock texture %d", i);
 		memset(&planes[i].rect, 0, sizeof(planes[i].rect));
 	}
+	m_locked = false;
+
 }
 
 void YUVBuffer::Clear()
@@ -203,6 +204,8 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 
 	DefinesMap defines;
 
+	LOGDEBUG(" - Creating YUV2RGB shader's planes");
+
 	if (format == RENDER_FMT_YUV420P16 || format == RENDER_FMT_YUV420P10)
 	{
 		defines["XBMC_YV12"] = "";
@@ -269,7 +272,7 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 	m_texSteps[0] = 1.0f / (float)texWidth;
 	m_texSteps[1] = 1.0f / (float)srcHeight;
 
-	if (!LoadEffect("special://app/system/yuv2rgb_d3d.fx", &defines)) {
+	if (!LoadEffect("special://app/data/yuv2rgb_d3d.fx", &defines)) {
 		m_effect.Release();
 		return false;
 	}

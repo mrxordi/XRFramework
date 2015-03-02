@@ -68,7 +68,7 @@ bool LogImplementation::WriteStringToLog(const std::string& logString)
 
 void LogImplementation::PrintDebugString(const std::string& debugString)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	//	int bufSize = MultiByteToWideChar(CP_UTF8, 0, debugString.c_str(), debugString.length(), NULL, 0);
 	//	void* buf = 0;
 	//	size_t sizebuf = (sizeof(wchar_t) * (bufSize + 1)); // '+1' for extra safety
@@ -81,7 +81,7 @@ void LogImplementation::PrintDebugString(const std::string& debugString)
 	::OutputDebugStringA(debugString.c_str());
 	::OutputDebugStringW(L"\n");
 	//	free(buf);
-#endif // _DEBUG
+//#endif // _DEBUG
 }
 
 void LogImplementation::GetCurrentLocalTime(int& hour, int& minute, int& second)

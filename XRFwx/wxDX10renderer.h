@@ -1,8 +1,10 @@
 #pragma once
 #include "wx/wx.h"
+#include "../XRFramework/utils/MyEvents.h"
 #include <memory>
 
 class cRenderSystemDX;
+class WinRenderer;
 
 class wxDX10renderer : public wxWindow
 {
@@ -36,10 +38,14 @@ private:
 	void HandleExitSizeMove(wxMoveEvent &event);
 	/// @brief Recalculate video positioning and scaling when the available area or zoom changes
 	void OnSizeEvent(wxSizeEvent &event);
+	/// @brief We need to handle Video Renderer events
+	void OnVideoRendererEvent(wxVideoRendererEvent &event);
+
 
 	wxSize m_videoSize;
 	wxSize m_oldvideoSize;
 	bool   m_bIsSizing;
+	WinRenderer* m_pVideoRenderer;
 
 	DECLARE_EVENT_TABLE()
 	DECLARE_CLASS(wxDX10renderer)

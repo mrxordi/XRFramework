@@ -5,8 +5,11 @@
 #include "WinShader.h"
 #include "RenderModes.h"
 #include "wx/window.h"
+#include "utils/MyEvents.h"
 #include "dvdplayer/Codecs/VideoCodec.h"
 #include "../XRThreads/CriticalSection.h"
+#include "../XRThreads/SingleLock.h"
+
 
 #define MAX_PLANES 3
 #define MAX_FIELDS 3
@@ -56,13 +59,18 @@ public:
 	virtual ~WinRenderer();
 
 	bool Configure(UINT width, UINT height, float fps, unsigned int flags, ERenderFormat format, wxWindow* window);
+	void Release();
 	void Render();
 	void RenderPS();
 	
 	void CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height);
 	void ManageDisplay();
+	void ManageTextures();
+	
 	int AddVideoPicture(DVDVideoPicture& pic);
-	int GetImage(YV12Image* image, int source, bool readonly);
+	int GetImage(YV12Image* image, int source);
+	void ReleaseImage(int index);
+	
 	int NextYV12Texture();
 	void DeleteYV12Texture(int index);
 	bool CreateYV12Texture(int index);
@@ -71,9 +79,13 @@ public:
 
 	void SetBufferSize(int size) { m_neededBuffers = size; }
 	int  GetMaxBufferSize() { return NUM_BUFFERS; }
+
+	XR::CCriticalSection m_eventlock;
 protected:
 	void Stage1();
 	void Stage2();
+
+	void SendVideoRendererMessage(wxVideoRendererEvent::VR_ACTION action);
 private:
 	wxWindow* m_contextWindow;
 	int  m_iYV12RenderBuffer;
