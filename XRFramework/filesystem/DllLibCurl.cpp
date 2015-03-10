@@ -18,32 +18,25 @@
 *
 */
 #include "stdafxf.h"
-#include "XRThreads/SystemClock.h"
 #include "DllLibCurl.h"
 #include "../XRThreads/SingleLock.h"
+#include "../XRThreads/SystemClock.h"
 #include "log/log.h"
 
 
 #include <assert.h>
 
-
 bool DllLibCurlGlobal::Load()
 {
 	XR::CSingleLock lock(m_critSection);
-	if (m_curlReferences > 0)
+	if (m_curlReferences > 0) 
 	{
 		m_curlReferences++;
 		return true;
 	}
 
-	/* we handle this ourself */
-	DllDynamic::EnableDelayedUnload(false);
-	if (!DllDynamic::Load())
-		return false;
-
-	if (global_init(CURL_GLOBAL_ALL))
+	if (curl_global_init(CURL_GLOBAL_ALL)) 
 	{
-		DllDynamic::Unload();
 		LOGERR("Error initializing libcurl");
 		return false;
 	}
@@ -57,17 +50,9 @@ bool DllLibCurlGlobal::Load()
 void DllLibCurlGlobal::Unload()
 {
 	XR::CSingleLock lock(m_critSection);
+
 	if (--m_curlReferences == 0)
-	{
-		if (!IsLoaded())
-			return;
-
-		// close libcurl
-		global_cleanup();
-
-		DllDynamic::Unload();
-	}
-
+		curl_global_cleanup();  // close libcurl
 
 }
 
@@ -83,19 +68,19 @@ void DllLibCurlGlobal::CheckIdle()
 
 
 	VEC_CURLSESSIONS::iterator it = m_sessions.begin();
-	while (it != m_sessions.end())
+	while (it != m_sessions.end()) 
 	{
 		//unsigned int tickcount = XR::SystemClockMillis() - it->m_idletimestamp;
-		if (!it->m_busy && (XR::SystemClockMillis() - it->m_idletimestamp > idletime))
+		if (!it->m_busy && (XR::SystemClockMillis() - it->m_idletimestamp > idletime)) 
 		{
 			LOGINFO("Closing session to %s://%s (easy=%p, multi=%p)\n", it->m_protocol.c_str(), it->m_hostname.c_str(), (void*)it->m_easy, (void*)it->m_multi);
 
 			// It's important to clean up multi *before* cleaning up easy, because the multi cleanup
 			// code accesses stuff in the easy's structure.
 			if (it->m_multi)
-				multi_cleanup(it->m_multi);
+				curl_multi_cleanup(it->m_multi);
 			if (it->m_easy)
-				easy_cleanup(it->m_easy);
+				curl_easy_cleanup(it->m_easy);
 
 			Unload();
 
@@ -113,31 +98,30 @@ void DllLibCurlGlobal::easy_aquire(const char *protocol, const char *hostname, C
 	XR::CSingleLock lock(m_critSection);
 
 	VEC_CURLSESSIONS::iterator it;
-	for (it = m_sessions.begin(); it != m_sessions.end(); it++)
+	for (it = m_sessions.begin(); it != m_sessions.end(); it++) 
 	{
-		if (!it->m_busy)
+		if (!it->m_busy) 
 		{
 			/* allow reuse of requester is trying to connect to same host */
 			/* curl will take care of any differences in username/password */
-			if (it->m_protocol.compare(protocol) == 0 && it->m_hostname.compare(hostname) == 0)
+			if (it->m_protocol.compare(protocol) == 0 && it->m_hostname.compare(hostname) == 0) 
 			{
 				it->m_busy = true;
-				if (easy_handle)
+				if (easy_handle) 
 				{
 					if (!it->m_easy)
-						it->m_easy = easy_init();
+						it->m_easy = curl_easy_init();
 
 					*easy_handle = it->m_easy;
 				}
 
-				if (multi_handle)
+				if (multi_handle) 
 				{
 					if (!it->m_multi)
-						it->m_multi = multi_init();
+						it->m_multi = curl_multi_init();
 
 					*multi_handle = it->m_multi;
 				}
-
 				return;
 			}
 		}
@@ -151,15 +135,15 @@ void DllLibCurlGlobal::easy_aquire(const char *protocol, const char *hostname, C
 	/* count up global interface counter */
 	Load();
 
-	if (easy_handle)
+	if (easy_handle) 
 	{
-		session.m_easy = easy_init();
+		session.m_easy = curl_easy_init();
 		*easy_handle = session.m_easy;
 	}
 
-	if (multi_handle)
+	if (multi_handle) 
 	{
-		session.m_multi = multi_init();
+		session.m_multi = curl_multi_init();
 		*multi_handle = session.m_multi;
 	}
 
@@ -169,7 +153,6 @@ void DllLibCurlGlobal::easy_aquire(const char *protocol, const char *hostname, C
 	LOGINFO("Created session to %s://%s (easy=%p, multi=%p)", protocol, hostname, (void*)session.m_easy, (void*)session.m_multi);
 
 	return;
-
 }
 
 void DllLibCurlGlobal::easy_release(CURL_HANDLE** easy_handle, CURLM** multi_handle)
@@ -179,26 +162,26 @@ void DllLibCurlGlobal::easy_release(CURL_HANDLE** easy_handle, CURLM** multi_han
 	CURL_HANDLE* easy = NULL;
 	CURLM*       multi = NULL;
 
-	if (easy_handle)
+	if (easy_handle) 
 	{
 		easy = *easy_handle;
 		*easy_handle = NULL;
 	}
 
-	if (multi_handle)
+	if (multi_handle) 
 	{
 		multi = *multi_handle;
 		*multi_handle = NULL;
 	}
 
 	VEC_CURLSESSIONS::iterator it;
-	for (it = m_sessions.begin(); it != m_sessions.end(); it++)
+	for (it = m_sessions.begin(); it != m_sessions.end(); it++) 
 	{
-		if (it->m_easy == easy && (multi == NULL || it->m_multi == multi))
+		if (it->m_easy == easy && (multi == NULL || it->m_multi == multi)) 
 		{
 			/* reset session so next caller doesn't reuse options, only connections */
 			/* will reset verbose too so it won't print that it closed connections on cleanup*/
-			easy_reset(easy);
+			curl_easy_reset(easy);
 			it->m_busy = false;
 			it->m_idletimestamp = XR::SystemClockMillis();
 			return;
@@ -211,18 +194,18 @@ CURL_HANDLE* DllLibCurlGlobal::easy_duphandle(CURL_HANDLE* easy_handle)
 	XR::CSingleLock lock(m_critSection);
 
 	VEC_CURLSESSIONS::iterator it;
-	for (it = m_sessions.begin(); it != m_sessions.end(); it++)
+	for (it = m_sessions.begin(); it != m_sessions.end(); it++) 
 	{
-		if (it->m_easy == easy_handle)
+		if (it->m_easy == easy_handle) 
 		{
 			SSession session = *it;
-			session.m_easy = DllLibCurl::easy_duphandle(easy_handle);
+			session.m_easy = curl_easy_duphandle(easy_handle);
 			Load();
 			m_sessions.push_back(session);
 			return session.m_easy;
 		}
 	}
-	return DllLibCurl::easy_duphandle(easy_handle);
+	return curl_easy_duphandle(easy_handle);
 }
 
 void DllLibCurlGlobal::easy_duplicate(CURL_HANDLE* easy, CURLM* multi, CURL_HANDLE** easy_out, CURLM** multi_out)
@@ -230,15 +213,15 @@ void DllLibCurlGlobal::easy_duplicate(CURL_HANDLE* easy, CURLM* multi, CURL_HAND
 	XR::CSingleLock lock(m_critSection);
 
 	if (easy_out && easy)
-		*easy_out = DllLibCurl::easy_duphandle(easy);
+		*easy_out = curl_easy_duphandle(easy);
 
 	if (multi_out && multi)
-		*multi_out = DllLibCurl::multi_init();
+		*multi_out = curl_multi_init();
 
 	VEC_CURLSESSIONS::iterator it;
-	for (it = m_sessions.begin(); it != m_sessions.end(); it++)
+	for (it = m_sessions.begin(); it != m_sessions.end(); it++) 
 	{
-		if (it->m_easy == easy)
+		if (it->m_easy == easy) 
 		{
 			SSession session = *it;
 			if (easy_out && easy)
@@ -274,16 +257,18 @@ void DllLibCurlGlobal::UnloadAll()
 	CURLM*       multi = NULL;
 	VEC_CURLSESSIONS::iterator it;
 
-	for (it = m_sessions.begin(); it != m_sessions.end();) {
-		if (it->m_easy){
-			easy_reset(it->m_easy);
+	for (it = m_sessions.begin(); it != m_sessions.end();) 
+	{
+		if (it->m_easy) 
+		{
+			curl_easy_reset(it->m_easy);
 			it->m_busy = false;
 			// It's important to clean up multi *before* cleaning up easy, because the multi cleanup
 			// code accesses stuff in the easy's structure.
 			if (it->m_multi)
-				multi_cleanup(it->m_multi);
+				curl_multi_cleanup(it->m_multi);
 			if (it->m_easy)
-				easy_cleanup(it->m_easy);
+				curl_easy_cleanup(it->m_easy);
 			LOGINFO("Closing session to %s://%s (easy=%p, multi=%p)", it->m_protocol.c_str(), it->m_hostname.c_str(), (void*)it->m_easy, (void*)it->m_multi);
 			it = m_sessions.erase(it);
 
@@ -292,9 +277,7 @@ void DllLibCurlGlobal::UnloadAll()
 	}
 
 	for (int i = m_curlReferences; i > 0; i--)
-	{
 		Unload();
-	}
 }
 
 XR::CCriticalSection DllLibCurlGlobal::m_critSection;

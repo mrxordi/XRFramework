@@ -44,8 +44,7 @@ namespace XR
 
 		inline bool IsTimePast() const { return totalWaitTime == InfiniteValue ? false : (totalWaitTime == 0 ? true : (SystemClockMillis() - startTime) >= totalWaitTime); }
 
-		inline unsigned int MillisLeft() const
-		{
+		inline unsigned int MillisLeft() const {
 			if (totalWaitTime == InfiniteValue)
 				return InfiniteValue;
 			if (totalWaitTime == 0)

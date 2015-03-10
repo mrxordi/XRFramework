@@ -12,8 +12,8 @@ protected:
 		m_vbsize(0),
 		m_vertsize(0),
 		m_primitivesCount(0),
-		m_indexCount(0)
-	{};
+		m_indexCount(0) {};
+
 	virtual ~WinShader();
 	virtual bool CreateVertexBuffer(unsigned int vertCount, unsigned int vertSize, unsigned int primitivesCount);
 	virtual bool CreateIndexBuffer(unsigned int indexCount);

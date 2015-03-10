@@ -16,7 +16,8 @@ XR::ILogger* CThread::logger = NULL;
 
 
 CThread::CThread(const char* ThreadName) 
-	: m_StopEvent(true, true), m_TermEvent(true), m_StartEvent(true) {
+	: m_StopEvent(true, true), m_TermEvent(true), m_StartEvent(true) 
+{
 
 		m_bStop = false;
 		m_bAutoDelete = false;
@@ -33,7 +34,8 @@ CThread::CThread(const char* ThreadName)
 }
 
 CThread::CThread(IRunnable* pRunnable, const char* ThreadName) 
-	: m_StopEvent(true,true), m_TermEvent(true), m_StartEvent(true) {
+	: m_StopEvent(true,true), m_TermEvent(true), m_StartEvent(true) 
+{
 
 		m_bStop = false;
 		m_bAutoDelete = false;
@@ -48,12 +50,15 @@ CThread::CThread(IRunnable* pRunnable, const char* ThreadName)
 			m_ThreadName = ThreadName;
 }
 
-CThread::~CThread(void) {
+CThread::~CThread(void) 
+{
 	StopThread();
 }
 
-void CThread::Create(bool bAutoDelete, unsigned stacksize /*= 0*/) {
-	if (m_ThreadId != 0) {
+void CThread::Create(bool bAutoDelete, unsigned stacksize /*= 0*/) 
+{
+	if (m_ThreadId != 0) 
+	{
 		LOG(LOG_ERROR, "fatal error creating thread- old thread id not null", NULL);
 		exit(1);
 	}
@@ -80,13 +85,15 @@ void CThread::Sleep(unsigned int miliseconds)
 }
 
 
-THREADFUNC CThread::staticThread(void *data) {
+THREADFUNC CThread::staticThread(void *data) 
+{
 	CThread* pThread = (CThread*)(data);
 	std::string name;
 	ThreadIdentifier id;
 	bool autodelete;
 
-	if (!pThread) {
+	if (!pThread) 
+	{
 		LOG(LOG_ERROR, "sanity failed. thread is NULL.", NULL);
 		return 1;
 	}
@@ -113,73 +120,79 @@ THREADFUNC CThread::staticThread(void *data) {
 
 	lock.Leave();
 
-	if (autodelete) {
+	if (autodelete) 
+	{
 		LOG(LOG_DEBUG,"Thread %s %d terminating (autodelete)", name.c_str(), (DWORD)id);
 		delete pThread;
 		pThread = NULL;
-	} else {
+	} else 
+	{
 		LOG(LOG_DEBUG,"Thread %s %d terminating", name.c_str(), (DWORD)id);
 	}
 
 	return 0;
 }
 
-void CThread::StopThread(bool bWait /*= true*/) {
+void CThread::StopThread(bool bWait /*= true*/) 
+{
 	m_bStop = true;
 	m_StopEvent.Set();
 	XR::CSingleLock lock(m_CriticalSection);
-	if (m_ThreadId && bWait) {
+	if (m_ThreadId && bWait) 
+	{
 		lock.Leave();
 		WaitForThreadExit(0xFFFFFFFF);
 	}
 }
 
-void CThread::Process() {
+void CThread::Process() 
+{
 	if (m_pRunnable)
 		m_pRunnable->Run();
 }
 
-CThread* CThread::GetCurrentThread() {
+CThread* CThread::GetCurrentThread() 
+{
 	return currentThread.get();
 }
 
-void CThread::Action() {
+void CThread::Action() 
+{
 
-	try
-	{
+	try {
 		OnStartup();
 	}
-	catch (...)
+	catch (...) 
 	{
 		LOG(LOG_ERROR, "thread %s, Unhandled exception caught in thread startup, aborting. auto delete: %d", m_ThreadName.c_str(), IsAutoDelete());
 		if (IsAutoDelete())
 			return;
 	}
 
-	try
-	{
+	try {
 		Process();
 	}
-	catch (...)
+	catch (...) 
 	{
 		LOG(LOG_ERROR, "thread %s, Unhandled exception caught in thread process, aborting. auto delete: %d", m_ThreadName.c_str(), IsAutoDelete());
 	}
 
-	try
-	{
+	try {
 		OnExit();
 	}
-	catch (...)
+	catch (...) 
 	{
 		LOG(LOG_ERROR, "thread %s, Unhandled exception caught in thread OnExit, aborting. auto delete: %d", m_ThreadName.c_str(), IsAutoDelete());
 	}
 }
 
-bool CThread::WaitForThreadExit(unsigned int milliseconds) {
-	bool bReturn = true;
+bool CThread::WaitForThreadExit(unsigned int milliseconds) 
+{
 
+	bool bReturn = true;
 	XR::CSingleLock lock(m_CriticalSection);
-	if (m_ThreadId && m_ThreadOpaque.handle != NULL)
+
+	if (m_ThreadId && m_ThreadOpaque.handle != NULL) 
 	{
 		// boost priority of thread we are waiting on to same as caller
 		int callee = GetThreadPriority(m_ThreadOpaque.handle);
@@ -198,53 +211,56 @@ bool CThread::WaitForThreadExit(unsigned int milliseconds) {
 	return bReturn;
 }
 
-int CThread::GetSchedRRPriority(void) {
+int CThread::GetSchedRRPriority(void) 
+{
 	return GetNormalPriority();
 }
 
-int CThread::GetPriority(void) {
+int CThread::GetPriority(void) 
+{
 	XR::CSingleLock lock(m_CriticalSection);
-
 	int iReturn = THREAD_PRIORITY_NORMAL;
-	if (m_ThreadOpaque.handle)
+
+	if (m_ThreadOpaque.handle) 
 	{
 		iReturn = GetThreadPriority(m_ThreadOpaque.handle);
 	}
 	return iReturn;
 }
 
-bool CThread::SetPriority(const int iPriority) {
+bool CThread::SetPriority(const int iPriority) 
+{
 	bool bReturn = false;
 
 	XR::CSingleLock lock(m_CriticalSection);
-	if (m_ThreadOpaque.handle) {
+	if (m_ThreadOpaque.handle) 
 		bReturn = SetThreadPriority(m_ThreadOpaque.handle, iPriority) == TRUE;
-	}
 
 	return bReturn;
 }
 
-int CThread::GetMinPriority(void)
+int CThread::GetMinPriority(void) 
 {
 	return(THREAD_PRIORITY_IDLE);
 }
 
-int CThread::GetMaxPriority(void)
+int CThread::GetMaxPriority(void) 
 {
 	return(THREAD_PRIORITY_HIGHEST);
 }
 
-int CThread::GetNormalPriority(void)
+int CThread::GetNormalPriority(void) 
 {
 	return(THREAD_PRIORITY_NORMAL);
 }
 
-bool CThread::IsCurrentThread(const ThreadIdentifier tid)
+bool CThread::IsCurrentThread(const ThreadIdentifier tid) 
 {
 	return (::GetCurrentThreadId() == tid);
 }
 
-float CThread::GetRelativeUsage() {
+float CThread::GetRelativeUsage() 
+{
 	unsigned int iTime = XR::SystemClockMillis();
 	iTime *= 10000; // convert into 100ns tics
 
@@ -264,14 +280,15 @@ float CThread::GetRelativeUsage() {
 
 int64_t CThread::GetAbsoluteUsage()
 {
-	XR::CSingleLock lock(m_CriticalSection);
 
+	XR::CSingleLock lock(m_CriticalSection);
 	if (!m_ThreadOpaque.handle)
 		return 0;
 
 	uint64_t time = 0;
 	FILETIME CreationTime, ExitTime, UserTime, KernelTime;
-	if( GetThreadTimes(m_ThreadOpaque.handle, &CreationTime, &ExitTime, &KernelTime, &UserTime ) )
+
+	if(GetThreadTimes(m_ThreadOpaque.handle, &CreationTime, &ExitTime, &KernelTime, &UserTime)) 
 	{
 		time = (((uint64_t)UserTime.dwHighDateTime) << 32) + ((uint64_t)UserTime.dwLowDateTime);
 		time += (((uint64_t)KernelTime.dwHighDateTime) << 32) + ((uint64_t)KernelTime.dwLowDateTime);
@@ -279,7 +296,8 @@ int64_t CThread::GetAbsoluteUsage()
 	return time;
 }
 
-ThreadIdentifier CThread::GetCurrentThreadId() {
+ThreadIdentifier CThread::GetCurrentThreadId() 
+{
 	return ::GetCurrentThreadId();
 }
 
@@ -288,8 +306,7 @@ void CThread::SetThreadInfo()
 	const unsigned int MS_VC_EXCEPTION = 0x406d1388;
 
 #pragma pack(push,8)
-	struct THREADNAME_INFO
-	{
+	struct THREADNAME_INFO {
 		DWORD dwType; // must be 0x1000
 		LPCSTR szName; // pointer to name (in same addr space)
 		DWORD dwThreadID; // thread ID (-1 caller thread)
@@ -302,7 +319,7 @@ void CThread::SetThreadInfo()
 	info.dwThreadID = m_ThreadId;
 	info.dwFlags = 0;
 
-	__try
+	__try 
 	{
 		RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR *)&info);
 	}
@@ -312,16 +329,19 @@ void CThread::SetThreadInfo()
 
 }
 
-void CThread::TermHandler() {
+void CThread::TermHandler() 
+{
 	CloseHandle(m_ThreadOpaque.handle);
 	m_ThreadOpaque.handle = NULL;
 }
 
-void CThread::SpawnThread(unsigned stacksize) {
+void CThread::SpawnThread(unsigned stacksize) 
+{
 	// Create in the suspended state, so that no matter the thread priorities and scheduled order, the handle will be assigned
 	// before the new thread exits.
 	m_ThreadOpaque.handle = CreateThread(NULL, stacksize, (LPTHREAD_START_ROUTINE)&staticThread, this, CREATE_SUSPENDED, &m_ThreadId);
-	if (m_ThreadOpaque.handle == NULL)
+
+	if (m_ThreadOpaque.handle == NULL) 
 	{
 		LOG(LOG_ERROR, "fatal error %d creating thread", GetLastError());
 		return;

@@ -53,7 +53,7 @@ bool DllDynamic::Load()
 	if (!(m_dll = LoaderFactory::Get()->LoadDLL(m_strDllName, m_DelayUnload, LoadSymbols())))
 		return false;
 
-	if (!ResolveExports())
+	if (!ResolveExports()) 
 	{
 		LOGERR("Unable to resolve exports from dll %s", m_strDllName.c_str());
 		Unload();

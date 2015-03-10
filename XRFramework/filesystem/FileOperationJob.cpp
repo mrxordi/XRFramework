@@ -14,13 +14,13 @@ FileOperationJob::FileOperationJob()
 
 FileOperationJob::FileOperationJob(FileAction action, FileItemList & items,
 									const std::string& strDestFile,
-									bool displayProgress)
+									bool displayProgress) 
 {
 	m_bDisplayProgress = displayProgress;
 	SetFileOperation(action, items, strDestFile);
 }
 
-void FileOperationJob::SetFileOperation(FileAction action, FileItemList &items, const std::string &strDestFile)
+void FileOperationJob::SetFileOperation(FileAction action, FileItemList &items, const std::string &strDestFile) 
 {
   m_fileaction = action;
   m_strDestFile = strDestFile;
@@ -30,12 +30,12 @@ void FileOperationJob::SetFileOperation(FileAction action, FileItemList &items, 
     m_items.Add(FileItemPtr(new FileItem(*items[i])));
 }
 
-bool FileOperationJob::DoWork()
+bool FileOperationJob::DoWork() 
 {
 	FileOperationList ops;
 	double totalTime = 0.0;
 
-	if (m_bDisplayProgress)
+	if (m_bDisplayProgress) 
 	{
 		//m_hStatusBar = g_iApplication->GetStatusBar();
 	}
@@ -56,10 +56,10 @@ bool FileOperationJob::DoWork()
 	return success;
 }
 
-std::string FileOperationJob::GetActionString(FileAction action)
+std::string FileOperationJob::GetActionString(FileAction action) 
 {
 	std::string result;
-	switch (action)
+	switch (action) 
 	{
 	case ActionCopy:
 	case ActionReplace:
@@ -80,18 +80,19 @@ std::string FileOperationJob::GetActionString(FileAction action)
 	return result;
 }
 
-bool FileOperationJob::operator==(const CJob* job) const
+bool FileOperationJob::operator==(const CJob* job) const 
 {
-	if (strcmp(job->GetType(), GetType()) == 0)
+	if (strcmp(job->GetType(), GetType()) == 0) 
 	{
+
 		const FileOperationJob* rjob = dynamic_cast<const FileOperationJob*>(job);
-		if (rjob)
+		if (rjob) 
 		{
 			if (GetAction() == rjob->GetAction() &&
-				m_strDestFile == rjob->m_strDestFile &&
-				m_items.Size() == rjob->m_items.Size())
+					m_strDestFile == rjob->m_strDestFile &&
+					m_items.Size() == rjob->m_items.Size()) 
 			{
-				for (int i = 0; i<m_items.Size(); ++i)
+				for (int i = 0; i<m_items.Size(); ++i) 
 				{
 					if (m_items[i]->GetPath() != rjob->m_items[i]->GetPath())
 						return false;
@@ -105,7 +106,7 @@ bool FileOperationJob::operator==(const CJob* job) const
 
 bool FileOperationJob::DoProcess(FileAction action, FileItemList & items, const std::string& strDestFile, FileOperationList &fileOperations, double &totalTime)
 {
-	for (int iItem = 0; iItem < items.Size(); ++iItem)
+	for (int iItem = 0; iItem < items.Size(); ++iItem) 
 	{
 		FileItemPtr pItem = items[iItem];
 
@@ -117,7 +118,7 @@ bool FileOperationJob::DoProcess(FileAction action, FileItemList & items, const 
 		if (!strDestFile.empty()) // only do this if we have a destination
 			strnewDestFile = URIUtils::ChangeBasePath(pItem->GetPath(), strFileName, strDestFile); // Convert (URL) encoding + slashes (if source / target differ)
 
-		if (pItem->m_bIsFolder)
+		if (pItem->m_bIsFolder) 
 		{
 			// in ActionReplace mode all subdirectories will be removed by the below
 			// DoProcessFolder(ActionDelete) call as well, so ActionCopy is enough when
@@ -133,27 +134,29 @@ bool FileOperationJob::DoProcess(FileAction action, FileItemList & items, const 
 			if (action == ActionDelete || action == ActionDeleteFolder)
 				DoProcessFile(ActionDeleteFolder, pItem->GetPath(), "", fileOperations, totalTime);
 		}
-		else
+		else 
 			DoProcessFile(action, pItem->GetPath(), strnewDestFile, fileOperations, totalTime);
 	}
 	return true;
 }
 
-bool FileOperationJob::DoProcessFolder(FileAction action, const std::string& strPath, const std::string& strDestFile, FileOperationList &fileOperations, double &totalTime)
+bool FileOperationJob::DoProcessFolder(FileAction action, const std::string& strPath, const std::string& strDestFile, FileOperationList &fileOperations, double &totalTime) 
 {
 	LOGDEBUG("FileManager, processing folder: %s", strPath.c_str());
 	FileItemList items;
 	//m_rootDir.GetDirectory(strPath, items);
 	Directory::GetDirectory(strPath, items, "", DIR_FLAG_NO_FILE_DIRS | DIR_FLAG_GET_HIDDEN);
-	for (int i = 0; i < items.Size(); i++)
+
+	for (int i = 0; i < items.Size(); i++) 
 	{
 		FileItemPtr pItem = items[i];
 		LOGDEBUG("  -- %s", pItem->GetPath().c_str());
 	}
 
-	if (!DoProcess(action, items, strDestFile, fileOperations, totalTime)) return false;
+	if (!DoProcess(action, items, strDestFile, fileOperations, totalTime)) 
+		return false;
 
-	if (action == ActionMove)
+	if (action == ActionMove) 
 	{
 		fileOperations.push_back(FileOperation(ActionDeleteFolder, strPath, "", 1));
 		totalTime += 1.0;
@@ -162,11 +165,11 @@ bool FileOperationJob::DoProcessFolder(FileAction action, const std::string& str
 	return true;
 }
 
-bool FileOperationJob::DoProcessFile(FileAction action, const std::string& strFileA, const std::string& strFileB, FileOperationList &fileOperations, double &totalTime)
+bool FileOperationJob::DoProcessFile(FileAction action, const std::string& strFileA, const std::string& strFileB, FileOperationList &fileOperations, double &totalTime) 
 {
 	int64_t time = 1;
 
-	if (action == ActionCopy || action == ActionReplace || (action == ActionMove && !CanBeRenamed(strFileA, strFileB)))
+	if (action == ActionCopy || action == ActionReplace || (action == ActionMove && !CanBeRenamed(strFileA, strFileB))) 
 	{
 		struct __stat64 data;
 		if (File::Stat(strFileA, &data) == 0)
@@ -180,7 +183,7 @@ bool FileOperationJob::DoProcessFile(FileAction action, const std::string& strFi
 	return true;
 }
 
-inline bool FileOperationJob::CanBeRenamed(const std::string &strFileA, const std::string &strFileB)
+inline bool FileOperationJob::CanBeRenamed(const std::string &strFileA, const std::string &strFileB) 
 {
 	if (URIUtils::IsHD(strFileA) && URIUtils::IsHD(strFileB))
 		return true;
@@ -193,17 +196,16 @@ inline bool FileOperationJob::CanBeRenamed(const std::string &strFileA, const st
 ////////////////////////////////////////////////////////////////////////////////////
 
 FileOperationJob::FileOperation::FileOperation(FileAction action, const std::string &strFileA, const std::string &strFileB, int64_t time) : m_action(action), m_strFileA(strFileA), m_strFileB(strFileB), m_time(time)
-{
-}
+{}
 
-struct DataHolder
+struct DataHolder 
 {
 	FileOperationJob *base;
 	double current;
 	double opWeight;
 };
 
-bool FileOperationJob::FileOperation::ExecuteOperation(FileOperationJob *base, double &current, double opWeight)
+bool FileOperationJob::FileOperation::ExecuteOperation(FileOperationJob *base, double &current, double opWeight) 
 {
 	bool bResult = true;
 
@@ -213,25 +215,22 @@ bool FileOperationJob::FileOperation::ExecuteOperation(FileOperationJob *base, d
 	if (base->ShouldCancel((unsigned)current, 100))
 		return false;
 
-	if (base->m_hStatusBar)
-	{
+	if (base->m_hStatusBar) 
 		base->m_hStatusBar->SetText(StringUtils::Format("%s...%f %%", base->GetCurrentFile().c_str(), (float)current));
-	}
 
 	DataHolder data = { base, current, opWeight };
 
-	switch (m_action)
+	switch (m_action) 
 	{
 	case FileOperationJob::ActionCopy:
-	case FileOperationJob::ActionReplace:
-		{
-			LOGDEBUG("FileManager: copy %s -> %s\n", m_strFileA.c_str(), m_strFileB.c_str());
-
-			bResult = File::Copy(m_strFileA, m_strFileB, this, &data);
-		}
+	case FileOperationJob::ActionReplace: 
+	{
+		LOGDEBUG("FileManager: copy %s -> %s\n", m_strFileA.c_str(), m_strFileB.c_str());
+		bResult = File::Copy(m_strFileA, m_strFileB, this, &data);
 		break;
-	case ActionMove:
-		{
+	}
+	case ActionMove: 
+	{
 		LOGDEBUG("FileManager: move %s -> %s\n", m_strFileA.c_str(), m_strFileB.c_str());
 
 		if (CanBeRenamed(m_strFileA, m_strFileB))
@@ -240,41 +239,38 @@ bool FileOperationJob::FileOperation::ExecuteOperation(FileOperationJob *base, d
 			bResult = File::Delete(m_strFileA);
 		else
 			bResult = false;
-		}
-		break;
-	case FileOperationJob::ActionDelete:
-		{
-			LOGDEBUG("FileManager: delete %s\n", m_strFileA.c_str());
-
-			bResult = File::Delete(m_strFileA);
-		}
-		break;
-	case FileOperationJob::ActionDeleteFolder:
-		{
-			LOGDEBUG("FileManager: delete folder %s\n", m_strFileA.c_str());
-
-			bResult = Directory::Remove(m_strFileA);
-		}
-		break;
-	case FileOperationJob::ActionCreateFolder:
-		{
-			LOGDEBUG("FileManager: create folder %s\n", m_strFileA.c_str());
-
-			bResult = Directory::Create(m_strFileA);
-		}
 		break;
 	}
-	current += (double)m_time * opWeight;
+	case FileOperationJob::ActionDelete: 
+	{
+			LOGDEBUG("FileManager: delete %s\n", m_strFileA.c_str());
+			bResult = File::Delete(m_strFileA);
+			break;
+	}
+	case FileOperationJob::ActionDeleteFolder: 
+	{
+		LOGDEBUG("FileManager: delete folder %s\n", m_strFileA.c_str());
+		bResult = Directory::Remove(m_strFileA);
+		break;
+	}
+	case FileOperationJob::ActionCreateFolder: 
+	{
+			LOGDEBUG("FileManager: create folder %s\n", m_strFileA.c_str());
+			bResult = Directory::Create(m_strFileA);
+			break;
+	}
+	}
 
+	current += (double)m_time * opWeight;
 	return bResult;
 }
 
-void FileOperationJob::FileOperation::Debug()
+void FileOperationJob::FileOperation::Debug() 
 {
 	printf("%i | %s > %s\n", m_action, m_strFileA.c_str(), m_strFileB.c_str());
 }
 
-bool FileOperationJob::FileOperation::OnFileCallback(void* pContext, int ipercent, float avgSpeed)
+bool FileOperationJob::FileOperation::OnFileCallback(void* pContext, int ipercent, float avgSpeed) 
 {
 	DataHolder *data = (DataHolder *)pContext;
 	double current = data->current + ((double)ipercent * data->opWeight * (double)m_time) / 100.0;
@@ -284,7 +280,7 @@ bool FileOperationJob::FileOperation::OnFileCallback(void* pContext, int ipercen
 	else
 		data->base->m_avgSpeed = StringUtils::Format("%.1f KB/s", avgSpeed / 1000.0f);
 
-	if (data->base->m_hStatusBar)
+	if (data->base->m_hStatusBar) 
 	{
 		std::string line;
 		line = StringUtils::Format("%s...(%s) %f",

@@ -41,8 +41,7 @@ SimpleFileCache::SimpleFileCache()
 	, m_hDataAvailEvent(NULL)
 	, m_nStartPosition(0)
 	, m_nWritePosition(0)
-	, m_nReadPosition(0) {
-}
+	, m_nReadPosition(0) {}
 
 SimpleFileCache::~SimpleFileCache()
 {

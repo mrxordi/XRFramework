@@ -8,6 +8,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU(ID_Quit, MyFrame::OnQuit)
 EVT_MENU(ID_About, MyFrame::OnAbout)
 EVT_MENU(ID_ResizeWideo, MyFrame::OnResizeWideo)
+EVT_MENU_RANGE(ID_Debug_ffmpeg, ID_Debug_curl, MyFrame::DebugToggle)
 EVT_CLOSE(MyFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -20,8 +21,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	menuFile->AppendSeparator();
 	menuFile->Append(ID_Quit, "E&xit");
 
+	wxMenu* menuDebug = new wxMenu;
+	wxMenuItem* item = menuDebug->Append(ID_Debug_curl, "Debug CURL", wxEmptyString, wxITEM_CHECK);
+	if (CLog::getSingletonPtr()->IsLogExtraLogged(LOGCURL))
+		item->Check(true);
+
+	item = menuDebug->Append(ID_Debug_ffmpeg, "Debug FFMPEG", wxEmptyString, wxITEM_CHECK);
+	if (CLog::getSingletonPtr()->IsLogExtraLogged(LOGFFMPEG))
+		item->Check(true);
+
 	wxMenuBar *menuBar = new wxMenuBar;
 	menuBar->Append(menuFile, "&File");
+	menuBar->Append(menuDebug, "&Debug Options");
 
 	SetMenuBar(menuBar);
 
@@ -54,12 +65,34 @@ void MyFrame::OnCloseWindow(wxCloseEvent& event)
 {
 	wxSize size = GetSize();
 	CMonitor* monitor = wxGetApp().m_monitors->GetNearestMonitor(GetHWND());
-	if (monitor) {
+
+	if (monitor)
 		GetAppSettings().SaveCurrentRect(XRect(0, 0, size.x, size.y), monitor->GetOrdinal());
-	}
 
 	wxVideoRendererEvent* ev = new wxVideoRendererEvent(wxGetApp().m_VideoRenderer.get(), wxVideoRendererEvent::VR_ACTION_DETACH);
 	QueueEvent(ev);
 
 	wxFrame::OnCloseWindow(event);
+}
+
+void MyFrame::DebugToggle(wxCommandEvent& event)
+{
+	int extraLogLevel = CLog::getSingletonPtr()->GetExtraLogLevel();
+
+	switch (event.GetId()) 
+	{
+	case ID_Debug_curl:
+		if (event.IsChecked())
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel | LOGCURL);
+		else
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel & ~(LOGCURL));
+		break;
+	case ID_Debug_ffmpeg:
+		if (event.IsChecked())
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel | LOGFFMPEG);
+		else
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel & ~(LOGFFMPEG));
+		break;
+
+	}
 }

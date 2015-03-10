@@ -12,23 +12,28 @@ namespace XR {
 		
 	public:
 		//default constructor
-		inline RecursiveMutex() {
+		inline RecursiveMutex() 
+		{
 			InitializeCriticalSection(&mutex);
 		}
 		//Destructor
-		inline ~RecursiveMutex() {
+		inline ~RecursiveMutex() 
+		{
 			DeleteCriticalSection(&mutex);
 		}
 
-		inline void lock() {
+		inline void lock() 
+		{
 			EnterCriticalSection(&mutex);
 		}
 
-		inline void unlock() {
+		inline void unlock() 
+		{
 			LeaveCriticalSection(&mutex);
 		}
 
-		inline bool try_lock() {
+		inline bool try_lock() 
+		{
 			return TryEnterCriticalSection(&mutex) ? true : false;
 		}
 	};

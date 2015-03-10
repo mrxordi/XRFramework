@@ -161,7 +161,8 @@ bool Directory::GetDirectory(const CURL& url, FileItemList &items, const Hints &
 				return false;
 			}
 		}
-		if (!pDirectory->AllowAll()) {
+		if (!pDirectory->AllowAll()) 
+		{
 			pDirectory->SetMask(hints.mask);
 			for (int i = 0; i < items.Size(); ++i)
 			{
@@ -190,7 +191,8 @@ bool Directory::GetDirectory(const CURL& url, FileItemList &items, const Hints &
 		return true;
 
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception!");
 	}
 	LOGERR("Error getting %s", url.GetRedacted().c_str());
@@ -214,7 +216,8 @@ bool Directory::Create(const CURL& url)
 			if (pDirectory->Create(realURL))
 				return true;
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception!");
 	}
 	LOGERR("Error creating %s", url.GetRedacted().c_str());
@@ -236,7 +239,8 @@ bool Directory::Exists(const CURL& url, bool bUseCache /* = true */)
 		if (pDirectory.get())
 			return pDirectory->Exists(realURL);
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception!");
 	}
 	LOGERR("Error checking for %s", url.GetRedacted().c_str());
@@ -255,12 +259,13 @@ bool Directory::Remove(const CURL& url)
 	{
 		CURL realURL(url);
 		std::auto_ptr<IDirectory> pDirectory(DirectoryFactory(realURL));
+
 		if (pDirectory.get())
-			if (pDirectory->Remove(realURL)) {
-			return true;
-			}
+			if (pDirectory->Remove(realURL))
+				return true;
 	}
-	catch (...)	{
+	catch (...)	
+	{
 		LOGERR("Unhandled exception!");
 	}
 	LOGERR("Error removing %s folder.", url.GetRedacted().c_str());
@@ -268,7 +273,8 @@ bool Directory::Remove(const CURL& url)
 	return false;
 }
 
-IDirectory* DirectoryFactory(const CURL& url) {
+IDirectory* DirectoryFactory(const CURL& url) 
+{
 
 	FileItem item(url.Get(), false);
 	if (url.GetProtocol().empty() || url.IsProtocol("file")) return new Win32Directory();

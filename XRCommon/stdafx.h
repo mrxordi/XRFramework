@@ -17,4 +17,8 @@
 #include <d3d10.h>
 #include <dxgi.h>
 
+#pragma comment(lib, "tinyxml2.lib")
+#pragma comment(lib, "libiconv.lib")
+#pragma comment(lib, "d3d10.lib")
+
 // TODO: reference additional headers your program requires here

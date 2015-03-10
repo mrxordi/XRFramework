@@ -8,16 +8,18 @@ LogImplementation::LogImplementation() : m_hFile(INVALID_HANDLE_VALUE)
 {}
 
 
-LogImplementation::~LogImplementation() {
+LogImplementation::~LogImplementation() 
+{
 	if (m_hFile != INVALID_HANDLE_VALUE)
 		CloseHandle(m_hFile);
 }
 
-bool LogImplementation::OpenLogFile(const std::string& logFilename, const std::string& backupOldLogToFilename) {
+bool LogImplementation::OpenLogFile(const std::string& logFilename, const std::string& backupOldLogToFilename) 
+{
 	if (m_hFile != INVALID_HANDLE_VALUE)
 		return false; // file was already opened
 
-	if (!backupOldLogToFilename.empty())
+	if (!backupOldLogToFilename.empty()) 
 	{
 		(void)DeleteFileA(backupOldLogToFilename.c_str());					 // if it's failed, try to continue
 		(void)MoveFileA(logFilename.c_str(), backupOldLogToFilename.c_str()); // if it's failed, try to continue
@@ -25,14 +27,16 @@ bool LogImplementation::OpenLogFile(const std::string& logFilename, const std::s
 
 	m_hFile = CreateFileA(logFilename.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (m_hFile == INVALID_HANDLE_VALUE) {
+	if (m_hFile == INVALID_HANDLE_VALUE) 
+	{
 		PrintDebugString("Failed to create the file log, logging only to debug output");
 		return false;
 	}
 
 	static const unsigned char BOM[3] = { 0xEF, 0xBB, 0xBF };
 	DWORD written;
-	if (!WriteFile(m_hFile, BOM, sizeof(BOM), &written, NULL)) {			 // write BOM
+	if (!WriteFile(m_hFile, BOM, sizeof(BOM), &written, NULL)) 
+	{			 // write BOM
 		PrintDebugString("Failed to write to the file log, logging only to debug output");
 		return false;
 	}
@@ -42,7 +46,7 @@ bool LogImplementation::OpenLogFile(const std::string& logFilename, const std::s
 
 void LogImplementation::CloseLogFile(void)
 {
-	if (m_hFile != INVALID_HANDLE_VALUE)
+	if (m_hFile != INVALID_HANDLE_VALUE) 
 	{
 		CloseHandle(m_hFile);
 		m_hFile = INVALID_HANDLE_VALUE;

@@ -6,7 +6,7 @@
 //
 // Transformation matrixes for different colorspaces.
 //
-static float yuv_coef_bt601[4][4] =
+static float yuv_coef_bt601[4][4] = 
 {
 	{ 1.0f, 1.0f, 1.0f, 0.0f }, 
 	{ 0.0f, -0.344f, 1.773f, 0.0f },
@@ -14,7 +14,7 @@ static float yuv_coef_bt601[4][4] =
 	{ 0.0f, 0.0f, 0.0f, 0.0f }
 };
 
-static float yuv_coef_bt709[4][4] =
+static float yuv_coef_bt709[4][4] = 
 {
 	{ 1.0f, 1.0f, 1.0f, 0.0f },
 	{ 0.0f, -0.1870f, 1.8556f, 0.0f },
@@ -22,7 +22,7 @@ static float yuv_coef_bt709[4][4] =
 	{ 0.0f, 0.0f, 0.0f, 0.0f }
 };
 
-static float yuv_coef_ebu[4][4] =
+static float yuv_coef_ebu[4][4] = 
 {
 	{ 1.0f, 1.0f, 1.0f, 0.0f },
 	{ 0.0f, -0.3960f, 2.029f, 0.0f },
@@ -30,7 +30,7 @@ static float yuv_coef_ebu[4][4] =
 	{ 0.0f, 0.0f, 0.0f, 0.0f }
 };
 
-static float yuv_coef_smtp240m[4][4] =
+static float yuv_coef_smtp240m[4][4] = 
 {
 	{ 1.0f, 1.0f, 1.0f, 0.0f },
 	{ 0.0f, -0.2253f, 1.8270f, 0.0f },
@@ -38,11 +38,11 @@ static float yuv_coef_smtp240m[4][4] =
 	{ 0.0f, 0.0f, 0.0f, 0.0f }
 };
 
-static float** PickYUVConversionMatrix(unsigned flags)
+static float** PickYUVConversionMatrix(unsigned flags) 
 {
 	// Pick the matrix.
 
-	switch (CONF_FLAGS_YUVCOEF_MASK(flags))
+	switch (CONF_FLAGS_YUVCOEF_MASK(flags)) 
 	{
 	case CONF_FLAGS_YUVCOEF_240M:
 		return (float**)yuv_coef_smtp240m; break;
@@ -57,7 +57,7 @@ static float** PickYUVConversionMatrix(unsigned flags)
 	return (float**)yuv_coef_bt601;
 }
 
-void CalculateYUVMatrix(TransformMatrix &matrix, unsigned int flags, ERenderFormat format, float black, float contrast)
+void CalculateYUVMatrix(TransformMatrix &matrix, unsigned int flags, ERenderFormat format, float black, float contrast) 
 {
 	TransformMatrix coef;
 
@@ -75,7 +75,7 @@ void CalculateYUVMatrix(TransformMatrix &matrix, unsigned int flags, ERenderForm
 	matrix *= TransformMatrix::CreateTranslation(0.0, -0.5, -0.5);
 	
 
-	if (!(flags & CONF_FLAGS_YUV_FULLRANGE))
+	if (!(flags & CONF_FLAGS_YUV_FULLRANGE)) 
 	{
 		matrix *= TransformMatrix::CreateScaler(255.0f / (235 - 16),
 			255.0f / (240 - 16), 
@@ -85,7 +85,7 @@ void CalculateYUVMatrix(TransformMatrix &matrix, unsigned int flags, ERenderForm
 			-16.0f / 255);
 	}
 
-	if (format == RENDER_FMT_YUV420P10)
+	if (format == RENDER_FMT_YUV420P10) 
 	{
 		matrix *= TransformMatrix::CreateScaler(65535.0f / 1023.0f,
 			65535.0f / 1023.0f, 
@@ -93,7 +93,7 @@ void CalculateYUVMatrix(TransformMatrix &matrix, unsigned int flags, ERenderForm
 	}
 }
 
-YUV2RGBMatrix::YUV2RGBMatrix()
+YUV2RGBMatrix::YUV2RGBMatrix() 
 {
 	m_NeedRecalc = true;
 	m_blacklevel = 0.0f;
@@ -102,33 +102,33 @@ YUV2RGBMatrix::YUV2RGBMatrix()
 	m_format = RENDER_FMT_NONE;
 }
 
-void YUV2RGBMatrix::SetParameters(float contrast, float blacklevel, unsigned int flags, ERenderFormat format)
+void YUV2RGBMatrix::SetParameters(float contrast, float blacklevel, unsigned int flags, ERenderFormat format) 
 {
-	if (m_contrast != contrast)
+	if (m_contrast != contrast) 
 	{
 		m_NeedRecalc = true;
 		m_contrast = contrast;
 	}
-	if (m_blacklevel != blacklevel)
+	if (m_blacklevel != blacklevel) 
 	{
 		m_NeedRecalc = true;
 		m_blacklevel = blacklevel;
 	}
-	if (m_flags != flags)
+	if (m_flags != flags) 
 	{
 		m_NeedRecalc = true;
 		m_flags = flags;
 	}
-	if (m_format != format)
+	if (m_format != format) 
 	{
 		m_NeedRecalc = true;
 		m_format = format;
 	}
 }
 
-XMFLOAT4X4* YUV2RGBMatrix::Matrix()
+XMFLOAT4X4* YUV2RGBMatrix::Matrix() 
 {
-	if (m_NeedRecalc)
+	if (m_NeedRecalc) 
 	{
 		TransformMatrix matrix;
 		CalculateYUVMatrix(matrix, m_flags, m_format, m_blacklevel, m_contrast);

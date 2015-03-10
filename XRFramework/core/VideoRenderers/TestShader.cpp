@@ -10,17 +10,20 @@ TestShader::~TestShader()
 
 bool TestShader::Create()
 {
-	if (!CreateVertexBuffer(8, sizeof(CUSTOMVERTEX), 2)) {
+	if (!CreateVertexBuffer(8, sizeof(CUSTOMVERTEX), 2)) 
+	{
 		LOGFATAL("Failed to create Vertex Buffer. (No memory?)");
 		return false;
 	}
 
-	if (!CreateIndexBuffer(5)) {
+	if (!CreateIndexBuffer(5)) 
+	{
 		LOGFATAL("Failed to create Vertex Buffer. (No memory?)");
 		return false;
 	}
 
-	if (!LoadEffect("special://app/data/test.fx", nullptr)) {
+	if (!LoadEffect("special://app/data/test.fx", nullptr)) 
+	{
 		m_effect.Release();
 		return false;
 	}
@@ -41,7 +44,8 @@ bool TestShader::Render()
 void TestShader::PrepareParameters()
 {
 	CUSTOMVERTEX* v;
-	if (LockVertexBuffer((void**)&v)) {
+	if (LockVertexBuffer((void**)&v)) 
+	{
 		v[0].position = XMFLOAT4(300.0f, 20.0f, 1.0f, 1.0f); //left top
 		v[0].color = XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f);
 
@@ -68,7 +72,8 @@ void TestShader::PrepareParameters()
 	}
 
 	int* f;
-	if (LockIndexBuffer((void**)&f)) {
+	if (LockIndexBuffer((void**)&f)) 
+	{
 		f[0] = 3; 
 		f[1] = 2;
 		f[2] = 0;
@@ -101,9 +106,8 @@ bool TestShader::BuildVertexLayout()
 
 	ID3D10Device* pDevice = g_DXRendererPtr->GetDevice();
 	HRESULT hr = pDevice->CreateInputLayout(layout, numElements, pDesc.pIAInputSignature, pDesc.IAInputSignatureSize, &m_inputLayout);
-	if (SUCCEEDED(hr)) {
+	if (SUCCEEDED(hr))
 		return true;
-	}
 
 	LOGERR("Failed to create input Layout.");
 	SAFE_RELEASE(m_inputLayout);

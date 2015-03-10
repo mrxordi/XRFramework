@@ -45,7 +45,8 @@ static RenderMethodDetail RenderMethodDetails[] = {
 
 static RenderMethodDetail *FindRenderMethod(ERenderMethod m)
 {
-	for (unsigned i = 0; RenderMethodDetails[i].method != RENDER_INVALID; i++) {
+	for (unsigned i = 0; RenderMethodDetails[i].method != RENDER_INVALID; i++) 
+	{
 		if (RenderMethodDetails[i].method == m)
 			return &RenderMethodDetails[i];
 	}

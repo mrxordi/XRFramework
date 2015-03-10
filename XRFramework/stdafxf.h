@@ -8,6 +8,9 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define LOGQUIETMODE
 #define TARGET_WINDOWS
+
+#pragma comment(lib, "Ws2_32.lib")
+
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>

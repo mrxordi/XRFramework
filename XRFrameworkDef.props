@@ -3,12 +3,12 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\includes;D:\ProgramFiles\VisualLeakDetector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\lib\debug;D:\ProgramFiles\VisualLeakDetector\lib\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\includes;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)/includes;D:\ProgramFiles\VisualLeakDetector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)/lib/release;D:\ProgramFiles\VisualLeakDetector\lib\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/includes;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)/lib/release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

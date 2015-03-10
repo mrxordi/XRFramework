@@ -25,8 +25,10 @@ bool YUVBuffer::Create(ERenderFormat format, unsigned int width, unsigned int he
 	m_width = width;
 	m_height = height;
 
-	switch (m_format) {
-	case RENDER_FMT_YUV420P: {
+	switch (m_format) 
+	{
+	case RENDER_FMT_YUV420P: 
+	{
 		if (!planes[PLANE_Y].texture->Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
 			|| !planes[PLANE_U].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
 			|| !planes[PLANE_V].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM))
@@ -35,7 +37,8 @@ bool YUVBuffer::Create(ERenderFormat format, unsigned int width, unsigned int he
 		break;
 	}
 	case RENDER_FMT_YUV420P10:
-	case RENDER_FMT_YUV420P16: {
+	case RENDER_FMT_YUV420P16: 
+	{
 		if (!planes[PLANE_Y].texture->Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM)
 			|| !planes[PLANE_U].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM)
 			|| !planes[PLANE_V].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R16_UNORM))
@@ -43,20 +46,23 @@ bool YUVBuffer::Create(ERenderFormat format, unsigned int width, unsigned int he
 			m_activeplanes = 3;
 			break;
 		}	
-	case RENDER_FMT_NV12: {
+	case RENDER_FMT_NV12: 
+	{
 		if (!planes[PLANE_Y].texture->Create(m_width, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8_UNORM)
 			|| !planes[PLANE_UV].texture->Create(m_width / 2, m_height / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_R8G8_UNORM))
 			return false;
 		m_activeplanes = 2;
 		break;
 	}
-	case RENDER_FMT_YUYV422: {
+	case RENDER_FMT_YUYV422: 
+	{
 		if (!planes[PLANE_Y].texture->Create(m_width >> 1, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_B8G8R8A8_UNORM))
 			return false;
 		m_activeplanes = 1;
 		break;
 	}
-	case RENDER_FMT_UYVY422: {
+	case RENDER_FMT_UYVY422: 
+	{
 		if (!planes[PLANE_Y].texture->Create(m_width >> 1, m_height, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DYNAMIC, DXGI_FORMAT_B8G8R8A8_UNORM))
 			return false;
 		m_activeplanes = 1;
@@ -73,7 +79,7 @@ bool YUVBuffer::Create(ERenderFormat format, unsigned int width, unsigned int he
 void YUVBuffer::Release()
 {
 	if (planes[0].texture->GetResource() != NULL)
-		for (unsigned i = 0; i < m_activeplanes; i++)
+		for (unsigned i = 0; i < m_activeplanes; i++) 
 		{
 		planes[i].texture->Release();
 		memset(&planes[i].rect, 0, sizeof(planes[i].rect));
@@ -89,10 +95,9 @@ void YUVBuffer::StartDecode()
 
 	m_locked = true;
 
-	for (unsigned i = 0; i < m_activeplanes; i++)
+	for (unsigned i = 0; i < m_activeplanes; i++) 
 	{
-		if (planes[i].texture->GetResource()
-			&& planes[i].texture->Lock(0, D3D10_MAP_WRITE_DISCARD, &planes[i].rect) == false)
+		if (planes[i].texture->GetResource() && planes[i].texture->Lock(0, D3D10_MAP_WRITE_DISCARD, &planes[i].rect) == false) 
 		{
 			memset(&planes[i].rect, 0, sizeof(planes[i].rect));
 			LOGERR(" - failed to lock texture %d into memory", i);
@@ -106,7 +111,7 @@ void YUVBuffer::StartRender()
 		return;
 
 
-	for (unsigned i = 0; i < m_activeplanes; i++)
+	for (unsigned i = 0; i < m_activeplanes; i++) 
 	{
 		if (planes[i].texture->Get() && planes[i].rect.pData)
 			if (!planes[i].texture->Unlock(0))
@@ -120,42 +125,42 @@ void YUVBuffer::StartRender()
 void YUVBuffer::Clear()
 {
 	// Set Y to 0 and U,V to 128 (RGB 0,0,0) to avoid visual artifacts at the start of playback
-	switch (m_format)
+	switch (m_format) 
 	{
-	case RENDER_FMT_YUV420P16:
+	case RENDER_FMT_YUV420P16: 
 	{
 		wmemset((wchar_t*)planes[PLANE_Y].rect.pData, 0, planes[PLANE_Y].rect.RowPitch *  m_height / 2);
 		wmemset((wchar_t*)planes[PLANE_U].rect.pData, 32768, planes[PLANE_U].rect.RowPitch * (m_height / 2) / 2);
 		wmemset((wchar_t*)planes[PLANE_V].rect.pData, 32768, planes[PLANE_V].rect.RowPitch * (m_height / 2) / 2);
 		break;
 	}
-	case RENDER_FMT_YUV420P10:
+	case RENDER_FMT_YUV420P10: 
 	{
 		wmemset((wchar_t*)planes[PLANE_Y].rect.pData, 0, planes[PLANE_Y].rect.RowPitch *  m_height / 2);
 		wmemset((wchar_t*)planes[PLANE_U].rect.pData, 512, planes[PLANE_U].rect.RowPitch * (m_height / 2) / 2);
 		wmemset((wchar_t*)planes[PLANE_V].rect.pData, 512, planes[PLANE_V].rect.RowPitch * (m_height / 2) / 2);
 		break;
 	}
-	case RENDER_FMT_YUV420P:
+	case RENDER_FMT_YUV420P: 
 	{
 		memset(planes[PLANE_Y].rect.pData, 0, planes[PLANE_Y].rect.RowPitch *  m_height);
 		memset(planes[PLANE_U].rect.pData, 128, planes[PLANE_U].rect.RowPitch * (m_height / 2));
 		memset(planes[PLANE_V].rect.pData, 128, planes[PLANE_V].rect.RowPitch * (m_height / 2));
 		break;
 	}
-	case RENDER_FMT_NV12:
+	case RENDER_FMT_NV12: 
 	{
 		memset(planes[PLANE_Y].rect.pData, 0, planes[PLANE_Y].rect.RowPitch *  m_height);
 		memset(planes[PLANE_UV].rect.pData, 128, planes[PLANE_U].rect.RowPitch * (m_height / 2));
 		break;
 	}
 		// YUY2, UYVY: wmemset to set a 16bit pattern, byte-swapped because x86 is LE
-	case RENDER_FMT_YUYV422:
+	case RENDER_FMT_YUYV422: 
 	{
 		wmemset((wchar_t*)planes[PLANE_Y].rect.pData, 0x8000, planes[PLANE_Y].rect.RowPitch / 2 * m_height);
 		break;
 	}
-	case RENDER_FMT_UYVY422:
+	case RENDER_FMT_UYVY422: 
 	{
 		wmemset((wchar_t*)planes[PLANE_Y].rect.pData, 0x0080, planes[PLANE_Y].rect.RowPitch / 2 * m_height);
 		break;
@@ -164,7 +169,7 @@ void YUVBuffer::Clear()
 	}
 }
 
-bool YUVBuffer::IsReadyToRender()
+bool YUVBuffer::IsReadyToRender() 
 {
 	if (!m_locked)
 		return true;
@@ -177,7 +182,7 @@ bool YUVBuffer::IsReadyToRender()
 //###############################################
 YUV2RGBShader::~YUV2RGBShader()
 {
-	for (unsigned i = 0; i < MAX_PLANES; i++)
+	for (unsigned i = 0; i < MAX_PLANES; i++) 
 	{
 		if (m_YUVPlanes[i].Get() || m_YUVPlanes[i].GetResource())
 			m_YUVPlanes[i].Release();
@@ -186,12 +191,14 @@ YUV2RGBShader::~YUV2RGBShader()
 
 bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 {
-	if (!CreateVertexBuffer(4, sizeof(CUSTOMVERTEX), 1)) {
+	if (!CreateVertexBuffer(4, sizeof(CUSTOMVERTEX), 1)) 
+	{
 		LOGFATAL("Failed to create Vertex Buffer. (No memory?)");
 		return false;
 	}
 
-	if (!CreateIndexBuffer(5)) {
+	if (!CreateIndexBuffer(5)) 
+	{
 		LOGFATAL("Failed to create Vertex Buffer. (No memory?)");
 		return false;
 	}
@@ -206,61 +213,63 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 
 	LOGDEBUG(" - Creating YUV2RGB shader's planes");
 
-	if (format == RENDER_FMT_YUV420P16 || format == RENDER_FMT_YUV420P10)
+	if (format == RENDER_FMT_YUV420P16 || format == RENDER_FMT_YUV420P10) 
 	{
 		defines["XBMC_YV12"] = "";
 		texWidth = srcWidth;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R16_UNORM)
 			|| !m_YUVPlanes[1].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R16_UNORM)
-			|| !m_YUVPlanes[2].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R16_UNORM))
+			|| !m_YUVPlanes[2].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R16_UNORM)) 
 		{
+
 			LOGERR(": Failed to create 16 bit YV12 planes.");
 			return false;
 		}
 	}
-	else if (format == RENDER_FMT_YUV420P)
+	else if (format == RENDER_FMT_YUV420P) 
 	{
 		defines["XBMC_YV12"] = "";
 		texWidth = srcWidth;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8_UNORM)
 			|| !m_YUVPlanes[1].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8_UNORM)
-			|| !m_YUVPlanes[2].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8_UNORM))
+			|| !m_YUVPlanes[2].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8_UNORM)) 
 		{
+
 			LOGERR(": Failed to create YV12 planes.");
 			return false;
 		}
 	}
-	else if (format == RENDER_FMT_NV12)
+	else if (format == RENDER_FMT_NV12) 
 	{
 		defines["XBMC_NV12"] = "";
 		texWidth = srcWidth;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8_UNORM)
-			|| !m_YUVPlanes[1].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8G8_UNORM))
+			|| !m_YUVPlanes[1].Create(texWidth / 2, m_sourceHeight / 2, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8G8_UNORM)) 
 		{
 			LOGERR(": Failed to create NV12 planes.");
 			return false;
 		}
-	}
-	else if (format == RENDER_FMT_YUYV422)
+	} 
+	else if (format == RENDER_FMT_YUYV422) 
 	{
 		defines["XBMC_YUY2"] = "";
 		texWidth = srcWidth >> 1;
 
-		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM))
+		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM)) 
 		{
 			LOGERR(": Failed to create YUY2 planes.");
 			return false;
 		}
 	}
-	else if (format == RENDER_FMT_UYVY422)
+	else if (format == RENDER_FMT_UYVY422) 
 	{
 		defines["XBMC_UYVY"] = "";
 		texWidth = srcWidth >> 1;
 
-		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM))
+		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM)) 
 		{
 			LOGERR(": Failed to create UYVY planes.");
 			return false;
@@ -272,7 +281,8 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 	m_texSteps[0] = 1.0f / (float)texWidth;
 	m_texSteps[1] = 1.0f / (float)srcHeight;
 
-	if (!LoadEffect("special://app/data/yuv2rgb_d3d.fx", &defines)) {
+	if (!LoadEffect("special://app/data/yuv2rgb_d3d.fx", &defines)) 
+	{
 		m_effect.Release();
 		return false;
 	}
@@ -295,7 +305,7 @@ void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float co
 	//See RGB renderer for comment on this
 #define CHROMAOFFSET_HORIZ 0.25f
 
-	if (m_sourceRect != sourceRect || m_destRect != destRect)
+	if (m_sourceRect != sourceRect || m_destRect != destRect) 
 	{
 		m_sourceRect = sourceRect;
 		m_destRect = destRect;
@@ -342,7 +352,7 @@ void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float co
 		UINT f = (m_sourceHeight >> 1);
 		// -0.5 offset to compensate for D3D rasterization
 		// set z and rhw
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++) 
 		{
 			v[i].coord.x -= 0.5;
 			v[i].coord.y -= 0.5;
@@ -353,7 +363,8 @@ void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float co
 	}
 
 	int* f;
-	if (LockIndexBuffer((void**)&f)) {
+	if (LockIndexBuffer((void**)&f)) 
+	{
 		f[0] = 2;
 		f[1] = 3;
 		f[2] = 0;
@@ -366,7 +377,7 @@ void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float co
 	m_matrix.SetParameters(contrast * 0.02f, brightness * 0.01f - 0.5f, flags, m_format);
 }
 
-void YUV2RGBShader::SetShaderParameters(YUVBuffer* YUVbuf)
+void YUV2RGBShader::SetShaderParameters(YUVBuffer* YUVbuf) 
 {
 	m_effect.SetMatrix("gW", g_DXRendererPtr->m_world);
 	m_effect.SetMatrix("gV", g_DXRendererPtr->m_view);
@@ -380,21 +391,20 @@ void YUV2RGBShader::SetShaderParameters(YUVBuffer* YUVbuf)
 	m_effect.SetFloatArray("g_StepXY", m_texSteps, ARRAYSIZE(m_texSteps));
 }
 
-bool YUV2RGBShader::UploadToGPU(YUVBuffer* YUVbuf)
+bool YUV2RGBShader::UploadToGPU(YUVBuffer* YUVbuf) 
 {
-
-	for (UINT i = 0; i < YUVbuf->GetActivePlanes(); i++) {
+	for (UINT i = 0; i < YUVbuf->GetActivePlanes(); i++) 
+	{
 		ID3D10Resource* src, *dest;
 		src = YUVbuf->planes[i].texture->GetResource();
 		dest = m_YUVPlanes[i].GetResource();
 
 		g_DXRendererPtr->GetDevice()->CopyResource(dest, src);
 	}
-
 	return true;
 }
 
-bool YUV2RGBShader::BuildVertexLayout()
+bool YUV2RGBShader::BuildVertexLayout() 
 {
 	// Define the input layout
 	D3D10_INPUT_ELEMENT_DESC layout[] =
@@ -411,9 +421,9 @@ bool YUV2RGBShader::BuildVertexLayout()
 
 	ID3D10Device* pDevice = g_DXRendererPtr->GetDevice();
 	HRESULT hr = pDevice->CreateInputLayout(layout, numElements, pDesc.pIAInputSignature, pDesc.IAInputSignatureSize, &m_inputLayout);
-	if (SUCCEEDED(hr)) {
+
+	if (SUCCEEDED(hr))
 		return true;
-	}
 
 	LOGERR("Failed to create input Layout.");
 	SAFE_RELEASE(m_inputLayout);

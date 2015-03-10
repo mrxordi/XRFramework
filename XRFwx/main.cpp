@@ -8,11 +8,13 @@
 #include "../XRCommon/utils/SpecialProtocol.h"
 #include "../XRCommon/log/Log.h"
 #include "../XRCommon/settings/AppSettings.h"
+#include "../XRFramework/filesystem/CurlFile.h"
 
 IMPLEMENT_APP(MyApp)
 
 MyApp::~MyApp()
 {
+	m_settings->SetInt("system.extralogging", CLog::getSingletonPtr()->GetExtraLogLevel());
 	m_settings->SaveSettings();
 	m_VideoRenderer.reset();
 	ConverterFactory::DestroyAll();
@@ -40,20 +42,22 @@ bool MyApp::OnInit()
 	CSpecialProtocol::SetDocPath(docPath);
 	CSpecialProtocol::SetHomePath(homePath);
 
-	if (!g_LogPtr->Init(std::string("special://app/log.txt")))
+	if (!g_LogPtr->Init(std::string("special://app/log.txt"))) 
 	{
 		fprintf(stderr, "Could not init logging classes. Permission errors on (%s)\n",
 			CSpecialProtocol::TranslatePath("special://home/").c_str());
 	}
-	g_LogPtr->SetExtraLogLevels(LOGCURL | LOGFFMPEG);
+	m_settings = std::make_unique<CAppSettings>();
+	m_settings->Initialize(std::string("special://app/data/settings.xml"));
+	g_LogPtr->SetExtraLogLevels(m_settings->GetInt("system.extralogging"));
 
 	LOGINFO("Start application initialization. Running on thread: %d", GetCurrentThreadId());
 	CSpecialProtocol::LogPaths();
+	CCurlFile file;
+	LOGINFO("You are %s internet", file.IsInternet() ? "connected to" : "disconnected from");
 
 	m_monitors = std::make_unique<CMonitors>();
-	m_settings = std::make_unique<CAppSettings>();
 	m_VideoRenderer = std::make_unique<WinRenderer>();
-	m_settings->Initialize(std::string("special://app/data/settings.xml"));
 
 	XRect rect;
 	rect.top = 0;

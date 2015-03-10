@@ -21,20 +21,23 @@ LoaderFactory::~LoaderFactory(void)
 	UnloadAll();
 }
 
-LoaderFactory_t LoaderFactory::GetSharedPtr() {
+LoaderFactory_t LoaderFactory::GetSharedPtr() 
+{
 	XR::CSingleLock lock(m_critSect);
 
-	if (!m_thisInstance) {
+	if (!m_thisInstance) 
+	{
 		m_thisInstance.reset(new LoaderFactory);
 	}
 	return m_thisInstance;
 
 }
 
-LoaderFactory* LoaderFactory::Get()
+LoaderFactory* LoaderFactory::Get() 
 {
 	XR::CSingleLock lock(m_critSect);
-	if (!m_thisInstance) {
+	if (!m_thisInstance) 
+	{
 		m_thisInstance.reset(new LoaderFactory);
 	}
 	return m_thisInstance.get();
@@ -88,7 +91,8 @@ void LoaderFactory::UnloadDLL(const std::string& strDllName)
 			dll.m_lReferenceCount--;
 			if (0 == dll.m_lReferenceCount)
 			{
-				if (dll.m_bDelayUnload) {
+				if (dll.m_bDelayUnload) 
+				{
 					dll.m_unloadDelayStartTick = XR::SystemClockMillis();
 					LOGDEBUG("Dll (%s) has no more references added to delayed unload.", strDllName.c_str());
 				} else {

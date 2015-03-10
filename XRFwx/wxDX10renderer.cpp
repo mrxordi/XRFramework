@@ -20,14 +20,13 @@ wxDX10renderer::wxDX10renderer(wxWindow *parent, wxWindowID id /*= wxID_ANY*/, c
 {
 	LOGDEBUG("DX10 render control created.");
 
-	if (GetAppDX().get()) {
+	if (GetAppDX().get())
 		GetAppDX()->DestroyRenderSystem();
-	}
+
 	GetAppDX().reset(new cRenderSystemDX);
 
-	if (CreateWindow(parent, id, pos, size, style, name)) {
+	if (CreateWindow(parent, id, pos, size, style, name))
 		wxGetApp().Bind(wxEVT_IDLE, &wxDX10renderer::OnIdle, this);
-	}
 }
 
 bool wxDX10renderer::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/, const wxPoint& pos /*= wxDefaultPosition*/, const wxSize& size /*= wxDefaultSize*/, long style /*= 0*/, const wxString& name /*= L"DX10Canvas"*/)
@@ -53,7 +52,8 @@ bool wxDX10renderer::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/
 		NULL, pos, size, msflags, exStyle))
 		return false;
 
-	if (!GetAppDX().get() || !GetAppDX()->InitRenderSystem(nullptr, GetHWND())) {
+	if (!GetAppDX().get() || !GetAppDX()->InitRenderSystem(nullptr, GetHWND())) 
+	{
 		LOGFATAL("Failed to initialize render system.")
 		parent->RemoveChild(this);
 
@@ -65,16 +65,14 @@ bool wxDX10renderer::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/
 	parent->Bind(wxEVT_MOVE_START, &wxDX10renderer::HandleEnterSizeMove, this);
 	parent->Bind(wxEVT_MOVE_END, &wxDX10renderer::HandleExitSizeMove, this);
 	Bind(wxEVT_VIDEO_RENDERER, &wxDX10renderer::OnVideoRendererEvent, this);
-	//Bind(wxEVT_SIZE, &wxDX10renderer::OnSizeEvent, this);
-	//Bind(wxEVT_MOVE_START, &wxDX10renderer::HandleEnterSizeMove, this);
-	//Bind(wxEVT_MOVE_END, &wxDX10renderer::HandleExitSizeMove, this);
 		
 	return true;
 }
 
 wxDX10renderer::~wxDX10renderer()
 {
-	if (GetAppDX().get() && GetAppDX()->GetDevice()) {
+	if (GetAppDX().get() && GetAppDX()->GetDevice()) 
+	{
 		if (m_pVideoRenderer)
 			m_pVideoRenderer->Release();
 		GetAppDX()->DestroyRenderSystem();
@@ -85,7 +83,8 @@ wxDX10renderer::~wxDX10renderer()
 
 void wxDX10renderer::Render()
 {
-	if (GetAppDX()->BeginRender()) {
+	if (GetAppDX()->BeginRender()) 
+	{
 		if (m_pVideoRenderer)
 			m_pVideoRenderer->Render();
 		GetAppDX()->EndRender();
@@ -94,8 +93,8 @@ void wxDX10renderer::Render()
 
 void wxDX10renderer::OnSizeEvent(wxSizeEvent &event)
 {
-	//if (m_bIsSizing)
-	//	return;
+	//if (m_bIsSizing)  // \	That is uncommented only when debugging and coding ;)
+	//	return;			// /	It isnt needed (slows app)
 	m_videoSize = event.GetSize();
 	GetAppDX()->OnResize();
 }
@@ -109,7 +108,8 @@ void wxDX10renderer::HandleEnterSizeMove(wxMoveEvent &event)
 void wxDX10renderer::HandleExitSizeMove(wxMoveEvent &event)
 {
 	m_bIsSizing = false;
-	if (m_videoSize != GetSize() ) {
+	if (m_videoSize != GetSize()) 
+	{
 		GetAppDX()->OnResize();
 		m_videoSize = GetSize();
 	}
@@ -126,7 +126,7 @@ void wxDX10renderer::OnVideoRendererEvent(wxVideoRendererEvent &event)
 	if (event.pVideoRenderer)
 		XR::CSingleLock lock(event.pVideoRenderer->m_eventlock);
 
-	switch (event.e_action)
+	switch (event.e_action) 
 	{
 	case wxVideoRendererEvent::VR_ACTION_ATTACH:
 		m_pVideoRenderer = event.pVideoRenderer;

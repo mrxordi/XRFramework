@@ -28,8 +28,10 @@ public:
 
 
 	void PrintDebugString(const std::string& line); // universal interface for printing debug strings
-	void SetLogLevel(int level);
 	int  GetLogLevel() { return m_logLevel; }
+	int  GetExtraLogLevel() { return m_extraLogLevels; }
+
+	void SetLogLevel(int level);
 	void SetExtraLogLevels(int level);
 
 	bool IsLogExtraLogged(int loglevel);
@@ -61,12 +63,12 @@ private:
 
 namespace XR
 {
-	class LogImpl : public XR::ILogger
-	{
+	class LogImpl : public XR::ILogger {
 	public:
 		virtual ~LogImpl() {}
 		inline virtual void log(int logLevel, const char* file, const int lineNumber,
-			const char* functionName, _In_z_ const char* message) {
+			const char* functionName, _In_z_ const char* message) 
+		{
 			g_LogPtr->Log(logLevel, file, lineNumber, functionName, "%s", message);
 		}
 	};

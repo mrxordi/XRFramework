@@ -5,5 +5,6 @@
 
 #pragma once
 
+#pragma comment(lib, "winmm.lib")
 // TODO: reference additional headers your program requires here
 #include <windows.h>

@@ -80,7 +80,8 @@ public:
 
 	// will return a size, that is aligned to chunk size
 	// but always greater or equal to the file's chunk size
-	static int GetChunkSize(int chunk, int minimum) {
+	static int GetChunkSize(int chunk, int minimum) 
+	{
 		if (chunk)
 			return chunk * ((minimum + chunk - 1) / chunk);
 		else

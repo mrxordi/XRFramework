@@ -242,22 +242,23 @@ bool CCurlFile::CReadState::Seek(int64_t pos)
 		m_buffer.SkipBytes(len);
 		if (!FillBuffer(m_bufferSize))
 		{
-			if (!m_buffer.SkipBytes(-len)) {
-				LOGERR("Failed to restore position after failed fill");
-			}
+			if (!m_buffer.SkipBytes(-len))
+				LOGERR("Failed to restore position after failed fill")
 			else
 				m_filePos -= len;
+
 			return false;
 		}
 
 		if (!FITS_INT(pos - m_filePos) || !m_buffer.SkipBytes((int)(pos - m_filePos)))
 		{
 			LOGERR("Failed to skip to position after having filled buffer");
-			if (!m_buffer.SkipBytes(-len)) {
-				LOGERR("Failed to restore position after failed seek");
-			}
+
+			if (!m_buffer.SkipBytes(-len))
+				LOGERR("Failed to restore position after failed seek")
 			else
 				m_filePos -= len;
+
 			return false;
 		}
 		m_filePos = pos;
@@ -274,14 +275,14 @@ void CCurlFile::CReadState::SetResume(void)
 	* This only affects HTTP-like items, for FTP it's a null operation.
 	*/
 	if (m_sendRange && m_filePos == 0)
-		m_curlInterface.easy_setopt(m_easyHandle, CURLOPT_RANGE, "0-");
+		curl_easy_setopt(m_easyHandle, CURLOPT_RANGE, "0-");
 	else
 	{
-		m_curlInterface.easy_setopt(m_easyHandle, CURLOPT_RANGE, NULL);
+		curl_easy_setopt(m_easyHandle, CURLOPT_RANGE, NULL);
 		m_sendRange = false;
 	}
 
-	m_curlInterface.easy_setopt(m_easyHandle, CURLOPT_RESUME_FROM_LARGE, m_filePos);
+	curl_easy_setopt(m_easyHandle, CURLOPT_RESUME_FROM_LARGE, m_filePos);
 }
 
 long CCurlFile::CReadState::Connect(unsigned int size)
@@ -290,7 +291,7 @@ long CCurlFile::CReadState::Connect(unsigned int size)
 		LOGDEBUG("Resume from position %""I64d", m_filePos);
 
 	SetResume();
-	m_curlInterface.multi_add_handle(m_multiHandle, m_easyHandle);
+	curl_multi_add_handle(m_multiHandle, m_easyHandle);
 
 	m_bufferSize = size;
 	m_buffer.Destroy();
@@ -307,7 +308,7 @@ long CCurlFile::CReadState::Connect(unsigned int size)
 	}
 
 	double length;
-	if (CURLE_OK == m_curlInterface.easy_getinfo(m_easyHandle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &length))
+	if (CURLE_OK == curl_easy_getinfo(m_easyHandle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &length))
 	{
 		if (length < 0)
 			length = 0.0;
@@ -315,7 +316,7 @@ long CCurlFile::CReadState::Connect(unsigned int size)
 	}
 
 	long response;
-	if (CURLE_OK == m_curlInterface.easy_getinfo(m_easyHandle, CURLINFO_RESPONSE_CODE, &response))
+	if (CURLE_OK == curl_easy_getinfo(m_easyHandle, CURLINFO_RESPONSE_CODE, &response))
 		return response;
 
 	return -1;
@@ -324,7 +325,7 @@ long CCurlFile::CReadState::Connect(unsigned int size)
 void CCurlFile::CReadState::Disconnect()
 {
 	if (m_multiHandle && m_easyHandle)
-		m_curlInterface.multi_remove_handle(m_multiHandle, m_easyHandle);
+		curl_multi_remove_handle(m_multiHandle, m_easyHandle);
 
 	m_buffer.Clear();
 	free(m_overflowBuffer);
@@ -337,11 +338,11 @@ void CCurlFile::CReadState::Disconnect()
 
 	/* cleanup */
 	if (m_curlHeaderList)
-		m_curlInterface.slist_free_all(m_curlHeaderList);
+		curl_slist_free_all(m_curlHeaderList);
 	m_curlHeaderList = NULL;
 
 	if (m_curlAliasList)
-		m_curlInterface.slist_free_all(m_curlAliasList);
+		curl_slist_free_all(m_curlAliasList);
 	m_curlAliasList = NULL;
 }
 
@@ -356,7 +357,7 @@ CCurlFile::~CCurlFile()
 CCurlFile::CCurlFile() : m_curlInterface(DllLibCurlGlobal::Get())
 {
 	//m_curlInterface = DllLibCurlGlobal::Get();
-	//	m_curlInterface.Load(); // loads the curl dll and resolves exports etc.
+	//m_curlInterface.Load(); // loads the curl dll and resolves exports etc.
 	m_opened = false;
 	m_forWrite = false;
 	m_inError = false;
@@ -412,38 +413,38 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 {
 	CURL_HANDLE* h = state->m_easyHandle;
 
-	m_curlInterface.easy_reset(h);
+	curl_easy_reset(h);
 
-	m_curlInterface.easy_setopt(h, CURLOPT_DEBUGFUNCTION, debug_callback);
+	curl_easy_setopt(h, CURLOPT_DEBUGFUNCTION, debug_callback);
 
 #ifdef _DEBUG 
-	m_curlInterface.easy_setopt(h, CURLOPT_VERBOSE, TRUE);
+	curl_easy_setopt(h, CURLOPT_VERBOSE, TRUE);
 #else
 	m_curlInterface.easy_setopt(h, CURLOPT_VERBOSE, FALSE);
 #endif
-	m_curlInterface.easy_setopt(h, CURLOPT_WRITEDATA, state);
-	m_curlInterface.easy_setopt(h, CURLOPT_WRITEFUNCTION, write_callback);
+	curl_easy_setopt(h, CURLOPT_WRITEDATA, state);
+	curl_easy_setopt(h, CURLOPT_WRITEFUNCTION, write_callback);
 
-	m_curlInterface.easy_setopt(h, CURLOPT_READDATA, state);
-	m_curlInterface.easy_setopt(h, CURLOPT_READFUNCTION, read_callback);
+	curl_easy_setopt(h, CURLOPT_READDATA, state);
+	curl_easy_setopt(h, CURLOPT_READFUNCTION, read_callback);
 
 	// set username and password for current handle
 	if (m_username.length() > 0 && m_password.length() > 0)
 	{
 		std::string userpwd = m_username + ":" + m_password;
-		m_curlInterface.easy_setopt(h, CURLOPT_USERPWD, userpwd.c_str());
+		curl_easy_setopt(h, CURLOPT_USERPWD, userpwd.c_str());
 	}
 
 	// make sure headers are seperated from the data stream
-	m_curlInterface.easy_setopt(h, CURLOPT_WRITEHEADER, state);
-	m_curlInterface.easy_setopt(h, CURLOPT_HEADERFUNCTION, header_callback);
-	m_curlInterface.easy_setopt(h, CURLOPT_HEADER, FALSE);
+	curl_easy_setopt(h, CURLOPT_WRITEHEADER, state);
+	curl_easy_setopt(h, CURLOPT_HEADERFUNCTION, header_callback);
+	curl_easy_setopt(h, CURLOPT_HEADER, FALSE);
 
-	m_curlInterface.easy_setopt(h, CURLOPT_FTP_USE_EPSV, 0); // turn off epsv
+	curl_easy_setopt(h, CURLOPT_FTP_USE_EPSV, 0); // turn off epsv
 
 	// Allow us to follow two redirects
-	m_curlInterface.easy_setopt(h, CURLOPT_FOLLOWLOCATION, TRUE);
-	m_curlInterface.easy_setopt(h, CURLOPT_MAXREDIRS, 5);
+	curl_easy_setopt(h, CURLOPT_FOLLOWLOCATION, TRUE);
+	curl_easy_setopt(h, CURLOPT_MAXREDIRS, 5);
 
 	// Enable cookie engine for current handle to re-use them in future requests
 	std::string strCookieFile;
@@ -451,153 +452,153 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 	std::string strTempPath = CSpecialProtocol::TranslatePath("special://temp/");
 	strCookieFile = URIUtils::AddFileToFolder(strTempPath, "cookies.dat");
 
-	m_curlInterface.easy_setopt(h, CURLOPT_COOKIEFILE, strCookieFile.c_str());
-	m_curlInterface.easy_setopt(h, CURLOPT_COOKIEJAR, strCookieFile.c_str());
+	curl_easy_setopt(h, CURLOPT_COOKIEFILE, strCookieFile.c_str());
+	curl_easy_setopt(h, CURLOPT_COOKIEJAR, strCookieFile.c_str());
 
 	// Set custom cookie if requested
 	if (!m_cookie.empty())
-		m_curlInterface.easy_setopt(h, CURLOPT_COOKIE, m_cookie.c_str());
+		curl_easy_setopt(h, CURLOPT_COOKIE, m_cookie.c_str());
 
-	m_curlInterface.easy_setopt(h, CURLOPT_COOKIELIST, "FLUSH");
+	curl_easy_setopt(h, CURLOPT_COOKIELIST, "FLUSH");
 
 	// When using multiple threads you should set the CURLOPT_NOSIGNAL option to
 	// TRUE for all handles. Everything will work fine except that timeouts are not
 	// honored during the DNS lookup - which you can work around by building libcurl
 	// with c-ares support. c-ares is a library that provides asynchronous name
 	// resolves. Unfortunately, c-ares does not yet support IPv6.
-	m_curlInterface.easy_setopt(h, CURLOPT_NOSIGNAL, TRUE);
+	curl_easy_setopt(h, CURLOPT_NOSIGNAL, TRUE);
 
 	// not interested in failed requests
-	m_curlInterface.easy_setopt(h, CURLOPT_FAILONERROR, 1);
+	curl_easy_setopt(h, CURLOPT_FAILONERROR, 1);
 
 	// enable support for icecast / shoutcast streams
 	if (NULL == state->m_curlAliasList)
 		// m_curlAliasList is used only by this one place, but SetCommonOptions can
 		// be called multiple times, only append to list if it's empty.
-		state->m_curlAliasList = m_curlInterface.slist_append(state->m_curlAliasList, "ICY 200 OK");
-	m_curlInterface.easy_setopt(h, CURLOPT_HTTP200ALIASES, state->m_curlAliasList);
+		state->m_curlAliasList = curl_slist_append(state->m_curlAliasList, "ICY 200 OK");
+	curl_easy_setopt(h, CURLOPT_HTTP200ALIASES, state->m_curlAliasList);
 
 	// never verify peer, we don't have any certificates to do this
-	m_curlInterface.easy_setopt(h, CURLOPT_SSL_VERIFYPEER, 0);
-	m_curlInterface.easy_setopt(h, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_easy_setopt(h, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_easy_setopt(h, CURLOPT_SSL_VERIFYHOST, 0);
 
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_URL, m_url.c_str());
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TRANSFERTEXT, FALSE);
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_URL, m_url.c_str());
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_TRANSFERTEXT, FALSE);
 
 	// setup POST data if it is set (and it may be empty)
 	if (m_postdataset)
 	{
-		m_curlInterface.easy_setopt(h, CURLOPT_POST, 1);
-		m_curlInterface.easy_setopt(h, CURLOPT_POSTFIELDSIZE, m_postdata.length());
-		m_curlInterface.easy_setopt(h, CURLOPT_POSTFIELDS, m_postdata.c_str());
+		curl_easy_setopt(h, CURLOPT_POST, 1);
+		curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, m_postdata.length());
+		curl_easy_setopt(h, CURLOPT_POSTFIELDS, m_postdata.c_str());
 	}
 
 	// setup Referer header if needed
 	if (!m_referer.empty())
-		m_curlInterface.easy_setopt(h, CURLOPT_REFERER, m_referer.c_str());
+		curl_easy_setopt(h, CURLOPT_REFERER, m_referer.c_str());
 	else
 	{
-		m_curlInterface.easy_setopt(h, CURLOPT_REFERER, NULL);
-		m_curlInterface.easy_setopt(h, CURLOPT_AUTOREFERER, TRUE);
+		curl_easy_setopt(h, CURLOPT_REFERER, NULL);
+		curl_easy_setopt(h, CURLOPT_AUTOREFERER, TRUE);
 	}
 
 	// setup any requested authentication
 	if (m_ftpauth.length() > 0)
 	{
-		m_curlInterface.easy_setopt(h, CURLOPT_FTP_SSL, CURLFTPSSL_TRY);
+		curl_easy_setopt(h, CURLOPT_FTP_SSL, CURLFTPSSL_TRY);
 		if (m_ftpauth =="any")
-			m_curlInterface.easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_DEFAULT);
+			curl_easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_DEFAULT);
 		else if (m_ftpauth == "ssl")
-			m_curlInterface.easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_SSL);
+			curl_easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_SSL);
 		else if (m_ftpauth == "tls")
-			m_curlInterface.easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS);
+			curl_easy_setopt(h, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS);
 	}
 
 	// setup requested http authentication method
 	if (m_httpauth.length() > 0)
 	{
 		if (m_httpauth == "any")
-			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+			curl_easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
 		else if (m_httpauth == "anysafe")
-			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
+			curl_easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_ANYSAFE);
 		else if (m_httpauth == "digest")
-			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+			curl_easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
 		else if (m_httpauth == "ntlm")
-			m_curlInterface.easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
+			curl_easy_setopt(h, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
 	}
 
 	// allow passive mode for ftp
 	if (m_ftpport.length() > 0)
-		m_curlInterface.easy_setopt(h, CURLOPT_FTPPORT, m_ftpport.c_str());
+		curl_easy_setopt(h, CURLOPT_FTPPORT, m_ftpport.c_str());
 	else
-		m_curlInterface.easy_setopt(h, CURLOPT_FTPPORT, NULL);
+		curl_easy_setopt(h, CURLOPT_FTPPORT, NULL);
 
 	// allow curl to not use the ip address in the returned pasv response
 	if (m_ftppasvip)
-		m_curlInterface.easy_setopt(h, CURLOPT_FTP_SKIP_PASV_IP, 0);
+		curl_easy_setopt(h, CURLOPT_FTP_SKIP_PASV_IP, 0);
 	else
-		m_curlInterface.easy_setopt(h, CURLOPT_FTP_SKIP_PASV_IP, 1);
+		curl_easy_setopt(h, CURLOPT_FTP_SKIP_PASV_IP, 1);
 
 	// setup Content-Encoding if requested
 	if (m_contentencoding.length() > 0)
-		m_curlInterface.easy_setopt(h, CURLOPT_ENCODING, m_contentencoding.c_str());
+		curl_easy_setopt(h, CURLOPT_ENCODING, m_contentencoding.c_str());
 
 	if (!m_useOldHttpVersion && !m_acceptCharset.empty())
 		SetRequestHeader("Accept-Charset", m_acceptCharset);
 
 	if (m_userAgent.length() > 0)
-		m_curlInterface.easy_setopt(h, CURLOPT_USERAGENT, m_userAgent.c_str());
+		curl_easy_setopt(h, CURLOPT_USERAGENT, m_userAgent.c_str());
 	else /* set some default agent as shoutcast doesn't return proper stuff otherwise */
-		m_curlInterface.easy_setopt(h, CURLOPT_USERAGENT, "XR");
+		curl_easy_setopt(h, CURLOPT_USERAGENT, "XR");
 
 	if (m_useOldHttpVersion)
-		m_curlInterface.easy_setopt(h, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+		curl_easy_setopt(h, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 
 	if (false)
-		m_curlInterface.easy_setopt(h, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+		curl_easy_setopt(h, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
 	if (m_proxy.length() > 0)
 	{
-		m_curlInterface.easy_setopt(h, CURLOPT_PROXY, m_proxy.c_str());
-		m_curlInterface.easy_setopt(h, CURLOPT_PROXYTYPE, proxyType2CUrlProxyType[m_proxytype]);
+		curl_easy_setopt(h, CURLOPT_PROXY, m_proxy.c_str());
+		curl_easy_setopt(h, CURLOPT_PROXYTYPE, proxyType2CUrlProxyType[m_proxytype]);
 		if (m_proxyuserpass.length() > 0)
-			m_curlInterface.easy_setopt(h, CURLOPT_PROXYUSERPWD, m_proxyuserpass.c_str());
+			curl_easy_setopt(h, CURLOPT_PROXYUSERPWD, m_proxyuserpass.c_str());
 
 	}
 	if (m_customrequest.length() > 0)
-		m_curlInterface.easy_setopt(h, CURLOPT_CUSTOMREQUEST, m_customrequest.c_str());
+		curl_easy_setopt(h, CURLOPT_CUSTOMREQUEST, m_customrequest.c_str());
 
 	if (m_connecttimeout == 0)
 		m_connecttimeout = 10;
 
 	// set our timeouts, we abort connection after m_timeout, and reads after no data for m_timeout seconds
-	m_curlInterface.easy_setopt(h, CURLOPT_CONNECTTIMEOUT, m_connecttimeout);
+	curl_easy_setopt(h, CURLOPT_CONNECTTIMEOUT, m_connecttimeout);
 
 	// We abort in case we transfer less than 1byte/second
-	m_curlInterface.easy_setopt(h, CURLOPT_LOW_SPEED_LIMIT, 1);
+	curl_easy_setopt(h, CURLOPT_LOW_SPEED_LIMIT, 1);
 
 	if (m_lowspeedtime == 0)
 		m_lowspeedtime = 20;
 
 	// Set the lowspeed time very low as it seems Curl takes much longer to detect a lowspeed condition
-	m_curlInterface.easy_setopt(h, CURLOPT_LOW_SPEED_TIME, m_lowspeedtime);
+	curl_easy_setopt(h, CURLOPT_LOW_SPEED_TIME, m_lowspeedtime);
 
 	if (m_skipshout)
 		// For shoutcast file, content-length should not be set, and in libcurl there is a bug, if the
 		// cast file was 302 redirected then getinfo of CURLINFO_CONTENT_LENGTH_DOWNLOAD will return
 		// the 302 response's body length, which cause the next read request failed, so we ignore
 		// content-length for shoutcast file to workaround this.
-		m_curlInterface.easy_setopt(h, CURLOPT_IGNORE_CONTENT_LENGTH, 1);
+		curl_easy_setopt(h, CURLOPT_IGNORE_CONTENT_LENGTH, 1);
 
 	// Setup allowed TLS/SSL ciphers. New versions of cURL may deprecate things that are still in use.
-	m_curlInterface.easy_setopt(h, CURLOPT_SSL_CIPHER_LIST, m_cipherlist.c_str());
+	curl_easy_setopt(h, CURLOPT_SSL_CIPHER_LIST, m_cipherlist.c_str());
 }
 
 void CCurlFile::SetRequestHeaders(CReadState* state)
 {
 	if (state->m_curlHeaderList)
 	{
-		m_curlInterface.slist_free_all(state->m_curlHeaderList);
+		curl_slist_free_all(state->m_curlHeaderList);
 		state->m_curlHeaderList = NULL;
 	}
 
@@ -605,12 +606,12 @@ void CCurlFile::SetRequestHeaders(CReadState* state)
 	for (it = m_requestheaders.begin(); it != m_requestheaders.end(); it++)
 	{
 		std::string buffer = it->first + ": " + it->second;
-		state->m_curlHeaderList = m_curlInterface.slist_append(state->m_curlHeaderList, buffer.c_str());
+		state->m_curlHeaderList = curl_slist_append(state->m_curlHeaderList, buffer.c_str());
 	}
 
 	// add user defined headers
 	if (state->m_easyHandle)
-		m_curlInterface.easy_setopt(state->m_easyHandle, CURLOPT_HTTPHEADER, state->m_curlHeaderList);
+		curl_easy_setopt(state->m_easyHandle, CURLOPT_HTTPHEADER, state->m_curlHeaderList);
 }
 
 void CCurlFile::SetCorrectHeaders(CReadState* state)
@@ -644,7 +645,7 @@ void CCurlFile::ParseAndCorrectUrl(CURL &url2)
 	if (strProtocol == "ftp"
 		|| strProtocol == "ftps")
 	{
-		// we was using url optons for urls, keep the old code work and warning
+		// we was using url options for urls, keep the old code work and warning
 		if (!url2.GetOptions().empty())
 		{
 			LOGWARN("Ftp url option is deprecated, please switch to use protocol option (change '?' to '|'), url: [%s]", url2.GetRedacted().c_str());
@@ -945,7 +946,8 @@ bool CCurlFile::Open(const CURL& url)
 	}
 
 	char* efurl;
-	if (CURLE_OK == m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL, &efurl) && efurl) {
+	if (CURLE_OK == curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL, &efurl) && efurl) 
+	{
 		if (m_url != efurl)
 		{
 			std::string redactEfpath = CURL::GetRedacted(efurl);
@@ -977,7 +979,7 @@ bool CCurlFile::OpenForWrite(const CURL& url, bool bOverWrite)
 	SetRequestHeaders(m_state);
 
 	char* efurl;
-	if (CURLE_OK == m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL, &efurl) && efurl)
+	if (CURLE_OK == curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_EFFECTIVE_URL, &efurl) && efurl)
 		m_url = efurl;
 
 	m_opened = true;
@@ -988,9 +990,9 @@ bool CCurlFile::OpenForWrite(const CURL& url, bool bOverWrite)
 	ASSERT(m_state->m_multiHandle);
 
 	SetCommonOptions(m_state);
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_UPLOAD, 1);
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_UPLOAD, 1);
 
-	m_curlInterface.multi_add_handle(m_state->m_multiHandle, m_state->m_easyHandle);
+	curl_multi_add_handle(m_state->m_multiHandle, m_state->m_easyHandle);
 
 	m_state->SetReadBuffer(NULL, 0);
 
@@ -1006,14 +1008,14 @@ int CCurlFile::Write(const void* lpBuf, int64_t uiBufSize)
 
 	m_state->SetReadBuffer(lpBuf, uiBufSize);
 	m_state->m_isPaused = false;
-	m_curlInterface.easy_pause(m_state->m_easyHandle, CURLPAUSE_CONT);
+	curl_easy_pause(m_state->m_easyHandle, CURLPAUSE_CONT);
 
 	CURLMcode result = CURLM_OK;
 
 	m_stillRunning = 1;
 	while (m_stillRunning && !m_state->m_isPaused)
 	{
-		while ((result = m_curlInterface.multi_perform(m_state->m_multiHandle, &m_stillRunning)) == CURLM_CALL_MULTI_PERFORM);
+		while ((result = curl_multi_perform(m_state->m_multiHandle, &m_stillRunning)) == CURLM_CALL_MULTI_PERFORM);
 
 		if (!m_stillRunning)
 			break;
@@ -1021,9 +1023,9 @@ int CCurlFile::Write(const void* lpBuf, int64_t uiBufSize)
 		if (result != CURLM_OK)
 		{
 			long code;
-			if (m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_RESPONSE_CODE, &code) == CURLE_OK) {
+			if (curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_RESPONSE_CODE, &code) == CURLE_OK)
 				LOGERR("%s - Unable to write curl resource (%s) - %ld", __FUNCTION__, CURL::GetRedacted(m_url).c_str(), code);
-			}
+
 			m_inError = true;
 			return -1;
 		}
@@ -1082,21 +1084,21 @@ bool CCurlFile::Exists(const CURL& url)
 
 	SetCommonOptions(m_state);
 	SetRequestHeaders(m_state);
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 5);
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_NOBODY, 1);
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 5);
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_NOBODY, 1);
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
 
 	if (url2.GetProtocol() == "ftp")
 	{
-		m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_FILETIME, 1);
+		curl_easy_setopt(m_state->m_easyHandle, CURLOPT_FILETIME, 1);
 		// nocwd is less standard, will return empty list for non-existed remote dir on some ftp server, avoid it.
 		if (StringUtils::EndsWith(url2.GetFileName(), "/"))
-			m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_SINGLECWD);
+			curl_easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_SINGLECWD);
 		else
-			m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_NOCWD);
+			curl_easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_NOCWD);
 	}
 
-	CURLcode result = m_curlInterface.easy_perform(m_state->m_easyHandle);
+	CURLcode result = curl_easy_perform(m_state->m_easyHandle);
 	m_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
 
 	if (result == CURLE_WRITE_ERROR || result == CURLE_OK)
@@ -1105,12 +1107,12 @@ bool CCurlFile::Exists(const CURL& url)
 	if (result == CURLE_HTTP_RETURNED_ERROR)
 	{
 		long code;
-		if (m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_RESPONSE_CODE, &code) == CURLE_OK && code != 404)
+		if (curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_RESPONSE_CODE, &code) == CURLE_OK && code != 404)
 			LOGERR("CCurlFile::Exists - Failed: HTTP returned error %ld for %s", code, url.GetRedacted().c_str());
 	}
 	else if (result != CURLE_REMOTE_FILE_NOT_FOUND && result != CURLE_FTP_COULDNT_RETR_FILE)
 	{
-		LOGERR("CCurlFile::Exists - Failed: %s(%d) for %s", m_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
+		LOGERR("CCurlFile::Exists - Failed: %s(%d) for %s", curl_easy_strerror(result), result, url.GetRedacted().c_str());
 	}
 
 	errno = ENOENT;
@@ -1248,26 +1250,26 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
 
 	SetCommonOptions(m_state);
 	SetRequestHeaders(m_state);
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 10);
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_NOBODY, 1);
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
-	m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_FILETIME, 1);
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 10);
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_NOBODY, 1);
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
+	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_FILETIME, 1);
 
 	if (url2.GetProtocol() == "ftp")
 	{
 		// nocwd is less standard, will return empty list for non-existed remote dir on some ftp server, avoid it.
 		if (StringUtils::EndsWith(url2.GetFileName(), "/"))
-			m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_SINGLECWD);
+			curl_easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_SINGLECWD);
 		else
-			m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_NOCWD);
+			curl_easy_setopt(m_state->m_easyHandle, CURLOPT_FTP_FILEMETHOD, CURLFTPMETHOD_NOCWD);
 	}
 
-	CURLcode result = m_curlInterface.easy_perform(m_state->m_easyHandle);
+	CURLcode result = curl_easy_perform(m_state->m_easyHandle);
 
 	if (result == CURLE_HTTP_RETURNED_ERROR)
 	{
 		long code;
-		if (m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_RESPONSE_CODE, &code) == CURLE_OK && code == 404)
+		if (curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_RESPONSE_CODE, &code) == CURLE_OK && code == 404)
 			return -1;
 	}
 
@@ -1280,36 +1282,36 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
 		/* somehow curl doesn't reset CURLOPT_NOBODY properly so reset everything */
 		SetCommonOptions(m_state);
 		SetRequestHeaders(m_state);
-		m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 10);
-		m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_RANGE, "0-0");
-		m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
-		m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_FILETIME, 1);
-		result = m_curlInterface.easy_perform(m_state->m_easyHandle);
+		curl_easy_setopt(m_state->m_easyHandle, CURLOPT_TIMEOUT, 10);
+		curl_easy_setopt(m_state->m_easyHandle, CURLOPT_RANGE, "0-0");
+		curl_easy_setopt(m_state->m_easyHandle, CURLOPT_WRITEDATA, NULL); /* will cause write failure*/
+		curl_easy_setopt(m_state->m_easyHandle, CURLOPT_FILETIME, 1);
+		curl_easy_perform(m_state->m_easyHandle);
 	}
 
 	if (result == CURLE_HTTP_RANGE_ERROR)
 	{
 		/* crap can't use the range option, disable it and try again */
-		m_curlInterface.easy_setopt(m_state->m_easyHandle, CURLOPT_RANGE, NULL);
-		result = m_curlInterface.easy_perform(m_state->m_easyHandle);
+		curl_easy_setopt(m_state->m_easyHandle, CURLOPT_RANGE, NULL);
+		result = curl_easy_perform(m_state->m_easyHandle);
 	}
 
 	if (result != CURLE_WRITE_ERROR && result != CURLE_OK)
 	{
 		m_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
 		errno = ENOENT;
-		LOGERR("CCurlFile::Stat - Failed: %s(%d) for %s", m_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
+		LOGERR("CCurlFile::Stat - Failed: %s(%d) for %s", curl_easy_strerror(result), result, url.GetRedacted().c_str());
 		return -1;
 	}
 
 	double length;
-	result = m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &length);
+	result = curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &length);
 	if (result != CURLE_OK || length < 0.0)
 	{
 		if (url.GetProtocol() == "ftp")
 		{
 			m_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
-			LOGINFO("CCurlFile::Stat - Content length failed: %s(%d) for %s", m_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
+			LOGINFO("CCurlFile::Stat - Content length failed: %s(%d) for %s", curl_easy_strerror(result), result, url.GetRedacted().c_str());
 			errno = ENOENT;
 			return -1;
 		}
@@ -1322,10 +1324,10 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
 	if (buffer)
 	{
 		char *content;
-		result = m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_CONTENT_TYPE, &content);
+		result = curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_CONTENT_TYPE, &content);
 		if (result != CURLE_OK)
 		{
-			LOGINFO("CCurlFile::Stat - Content type failed: %s(%d) for %s", m_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
+			LOGINFO("CCurlFile::Stat - Content type failed: %s(%d) for %s", curl_easy_strerror(result), result, url.GetRedacted().c_str());
 			m_curlInterface.easy_release(&m_state->m_easyHandle, NULL);
 			errno = ENOENT;
 			return -1;
@@ -1340,10 +1342,10 @@ int CCurlFile::Stat(const CURL& url, struct __stat64* buffer)
 				buffer->st_mode = _S_IFREG;
 		}
 		long filetime;
-		result = m_curlInterface.easy_getinfo(m_state->m_easyHandle, CURLINFO_FILETIME, &filetime);
+		result = curl_easy_getinfo(m_state->m_easyHandle, CURLINFO_FILETIME, &filetime);
 		if (result != CURLE_OK)
 		{
-			LOGINFO("CCurlFile::Stat - Filetime failed: %s(%d) for %s", m_curlInterface.easy_strerror(result), result, url.GetRedacted().c_str());
+			LOGINFO("CCurlFile::Stat - Filetime failed: %s(%d) for %s", curl_easy_strerror(result), result, url.GetRedacted().c_str());
 		}
 		else
 		{
@@ -1410,7 +1412,7 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
 			continue;
 		}
 
-		CURLMcode result = m_curlInterface.multi_perform(m_multiHandle, &m_stillRunning);
+		CURLMcode result = curl_multi_perform(m_multiHandle, &m_stillRunning);
 		if (!m_stillRunning)
 		{
 			if (result == CURLM_OK)
@@ -1423,7 +1425,7 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
 				int msgs;
 				CURLcode CURLresult = CURLE_OK;
 				CURLMsg* msg;
-				while ((msg = m_curlInterface.multi_info_read(m_multiHandle, &msgs)))
+				while ((msg = curl_multi_info_read(m_multiHandle, &msgs)))
 				{
 					if (msg->msg == CURLMSG_DONE)
 					{
@@ -1433,12 +1435,12 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
 						if (msg->data.result == CURLE_HTTP_RETURNED_ERROR)
 						{
 							long httpCode;
-							m_curlInterface.easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &httpCode);
+							curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &httpCode);
 							LOGERR("CCurlFile::FillBuffer - Failed: HTTP returned error %ld", httpCode);
 						}
 						else
 						{
-							LOGERR("CCurlFile::FillBuffer - Failed: %s(%d)", m_curlInterface.easy_strerror(msg->data.result), msg->data.result);
+							LOGERR("CCurlFile::FillBuffer - Failed: %s(%d)", curl_easy_strerror(msg->data.result), msg->data.result);
 						}
 
 						// We need to check the result here as we don't want to retry on every error
@@ -1469,7 +1471,7 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
 
 				// Close handle
 				if (m_multiHandle && m_easyHandle)
-					m_curlInterface.multi_remove_handle(m_multiHandle, m_easyHandle);
+					curl_multi_remove_handle(m_multiHandle, m_easyHandle);
 
 				// Reset all the stuff like we would in Disconnect()
 				m_buffer.Clear();
@@ -1493,7 +1495,7 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
 
 				// Connect + seek to current position (again)
 				SetResume();
-				m_curlInterface.multi_add_handle(m_multiHandle, m_easyHandle);
+				curl_multi_add_handle(m_multiHandle, m_easyHandle);
 
 				// Return to the beginning of the loop:
 				continue;
@@ -1515,10 +1517,10 @@ bool CCurlFile::CReadState::FillBuffer(unsigned int want)
 			FD_ZERO(&fdexcep);
 
 			// get file descriptors from the transfers
-			m_curlInterface.multi_fdset(m_multiHandle, &fdread, &fdwrite, &fdexcep, &maxfd);
+			curl_multi_fdset(m_multiHandle, &fdread, &fdwrite, &fdexcep, &maxfd);
 
 			long timeout = 0;
-			if (CURLM_OK != m_curlInterface.multi_timeout(m_multiHandle, &timeout) || timeout == -1)
+			if (CURLM_OK != curl_multi_timeout(m_multiHandle, &timeout) || timeout == -1)
 				timeout = 200;
 
 			XR::EndTime endTime(timeout);
@@ -1646,7 +1648,7 @@ bool CCurlFile::GetCookies(const CURL &url, std::string &cookies)
 	DllLibCurlGlobal::Get().easy_aquire(url.GetProtocol().c_str(),
 		url.GetHostName().c_str(),
 		&easyHandle, &multiHandle);
-	if (CURLE_OK == DllLibCurlGlobal::Get().easy_getinfo(easyHandle, CURLINFO_COOKIELIST, &curlCookies))
+	if (CURLE_OK == curl_easy_getinfo(easyHandle, CURLINFO_COOKIELIST, &curlCookies))
 	{
 		// iterate over each cookie and format it into an RFC 2109 formatted Set-Cookie string
 		struct curl_slist* curlCookieIter = curlCookies;
@@ -1679,7 +1681,7 @@ bool CCurlFile::GetCookies(const CURL &url, std::string &cookies)
 		}
 
 		// free the curl cookies
-		DllLibCurlGlobal::Get().slist_free_all(curlCookies);
+		curl_slist_free_all(curlCookies);
 
 		// release our handles
 		DllLibCurlGlobal::Get().easy_release(&easyHandle, &multiHandle);

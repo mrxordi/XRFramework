@@ -36,33 +36,32 @@ WinRenderer::WinRenderer()
 	
 }
 
-WinRenderer::~WinRenderer()
+WinRenderer::~WinRenderer() 
 {
 	//We'll use this after well make sure that destructor will be not called from wxApp destructor
 	//as destructor stops sending messages first 
 	//SendVideoRendererMessage(wxVideoRendererEvent::VR_ACTION_DETACH);
 	SAFE_DELETE(m_colorShader);
 
-	for (int i = 0; i < NUM_BUFFERS; ++i) {
+	for (int i = 0; i < NUM_BUFFERS; ++i)
 		DeleteYV12Texture(i);
-	}
 
 	LOGDEBUG("Wideo Renderer now is destroyed.");
 }
 
-bool WinRenderer::Configure(UINT width, UINT height, float fps, unsigned int flags, ERenderFormat format, wxWindow* window)
+bool WinRenderer::Configure(UINT width, UINT height, float fps, unsigned int flags, ERenderFormat format, wxWindow* window) 
 {
 	//If no window pointer provided we check that are we reconfiguring renderer
 	//if yes then we check is the window the same or when is null we use previosly saved window ptr.
-	if ((!window && !m_contextWindow) && (m_contextWindow && m_contextWindow != window)) {
+	if ((!window && !m_contextWindow) && (m_contextWindow && m_contextWindow != window)) 
+	{
 		LOGFATAL("No window provided or configuring for different window (MUST RECREATE RENDERER!)");
 		return false;
 	}
 
 	m_contextWindow = window ? window : m_contextWindow;
 
-	if (m_sourceWidth != width
-		|| m_sourceHeight != height || m_format != format)
+	if (m_sourceWidth != width || m_sourceHeight != height || m_format != format)
 	{
 		m_sourceWidth = width;
 		m_sourceHeight = height;
@@ -71,8 +70,7 @@ bool WinRenderer::Configure(UINT width, UINT height, float fps, unsigned int fla
 		m_iYV12RenderBuffer = 0;
 		// reinitialize the filters/shaders
 		m_bFiltersInitialized = false;
-	}
-	else
+	} else 
 	{
 		if (m_VideoBuffers[m_iYV12RenderBuffer] != NULL)
 			m_VideoBuffers[m_iYV12RenderBuffer]->StartDecode();
@@ -88,11 +86,13 @@ bool WinRenderer::Configure(UINT width, UINT height, float fps, unsigned int fla
 
 	{
 		TestShader shader;
-		if (!shader.Create()) {
+		if (!shader.Create()) 
+		{
 			LOGERR("D3D: unable to load test shader - D3D installation is most likely incomplete!");
 			return false;
 		}
 	}
+
 	ManageDisplay();
 
 	LOGDEBUG("Video Renderer Configured - video: %ux%u@%f fps, frameratio:%f", width, height, fps, m_sourceFrameRatio);
@@ -106,8 +106,9 @@ bool WinRenderer::Configure(UINT width, UINT height, float fps, unsigned int fla
 	return true;
 }
 
-void WinRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height)
+void WinRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height) 
 {
+
 	m_sourceFrameRatio = (float)desired_width / desired_height;
 
 	// Check whether mplayer has decided that the size of the video file should be changed
@@ -140,21 +141,21 @@ void WinRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsigned
 	float Non4by3Correction = m_sourceFrameRatio / (4.0f / 3.0f);
 
 	// Finally, check for a VCD, SVCD or DVD frame size as these need special aspect ratios
-	if (m_sourceWidth == 352)
+	if (m_sourceWidth == 352) 
 	{ // VCD?
 		if (m_sourceHeight == 240) // NTSC
 			m_sourceFrameRatio = imageFrameRatio * NTSCPixelRatio;
 		if (m_sourceHeight == 288) // PAL
 			m_sourceFrameRatio = imageFrameRatio * PALPixelRatio;
 	}
-	if (m_sourceWidth == 480)
+	if (m_sourceWidth == 480) 
 	{ // SVCD?
 		if (m_sourceHeight == 480) // NTSC
 			m_sourceFrameRatio = imageFrameRatio * 3.0f / 2.0f * NTSCPixelRatio * Non4by3Correction;
 		if (m_sourceHeight == 576) // PAL
 			m_sourceFrameRatio = imageFrameRatio * 3.0f / 2.0f * PALPixelRatio * Non4by3Correction;
 	}
-	if (m_sourceWidth == 720)
+	if (m_sourceWidth == 720) 
 	{ // DVD?
 		if (m_sourceHeight == 480) // NTSC
 			m_sourceFrameRatio = imageFrameRatio * NTSCPixelRatio * Non4by3Correction;
@@ -163,7 +164,7 @@ void WinRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsigned
 	}
 }
 
-int WinRenderer::GetImage(YV12Image* image, int source)
+int WinRenderer::GetImage(YV12Image* image, int source) 
 {
 	/* take next available buffer */
 	if (source == AUTOSOURCE)
@@ -188,7 +189,7 @@ int WinRenderer::GetImage(YV12Image* image, int source)
 	else
 		image->bpp = 1;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++) 
 	{
 		image->stride[i] = buf->planes[i].rect.RowPitch;
 		image->plane[i] = (BYTE*)buf->planes[i].rect.pData;
@@ -199,19 +200,19 @@ int WinRenderer::GetImage(YV12Image* image, int source)
 
 void WinRenderer::ReleaseImage(int index)
 {
-
 }
 
-void WinRenderer::ManageTextures()
+void WinRenderer::ManageTextures() 
 {
-	if (m_NumYV12Buffers < m_neededBuffers)
+
+	if (m_NumYV12Buffers < m_neededBuffers) 
 	{
 		for (int i = m_NumYV12Buffers; i < m_neededBuffers; i++)
 			CreateYV12Texture(i);
 
 		m_NumYV12Buffers = m_neededBuffers;
 	}
-	else if (m_NumYV12Buffers > m_neededBuffers)
+	else if (m_NumYV12Buffers > m_neededBuffers) 
 	{
 		m_NumYV12Buffers = m_neededBuffers;
 		m_iYV12RenderBuffer = m_iYV12RenderBuffer % m_NumYV12Buffers;
@@ -229,10 +230,12 @@ int WinRenderer::NextYV12Texture()
 		return -1;
 }
 
-void WinRenderer::DeleteYV12Texture(int index)
+void WinRenderer::DeleteYV12Texture(int index) 
 {
 	XR::CSingleLock lock(g_DXRenderer);
-	if (m_VideoBuffers[index] != NULL) {
+
+	if (m_VideoBuffers[index] != NULL) 
+	{
 		LOGDEBUG(" - Deleted video buffer %i", index);
 		SAFE_DELETE(m_VideoBuffers[index]);
 	}
@@ -246,7 +249,7 @@ bool WinRenderer::CreateYV12Texture(int index)
 
 	YUVBuffer* buf = new YUVBuffer();
 
-	if (!buf->Create(m_format, m_sourceWidth, m_sourceHeight))
+	if (!buf->Create(m_format, m_sourceWidth, m_sourceHeight)) 
 	{
 		LOGERR(" - Unable to create YV12 video texture %i", index);
 		return false;
@@ -262,20 +265,21 @@ bool WinRenderer::CreateYV12Texture(int index)
 	return true;
 }
 
-void WinRenderer::UpdatePSVideoFilter()
+void WinRenderer::UpdatePSVideoFilter() 
 {
 	if (m_bFiltersInitialized)
 		return;
 
-	if (m_bUseHQScaler) {
+	if (m_bUseHQScaler)
 		throw;
-	}
 	
 	SAFE_DELETE(m_colorShader);
 
-	if (!m_bUseHQScaler) {
+	if (!m_bUseHQScaler) 
+	{
 		m_colorShader = new YUV2RGBShader;
-		if (!m_colorShader->Create(m_sourceWidth, m_sourceHeight, m_format)) {
+		if (!m_colorShader->Create(m_sourceWidth, m_sourceHeight, m_format)) 
+		{
 			SAFE_DELETE(m_colorShader);
 			LOGFATAL("Failed to create YUV color shader!");
 			m_bFiltersInitialized = false;
@@ -300,11 +304,10 @@ void WinRenderer::Render()
 
 void WinRenderer::RenderPS()
 {
-	if (!m_bUseHQScaler)
+	if (!m_bUseHQScaler) 
 	{
 		Stage1();
-	}
-	else
+	} else 
 	{
 		Stage1();
 		Stage2();
@@ -313,7 +316,8 @@ void WinRenderer::RenderPS()
 
 void WinRenderer::Stage1()
 {
-	if (!m_bUseHQScaler) {
+	if (!m_bUseHQScaler) 
+	{
 		m_colorShader->Render(m_sourceRect, m_destRect, g_AppSettings->m_contrast, g_AppSettings->m_brightness, m_iFlags, m_VideoBuffers[m_iYV12RenderBuffer]);
 	}
 	else {
@@ -326,7 +330,7 @@ void WinRenderer::Stage2()
 	//NOT IMPLEMENTED
 }
 
-void WinRenderer::ManageDisplay()
+void WinRenderer::ManageDisplay() 
 {
 	const wxRect rect = m_contextWindow->GetRect();
 	const XRect view(0, 0, rect.GetWidth(), rect.GetHeight());
@@ -336,19 +340,11 @@ void WinRenderer::ManageDisplay()
 	m_sourceRect.right = (float)m_sourceWidth;
 	m_sourceRect.bottom = (float)m_sourceHeight;
 
-// 	float x = m_sourceRect.Width();
-// 	float y = m_sourceRect.Height();
-// 
-// 	float outputframeratio = x / y;
-
 	float newWidth = view.Width();
 	float newHeight = newWidth / m_sourceFrameRatio;
 
-// 	if (newWidth > view.Width()) {
-// 		newHeight = view.Height();
-// 		newWidth = newHeight * outputframeratio;
-// 	}
-	if (newHeight > view.Height()) {
+	if (newHeight > view.Height()) 
+	{
 		newHeight = view.Height();
 		newWidth = newHeight * m_sourceFrameRatio;
 	}
@@ -370,19 +366,19 @@ void WinRenderer::ManageDisplay()
 
 int WinRenderer::AddVideoPicture(DVDVideoPicture& pic)
 {
-
 	return 1;
 }
 
-void WinRenderer::SendVideoRendererMessage(wxVideoRendererEvent::VR_ACTION action)
+void WinRenderer::SendVideoRendererMessage(wxVideoRendererEvent::VR_ACTION action) 
 {
+
 	//We have to make sure that Event has been processed before next event can be send
 	XR::CSingleLock lock(m_eventlock);
 	wxVideoRendererEvent* ev = new wxVideoRendererEvent(this, action);
 	m_contextWindow->GetEventHandler()->QueueEvent(ev);
 }
 
-void WinRenderer::Release()
+void WinRenderer::Release() 
 {
 	//We call this function whenever contexted window is destroying, or 
 	//while creating new DXrendering system (for example fullscreen toggling)
@@ -393,9 +389,9 @@ void WinRenderer::Release()
 
 	SAFE_DELETE(m_colorShader);
 
-	for (int i = 0; i < NUM_BUFFERS; ++i) {
+	for (int i = 0; i < NUM_BUFFERS; ++i)
 		DeleteYV12Texture(i);
-	}
+
 	m_bConfigured = false;
 	m_contextWindow = NULL;
 }

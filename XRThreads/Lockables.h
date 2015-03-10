@@ -48,12 +48,15 @@ namespace XR {
 		 *  leaves one still there.
 		 */
 
-		inline unsigned int exit(unsigned int leave = 0) { 
+		inline unsigned int exit(unsigned int leave = 0) 
+		{ 
 		  // it's possibe we don't actually own the lock
 		  // so we will try it.
 		  unsigned int ret = 0;
-		  if (try_lock()) {
-			if (leave < (count - 1)) {
+		  if (try_lock()) 
+		  {
+			if (leave < (count - 1)) 
+			{
 			  ret = count - 1 - leave;  // The -1 is because we don't want 
 										//  to count the try_lock increment.
 			  // We must NOT compare "count" in this loop since 
@@ -71,7 +74,8 @@ namespace XR {
 		/**
 		 * Restore a previous exit to the provided level.
 		 */
-		inline void restore(unsigned int restoreCount) {
+		inline void restore(unsigned int restoreCount) 
+		{
 		  for (unsigned int i = 0; i < restoreCount; i++) 
 			lock();
 		}

@@ -29,28 +29,26 @@
 namespace XR
 {
 
-	int64_t CurrentHostCounter(void)
+	int64_t CurrentHostCounter(void) 
 	{
 		LARGE_INTEGER PerformanceCount;
 		QueryPerformanceCounter(&PerformanceCount);
 		return((int64_t)PerformanceCount.QuadPart);
 	}
 
-	int64_t CurrentHostFrequency(void)
+	int64_t CurrentHostFrequency(void) 
 	{
 		LARGE_INTEGER Frequency;
 		QueryPerformanceFrequency(&Frequency);
 		return((int64_t)Frequency.QuadPart);
 	}
 
-	CDateTime GetLocalTime(time_t time)
+	CDateTime GetLocalTime(time_t time) 
 	{
 		CDateTime result;
 
 		tm *local;
-
 		local = localtime(&time); // Conversion to local time
-
 		/*
 		* Microsoft implementation of localtime returns NULL if on or before epoch.
 		* http://msdn.microsoft.com/en-us/library/bf12f0hc(VS.80).aspx
@@ -63,7 +61,7 @@ namespace XR
 		return result;
 	}
 
-	unsigned int SystemClockMillis()
+	unsigned int SystemClockMillis() 
 	{
 		uint64_t now_time;
 		static uint64_t start_time = 0;
@@ -71,7 +69,7 @@ namespace XR
 
 		now_time = (uint64_t)timeGetTime();
 
-		if (!start_time_set)
+		if (!start_time_set) 
 		{
 			start_time = now_time;
 			start_time_set = true;

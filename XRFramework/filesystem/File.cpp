@@ -37,7 +37,8 @@ bool File::Open(const CURL& url, const unsigned int flags)
 	//Catching all exceptions caused in the whole file opening operation
 	try {
 
-		if (!(m_flags & READ_NO_CACHE)) {
+		if (!(m_flags & READ_NO_CACHE)) 
+		{
 			const std::string pathToUrl(url2.Get());
 			if (URIUtils::IsInternetStream(url2, true) && !CUtil::IsPicture(pathToUrl))
 				m_flags |= READ_CACHED;
@@ -58,12 +59,14 @@ bool File::Open(const CURL& url, const unsigned int flags)
 
 		//Catching all exceptions caused in the file opening implementation
 		try {
-			if (!m_pFile->Open(url2)) {
+			if (!m_pFile->Open(url2)) 
+			{
 				SAFE_DELETE(m_pFile);
 				return false;
 			}
 		}
-		catch (...) {
+		catch (...) 
+		{
 			LOGERR("Unknown exception when opening %s", url.GetRedacted().c_str());
 			SAFE_DELETE(m_pFile);
 			return false;
@@ -101,14 +104,14 @@ bool File::OpenForWrite(const CURL& file, bool bOverWrite)
 {
 	CURL url(file);
 	//Catching all exceptions caused in the whole file opening operation
-	try {
-
+	try 
+	{
 		m_pFile = FileFactory(url);
-		if (m_pFile && m_pFile->OpenForWrite(url, bOverWrite)) {
+		if (m_pFile && m_pFile->OpenForWrite(url, bOverWrite)) 
 			return true;
-		}
 	} 
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception opening %s for write.", url.GetRedacted().c_str());
 	}
 
@@ -153,7 +156,8 @@ ssize_t File::LoadFile(const CURL& file, auto_buffer& outputBuffer)
 	*/
 
 	int64_t filesize = GetLength();
-	if (filesize > (int64_t)max_file_size){
+	if (filesize > (int64_t)max_file_size)
+	{
 		LOGERR("File %s is to large to load into memory. Use other technique to read file.");
 		return 0; /* file is too large for this function */
 	}
@@ -221,7 +225,8 @@ ssize_t File::Read(void *lpBuf, size_t uiBufSize)
 		}
 	}
 
-	try {
+	try 
+	{
 		if (m_flags & READ_TRUNCATED)
 		{
 			const ssize_t nBytes = m_pFile->Read(lpBuf, uiBufSize);
@@ -250,7 +255,8 @@ ssize_t File::Read(void *lpBuf, size_t uiBufSize)
 		}
 
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while reading file.");
 		return -1;
 	}
@@ -266,7 +272,8 @@ bool File::ReadString(char *szLine, int iLineLength)
 	try {
 		return m_pFile->ReadString(szLine, iLineLength);
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while reading string from file.");
 
 	}
@@ -284,7 +291,8 @@ ssize_t File::Write(const void* lpBuf, size_t uiBufSize)
 	try {
 		return m_pFile->Write(lpBuf, uiBufSize);
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while writing to file.");
 	}
 	return -1;
@@ -296,7 +304,8 @@ void File::Flush()
 		if (m_pFile)
 			m_pFile->Flush();
 	} 
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while flushing file.");
 	}
 	return;
@@ -320,7 +329,8 @@ int64_t File::Seek(int64_t iFilePosition, int iWhence)
 	try {
 		return m_pFile->Seek(iFilePosition, iWhence);
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while seeking file.");
 	}
 	return -1;
@@ -334,7 +344,8 @@ int File::Truncate(int64_t iSize)
 	try {
 		return m_pFile->Truncate(iSize);
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while trunkate file.");
 	}
 	return -1;
@@ -351,7 +362,8 @@ int64_t File::GetPosition() const
 	try {
 		return m_pFile->GetPosition();
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while getting position in file.");
 	}
 	return -1;
@@ -364,7 +376,8 @@ int64_t File::GetLength()
 			return m_pFile->GetLength();
 		return 0;
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while getting size of file.");
 	}
 	return 0;
@@ -372,7 +385,8 @@ int64_t File::GetLength()
 
 void File::Close()
 {
-	try {
+	try 
+	{
 		if (m_pFile)
 			m_pFile->Close();
 
@@ -380,7 +394,8 @@ void File::Close()
 		SAFE_DELETE(m_pFile);
 
 	}
-	catch (...){
+	catch (...)
+	{
 		LOGERR("Unhandled exception while closing file.");
 	}
 	return;
@@ -421,7 +436,8 @@ int File::IoControl(EIoControl request, void* param)
 		return -1;
 	result = m_pFile->IoControl(request, param);
 
-	if (result == -1 && request == IOCTRL_SEEK_POSSIBLE) {
+	if (result == -1 && request == IOCTRL_SEEK_POSSIBLE) 
+	{
 		if (m_pFile->GetLength() >= 0 && m_pFile->Seek(0, SEEK_CUR) >= 0)
 			return 1;
 		else
@@ -436,7 +452,8 @@ int File::Stat(struct __stat64 *buffer)
 	if (!buffer)
 		return -1;
 
-	if (!m_pFile) {
+	if (!m_pFile) 
+	{
 		memset(buffer, 0, sizeof(struct __stat64));
 		errno = ENOENT;
 		return -1;
@@ -464,7 +481,8 @@ int File::Stat(const CURL& file, struct __stat64* buffer)
 		pFile->Open(url);
 		return pFile->Stat(buffer);
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception while statting file.");
 	}
 	return -1;
@@ -487,7 +505,8 @@ bool File::Exists(const CURL& url, bool bUseCache /* = true */)
 
 		return pFile->Exists(url2);
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception checking %s does exist.", url.GetRedacted().c_str());
 	}
 	LOGERR("Error checking for %s does exist.", url.GetRedacted().c_str());
@@ -512,7 +531,8 @@ bool File::Delete(const CURL& url)
 		if (pFile->Delete(url2))
 			return true;
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception checking %s does exist.", url.GetRedacted().c_str());
 	}
 	LOGERR("Error checking for %s does exist.", url.GetRedacted().c_str());
@@ -540,7 +560,8 @@ bool File::Rename(const CURL& url, const CURL& newUrl)
 			return true;
 		}
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception renaming the file %s.", url.GetRedacted().c_str());
 	}
 
@@ -563,7 +584,8 @@ bool File::Copy(const CURL& url2, const CURL& dest, IFileCallback* pCallback, vo
 		return false;
 
 	CURL url(url2);
-	if (file.Open(url.Get(), READ_TRUNCATED)) {
+	if (file.Open(url.Get(), READ_TRUNCATED)) 
+	{
 		File newFile;
 
 		if (URIUtils::IsHD(pathToUrl)) // create possible missing dirs
@@ -579,7 +601,8 @@ bool File::Copy(const CURL& url2, const CURL& dest, IFileCallback* pCallback, vo
 				StringUtils::Tokenize(url.GetFileName(), tokens, pathsep.c_str());
 				std::string strCurrPath;
 				// Handle special
-				if (!url.GetProtocol().empty()) {
+				if (!url.GetProtocol().empty()) 
+				{
 					pathsep = "/";
 					strCurrPath += url.GetProtocol() + "://";
 				} // If the directory has a / at the beginning, don't forget it
@@ -595,7 +618,9 @@ bool File::Copy(const CURL& url2, const CURL& dest, IFileCallback* pCallback, vo
 
 		if (File::Exists(dest))
 			File::Delete(dest);
-		if (!newFile.OpenForWrite(dest, true)) {  // overwrite always
+
+		if (!newFile.OpenForWrite(dest, true)) 
+		{  // overwrite always
 			file.Close();
 			return false;
 		}
@@ -612,11 +637,14 @@ bool File::Copy(const CURL& url2, const CURL& dest, IFileCallback* pCallback, vo
 
 		float start = XR::SystemClockMillis()/1000.0f;   //Perfor some checks here
 
-		while (true) {
+		while (true) 
+		{
 			iRead = file.Read(buffer.get(), iBufferSize);
-			if (iRead == 0) break;
+			if (iRead == 0) 
+				break;
 
-			else if (iRead < 0) {
+			else if (iRead < 0) 
+			{
 				LOGERR("Failed read from file %s", url2.GetRedacted().c_str());
 				llFileSize = (uint64_t)-1;
 				break;
@@ -624,7 +652,8 @@ bool File::Copy(const CURL& url2, const CURL& dest, IFileCallback* pCallback, vo
 
 			/* write data and make sure we managed to write it all */
 			iWrite = 0;
-			while (iWrite < iRead) {
+			while (iWrite < iRead) 
+			{
 				ssize_t iWrite2 = newFile.Write((char*)buffer.get() + iWrite, iRead - iWrite);
 				if (iWrite2 <= 0)
 					break;
@@ -692,7 +721,8 @@ bool File::SetHidden(const CURL& url, bool hidden)
 		if (pFile->SetHidden(url2, hidden))
 			return true;
 	}
-	catch (...) {
+	catch (...) 
+	{
 		LOGERR("Unhandled exception checking %s does exist.", url.GetRedacted().c_str());
 	}
 	LOGERR("Error checking for %s does exist.", url.GetRedacted().c_str());
@@ -700,14 +730,15 @@ bool File::SetHidden(const CURL& url, bool hidden)
 
 }
 
-IFile* File::FileFactory(const std::string& strFileName) {
-
+IFile* File::FileFactory(const std::string& strFileName) 
+{
 	CURL url(strFileName);
 	return FileFactory(url);
 }
-IFile* File::FileFactory(CURL& url) {
-
-	if (url.IsProtocol("special")) {
+IFile* File::FileFactory(CURL& url) 
+{
+	if (url.IsProtocol("special")) 
+	{
 		url = CURL(CSpecialProtocol::TranslatePath(url));
 		return new CWin32File();
 	}
@@ -718,7 +749,6 @@ IFile* File::FileFactory(CURL& url) {
 
 	LOGWARN("Unsupported protocol(%s) in %s", url.GetProtocol().c_str(), url.GetRedacted().c_str());
 	return NULL;
-
 }
 
 using namespace std;
@@ -743,7 +773,6 @@ FileStreamBuffer::FileStreamBuffer(int backsize)
 void FileStreamBuffer::Attach(IFile *file)
 {
 	m_file = file;
-
 	m_frontsize = File::GetChunkSize(m_file->GetChunkSize(), 64 * 1024);
 
 	m_buffer = new char[m_frontsize + m_backsize];

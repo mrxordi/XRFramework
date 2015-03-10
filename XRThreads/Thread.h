@@ -13,7 +13,8 @@ public:
 };
 
 
-class CThread {
+class CThread 
+{
 	static XR::ILogger* logger;
 
 protected:
@@ -65,7 +66,8 @@ protected:
 	*  stop is called on the thread the wait will return with a response
 	*  indicating what happened.
 	*/
-	inline WaitResponse AbortableWait(::CEvent& event, int timeoutMillis = -1 /* indicates wait forever*/) {
+	inline WaitResponse AbortableWait(::CEvent& event, int timeoutMillis = -1 /* indicates wait forever*/) 
+	{
 		XR::CEventGroup group(&event, &m_StopEvent, NULL);
 		::CEvent* result = timeoutMillis < 0 ? group.wait() : group.wait(timeoutMillis);
 		return  result == &event ? WAIT_SIGNALED :
