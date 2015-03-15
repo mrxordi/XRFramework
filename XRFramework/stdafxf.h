@@ -11,6 +11,13 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
+#ifdef _DEBUG
+	#pragma comment(lib, "libcurld.lib")
+#else // _DEBUG
+	#pragma comment(lib, "libcurl.lib")
+#endif
+
+
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>

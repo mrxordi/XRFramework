@@ -18,21 +18,21 @@
 *
 */
 #include "stdafxf.h"
-#include "CurlFile.h"
-#include "utils/URIUtils.h"
-//#include "utils/SysInfo.h"
-#include "Util.h"
-#include "utils/URL.h"
 #include <WinSock.h>
-#include "XRThreads/SystemClock.h"
-
 #include <vector>
 #include <climits>
 
-#include "DllLibCurl.h"
-#include "utils/SpecialProtocol.h"
-#include "log/log.h"
+#include "CurlFile.h"
+#include "utils/URL.h"
+#include "utils/URIUtils.h"
 #include "utils/StringUtils.h"
+#include "utils/SpecialProtocol.h"
+//#include "utils/SysInfo.h"
+
+#include "Util.h"
+#include "XRThreads/SystemClock.h"
+#include "DllLibCurl.h"
+#include "log/log.h"
 
 #define XMIN(a,b) ((a)<(b)?(a):(b))
 #define FITS_INT(a) (((a) <= INT_MAX) && ((a) >= INT_MIN))
@@ -420,7 +420,7 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 #ifdef _DEBUG 
 	curl_easy_setopt(h, CURLOPT_VERBOSE, TRUE);
 #else
-	m_curlInterface.easy_setopt(h, CURLOPT_VERBOSE, FALSE);
+	curl_easy_setopt(h, CURLOPT_VERBOSE, FALSE);
 #endif
 	curl_easy_setopt(h, CURLOPT_WRITEDATA, state);
 	curl_easy_setopt(h, CURLOPT_WRITEFUNCTION, write_callback);

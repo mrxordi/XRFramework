@@ -189,7 +189,8 @@ void CLog::SetExtraLogLevels(int level)
 	std::string msg { "" };
 	if (level & LOGCURL)
 		msg += "LOGCURL";
-	if (level & LOGFFMPEG) {
+	if (level & LOGFFMPEG) 
+	{
 		if (!msg.empty())
 			msg += " | ";
 		msg += "LOGFFMPEG";

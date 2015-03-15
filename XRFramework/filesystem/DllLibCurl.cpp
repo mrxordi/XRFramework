@@ -53,7 +53,6 @@ void DllLibCurlGlobal::Unload()
 
 	if (--m_curlReferences == 0)
 		curl_global_cleanup();  // close libcurl
-
 }
 
 void DllLibCurlGlobal::CheckIdle()
