@@ -114,9 +114,13 @@
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
     <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
     <ClInclude Include="dvdplayer\FFmpeg.h" />
+    <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\CurlGlobal.h" />
+    <ClInclude Include="filesystem\File.h" />
     <ClInclude Include="filesystem\IFile.h" />
     <ClInclude Include="filesystem\MimeTypes.h" />
+    <ClInclude Include="filesystem\StreamFile.h" />
+    <ClInclude Include="filesystem\Win32File.h" />
     <ClInclude Include="IApplication.h" />
     <ClInclude Include="LoggerContext.h" />
     <ClInclude Include="render\D3D10Enumeration.h" />
@@ -155,9 +159,13 @@
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="dvdplayer\FFmpeg.cpp" />
+    <ClCompile Include="filesystem\CurlFile.cpp" />
     <ClCompile Include="filesystem\CurlGlobal.cpp" />
+    <ClCompile Include="filesystem\File.cpp" />
     <ClCompile Include="filesystem\IFile.cpp" />
     <ClCompile Include="filesystem\MimeTypes.cpp" />
+    <ClCompile Include="filesystem\StreamFile.cpp" />
+    <ClCompile Include="filesystem\Win32File.cpp" />
     <ClCompile Include="IApplication.cpp" />
     <ClCompile Include="LoggerContext.cpp" />
     <ClCompile Include="render\D3D10Enumeration.cpp" />

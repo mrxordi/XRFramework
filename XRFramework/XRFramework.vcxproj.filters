@@ -116,6 +116,14 @@
     <ClInclude Include="filesystem\IFile.h">
       <Filter>filesystem\IFile</Filter>
     </ClInclude>
+    <ClInclude Include="filesystem\File.h">
+      <Filter>filesystem\IFile</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\CurlFile.h">
+      <Filter>filesystem\IFile</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\Win32File.h" />
+    <ClInclude Include="filesystem\StreamFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -217,6 +225,14 @@
     <ClCompile Include="filesystem\IFile.cpp">
       <Filter>filesystem\IFile</Filter>
     </ClCompile>
+    <ClCompile Include="filesystem\File.cpp">
+      <Filter>filesystem\IFile</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\CurlFile.cpp">
+      <Filter>filesystem\IFile</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\Win32File.cpp" />
+    <ClCompile Include="filesystem\StreamFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">
