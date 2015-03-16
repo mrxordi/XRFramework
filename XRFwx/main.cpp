@@ -53,8 +53,8 @@ bool MyApp::OnInit()
 
 	LOGINFO("Start application initialization. Running on thread: %d", GetCurrentThreadId());
 	CSpecialProtocol::LogPaths();
-	CCurlFile file;
-	LOGINFO("You are %s internet", file.IsInternet() ? "connected to" : "disconnected from");
+	//CCurlFile file;
+	//LOGINFO("You are %s internet", file.IsInternet() ? "connected to" : "disconnected from");
 
 	m_monitors = std::make_unique<CMonitors>();
 	m_VideoRenderer = std::make_unique<WinRenderer>();

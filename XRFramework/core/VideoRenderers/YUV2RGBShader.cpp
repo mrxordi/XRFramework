@@ -215,7 +215,7 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 
 	if (format == RENDER_FMT_YUV420P16 || format == RENDER_FMT_YUV420P10) 
 	{
-		defines["XBMC_YV12"] = "";
+		defines["XR_YV12"] = "";
 		texWidth = srcWidth;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R16_UNORM)
@@ -229,7 +229,7 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 	}
 	else if (format == RENDER_FMT_YUV420P) 
 	{
-		defines["XBMC_YV12"] = "";
+		defines["XR_YV12"] = "";
 		texWidth = srcWidth;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8_UNORM)
@@ -243,7 +243,7 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 	}
 	else if (format == RENDER_FMT_NV12) 
 	{
-		defines["XBMC_NV12"] = "";
+		defines["XR_NV12"] = "";
 		texWidth = srcWidth;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_R8_UNORM)
@@ -255,7 +255,7 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 	} 
 	else if (format == RENDER_FMT_YUYV422) 
 	{
-		defines["XBMC_YUY2"] = "";
+		defines["XR_YUY2"] = "";
 		texWidth = srcWidth >> 1;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM)) 
@@ -266,7 +266,7 @@ bool YUV2RGBShader::Create(UINT srcWidth, UINT srcHeight, ERenderFormat format)
 	}
 	else if (format == RENDER_FMT_UYVY422) 
 	{
-		defines["XBMC_UYVY"] = "";
+		defines["XR_UYVY"] = "";
 		texWidth = srcWidth >> 1;
 
 		if (!m_YUVPlanes[0].Create(texWidth, m_sourceHeight, D3D10_BIND_SHADER_RESOURCE, D3D10_USAGE_DEFAULT, DXGI_FORMAT_B8G8R8A8_UNORM)) 

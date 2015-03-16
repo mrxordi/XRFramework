@@ -1,24 +1,3 @@
-#pragma once
-/*
- *      Copyright (C) 2005-2013 Team XBMC
- *      http://xbmc.org
- *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
- */
-
 #include "DLLoader/iLibraryLoader.h"
 #include "DLLoader/DllPaths_win32.h"
 
@@ -445,7 +424,7 @@ union { \
 //
 //  class DllExample : public DllDynamic, DllExampleInterface
 //  {
-//    DECLARE_DLL_WRAPPER(DllExample, special://xbmcbin/system/Example.dll)
+//    DECLARE_DLL_WRAPPER(DllExample, special://app/system/Example.dll)
 //    LOAD_SYMBOLS()  // add this if you want to load debug symbols for the dll
 //    DEFINE_METHOD2(void, foo, (int p1, char* p2))
 //    DEFINE_METHOD_LINKAGE2(void, __stdcall, bar, (char* p1, int p2))
@@ -464,7 +443,7 @@ union { \
 //  class DllExample : public DllDynamic, DllExampleInterface
 //  {
 //  public:
-//    DllExample() : DllDynamic( "special://xbmcbin/system/Example.dll" ) {}
+//    DllExample() : DllDynamic( "special://app/system/Example.dll" ) {}
 //  protected:
 //    virtual bool LoadSymbols() { return true; }
 //  protected:

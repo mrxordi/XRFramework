@@ -22,7 +22,6 @@ namespace XR {
    * number of locks that have been recursively acquired so that we can
    * undo it, and then restore that (See class CSingleExit).
    *
-   * All xbmc code expects Lockables to be recursive.
 */
 
 	template<class L> class CountingLockable : public NonCopyable {

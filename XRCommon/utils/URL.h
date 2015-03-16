@@ -1,10 +1,10 @@
 #pragma once
-#include "utils/URIUtils.h"
+#include "utils/UrlUtils.h"
 #include "utils/UrlOptions.h"
 
 #undef SetPort // WIN32INCLUDES this is defined as SetPortA in WinSpool.h which is being included _somewhere_
 
-class CURL {
+class CUrl {
 public:
 	enum _URLTYPE {
 		UKNOWN = 0,
@@ -15,9 +15,9 @@ public:
 		FULLPATH
 	}URLTYPE;
 public:
-	CURL(const std::string& strURL1);
-	CURL(void);
-	virtual ~CURL(void);
+	CUrl(const std::string& strURL1);
+	CUrl(void);
+	virtual ~CUrl(void);
 
 	void Reset();
 	void Parse(const std::string& strURL);
@@ -51,12 +51,12 @@ public:
 	std::string		 GetWithoutUserDetails(bool redact = false) const;
 
 	std::string GetOption(const std::string &key) const;
-	bool	   GetOption(const std::string &key, std::string &value) const;
-	bool	   GetProtocolOption(const std::string &key, std::string &value) const;
+	bool		GetOption(const std::string &key, std::string &value) const;
+	bool		GetProtocolOption(const std::string &key, std::string &value) const;
 	std::string GetProtocolOption(const std::string &key) const;
-	int		   GetPort() const;
+	int			GetPort() const;
 	std::string Get() const;
-	char	   GetDirectorySeparator() const;
+	char		GetDirectorySeparator() const;
 	std::string		   GetRedacted() const;
 	static std::string GetRedacted(const std::string& path);
 

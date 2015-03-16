@@ -17,7 +17,7 @@ std::string SysInfo::GetUserAgent()
 	std::string result;
 	result = "XRLib/ (";
 	result += GetUAWindowsVersion();
-	result += "; http://xbmc.org)";
+	result += "; http://XRFramework.com)";
 
 	return result;
 }

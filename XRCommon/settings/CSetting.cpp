@@ -78,7 +78,7 @@ bool CSetting::GetString(const XMLNode* pRootNode, const char* strTag, std::stri
 	{
 		strStringValue = pElement->GetText();
 		if (encoded && _strcmpi(encoded, "yes") == 0)
-			strStringValue = CURL::Decode(strStringValue);
+			strStringValue = CUrl::Decode(strStringValue);
 		return true;
 	}
 	strStringValue.clear();

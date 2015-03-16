@@ -8,7 +8,7 @@
 #define UTF8_SOURCE "UTF-8"
 #define WCHAR_CHARSET UTF16_CHARSET 
 
-class CURL;
+class CUrl;
 
 class StringConverter
 {
@@ -24,7 +24,7 @@ public:
 	static bool WToWin1250(const std::wstring& win1250StringSrc, std::string& wStringDst, bool failOnBadChar = false);
 
 	static std::wstring ConvertPathToWin32Form(const std::string& pathUtf8);
-	static std::wstring ConvertPathToWin32Form(const CURL& url);
+	static std::wstring ConvertPathToWin32Form(const CUrl& url);
 
 	template<class INPUT, class OUTPUT>
 	static bool Convert(const std::string& sourceCharset, const std::string& targetCharset, const INPUT& strSource, OUTPUT& strDest, bool failOnInvalidChar = false);

@@ -1,22 +1,3 @@
-/*
-*      Copyright (C) 2012-2013 Team XBMC
-*      http://xbmc.org
-*
-*  This Program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2, or (at your option)
-*  any later version.
-*
-*  This Program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with XBMC; see the file COPYING.  If not, see
-*  <http://www.gnu.org/licenses/>.
-*
-*/
 #include "stdafx.h"
 #include <sstream>
 
@@ -48,9 +29,9 @@ std::string CUrlOptions::GetOptionsString(bool withLeadingSeperator /* = false *
 		if (opt != m_options.begin())
 			options += "&";
 
-		options += CURL::Encode(opt->first);
+		options += CUrl::Encode(opt->first);
 		if (!opt->second.empty())
-			options += "=" + CURL::Encode(opt->second.asString());
+			options += "=" + CUrl::Encode(opt->second.asString());
 	}
 
 	if (withLeadingSeperator && !options.empty())
@@ -141,9 +122,9 @@ void CUrlOptions::AddOptions(const std::string &options)
 		string key, value;
 
 		size_t pos = option->find('=');
-		key = CURL::Decode(option->substr(0, pos));
+		key = CUrl::Decode(option->substr(0, pos));
 		if (pos != string::npos)
-			value = CURL::Decode(option->substr(pos + 1));
+			value = CUrl::Decode(option->substr(pos + 1));
 
 		// the key cannot be empty
 		if (!key.empty())

@@ -19,14 +19,14 @@ FileItem::FileItem(const FileItem& item)
 	*this = item;
 }
 
-FileItem::FileItem(const CURL& path, bool bIsFolder)
+FileItem::FileItem(const CUrl& path, bool bIsFolder)
 {
 	Initialize();
 	m_strPath = path.Get();
 	m_bIsFolder = bIsFolder;
-	m_url = CURL(path);
+	m_url = CUrl(path);
 	if (m_bIsFolder && !m_strPath.empty())
-		URIUtils::AddSlashAtEnd(m_strPath);
+		UrlUtils::AddSlashAtEnd(m_strPath);
 	FillInMimeType(false);
 }
 
@@ -35,9 +35,9 @@ FileItem::FileItem(const std::string& strPath, bool bIsFolder)
 	Initialize();
 	m_strPath = strPath;
 	m_bIsFolder = bIsFolder;
-	m_url = CURL(strPath);
+	m_url = CUrl(strPath);
 	if (m_bIsFolder && !m_strPath.empty())
-		URIUtils::AddSlashAtEnd(m_strPath);
+		UrlUtils::AddSlashAtEnd(m_strPath);
 	FillInMimeType(false);
 }
 
@@ -45,17 +45,17 @@ FileItem::~FileItem()
 {
 }
 
-void FileItem::SetURL(const CURL& url)
+void FileItem::SetURL(const CUrl& url)
 {
 	m_strPath = url.Get();
-	m_url = CURL(url);
+	m_url = CUrl(url);
 	m_properties.clear();
 	FillInMimeType();
 }
 
-bool FileItem::IsURL(const CURL& url) const
+bool FileItem::IsURL(const CUrl& url) const
 {
-	return URIUtils::PathEquals(url.Get(), m_strPath);
+	return UrlUtils::PathEquals(url.Get(), m_strPath);
 }
 
 void FileItem::Reset()
@@ -72,7 +72,7 @@ const FileItem& FileItem::operator=(const FileItem& item)
 {
 	if (this == &item) return *this;
 	m_strPath = item.GetPath();
-	m_url = CURL(m_strPath);
+	m_url = CUrl(m_strPath);
 	FillInMimeType();
 	return *this;
 }

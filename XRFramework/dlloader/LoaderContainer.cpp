@@ -143,7 +143,7 @@ void LoaderContainer::UnRegisterDll(LibraryLoader* pDll)
 
 LibraryLoader* LoaderContainer::FindModule(const char* sName, const char* sCurrentDir, bool bLoadSymbols)
 {
-	if (CURL::IsFullPath(sName)) 
+	if (CUrl::IsFullPath(sName)) 
 	{ //  Has a path, just try to load
 		return LoadDll(sName, bLoadSymbols);
 	}

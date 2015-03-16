@@ -2,7 +2,7 @@
 #include <string>
 
 class FileItemList;
-class CURL;
+class CUrl;
 
 /*! \brief Available directory flags
 The defaults are to allow file directories, no prompting, retrieve file information, hide hidden files, and utilise the directory cache
@@ -32,7 +32,7 @@ public:
 	\return Returns \e true, if successfull.
 	\sa CDirectoryFactory
 	*/
-	virtual bool GetDirectory(const CURL& url, FileItemList &items) = 0;
+	virtual bool GetDirectory(const CUrl& url, FileItemList &items) = 0;
 	/*!
 	\brief Retrieve the progress of the current directory fetch (if possible).
 	\return the progress as a float in the range 0..100
@@ -50,27 +50,27 @@ public:
 	\return Returns \e true, if directory is created or if it already exists
 	\sa CDirectoryFactory
 	*/
-	virtual bool Create(const CURL& url) { return false; }
+	virtual bool Create(const CUrl& url) { return false; }
 	/*!
 	\brief Check for directory existence
 	\param url Directory to check.
 	\return Returns \e true, if directory exists
 	\sa CDirectoryFactory
 	*/
-	virtual bool Exists(const CURL& url) { return false; }
+	virtual bool Exists(const CUrl& url) { return false; }
 	/*!
 	\brief Removes the directory
 	\param url Directory to remove.
 	\return Returns \e false if not succesfull
 	*/
-	virtual bool Remove(const CURL& url) { return false; }
+	virtual bool Remove(const CUrl& url) { return false; }
 
 	/*!
 	\brief Whether this file should be listed
 	\param url File to test.
 	\return Returns \e true if the file should be listed
 	*/
-	virtual bool IsAllowed(const CURL& url) const;
+	virtual bool IsAllowed(const CUrl& url) const;
 
 	/*! \brief Whether to allow all files/folders to be listed.
 	\return Returns \e true if all files/folder should be listed.

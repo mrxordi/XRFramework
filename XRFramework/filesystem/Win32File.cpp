@@ -1,28 +1,6 @@
-/*
-*      Copyright (C) 2014 Team XBMC
-*      http://xbmc.org
-*
-*  This Program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2, or (at your option)
-*  any later version.
-*
-*  This Program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with XBMC; see the file COPYING.  If not, see
-*  <http://www.gnu.org/licenses/>.
-*
-*/
-
 #include "stdafxf.h"
 #include "Win32File.h"
 #include "utils\WIN32Utils.h"
-//#include "utils/win32/Win32Log.h"
-//#include "utils/SystemInfo.h"
 #include "log/Log.h"
 #include "utils/AutoBuffer.h"
 #include "utils/StringUtils.h"
@@ -65,7 +43,7 @@ CWin32File::~CWin32File()
 		CloseHandle(m_hFile);
 }
 
-bool CWin32File::Open(const CURL& url)
+bool CWin32File::Open(const CUrl& url)
 {
 	assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
 	if (m_smbFile)
@@ -92,7 +70,7 @@ bool CWin32File::Open(const CURL& url)
 	return m_hFile != INVALID_HANDLE_VALUE;
 }
 
-bool CWin32File::OpenForWrite(const CURL& url, bool bOverWrite /*= false*/)
+bool CWin32File::OpenForWrite(const CUrl& url, bool bOverWrite /*= false*/)
 {
 	assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
 	if (m_smbFile)
@@ -342,7 +320,7 @@ void CWin32File::Flush()
 	FlushFileBuffers(m_hFile);
 }
 
-bool CWin32File::Delete(const CURL& url)
+bool CWin32File::Delete(const CUrl& url)
 {
 	assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
 	if (m_smbFile)
@@ -359,7 +337,7 @@ bool CWin32File::Delete(const CURL& url)
 	return result;
 }
 
-bool CWin32File::Rename(const CURL& urlCurrentName, const CURL& urlNewName)
+bool CWin32File::Rename(const CUrl& urlCurrentName, const CUrl& urlNewName)
 {
 	assert((!m_smbFile && urlCurrentName.GetProtocol().empty()) || (m_smbFile && urlCurrentName.IsProtocol("smb"))); // function suitable only for local or SMB files
 	assert((!m_smbFile && urlNewName.GetProtocol().empty()) || (m_smbFile && urlNewName.IsProtocol("smb"))); // function suitable only for local or SMB files
@@ -382,7 +360,7 @@ bool CWin32File::Rename(const CURL& urlCurrentName, const CURL& urlNewName)
 	return result;
 }
 
-bool CWin32File::SetHidden(const CURL& url, bool hidden)
+bool CWin32File::SetHidden(const CUrl& url, bool hidden)
 {
 	assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
 	if (m_smbFile)
@@ -411,7 +389,7 @@ bool CWin32File::SetHidden(const CURL& url, bool hidden)
 	return result;
 }
 
-bool CWin32File::Exists(const CURL& url)
+bool CWin32File::Exists(const CUrl& url)
 {
 	assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
 	if (m_smbFile)
@@ -428,7 +406,7 @@ bool CWin32File::Exists(const CURL& url)
 	return attrs != INVALID_FILE_ATTRIBUTES && (attrs & FILE_ATTRIBUTE_DIRECTORY) == 0;
 }
 
-int CWin32File::Stat(const CURL& url, struct __stat64* statData)
+int CWin32File::Stat(const CUrl& url, struct __stat64* statData)
 {
 	assert((!m_smbFile && url.GetProtocol().empty()) || (m_smbFile && url.IsProtocol("smb"))); // function suitable only for local or SMB files
 	if (m_smbFile)

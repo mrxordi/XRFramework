@@ -31,7 +31,7 @@ Win32Directory::Win32Directory()
 Win32Directory::~Win32Directory()
 {}
 
-bool Win32Directory::GetDirectory(const CURL& url, FileItemList &items)
+bool Win32Directory::GetDirectory(const CUrl& url, FileItemList &items)
 {
 	items.Clear();
 
@@ -101,7 +101,7 @@ bool Win32Directory::GetDirectory(const CURL& url, FileItemList &items)
 	return true;
 }
 
-bool Win32Directory::Create(const CURL& url)
+bool Win32Directory::Create(const CUrl& url)
 {
 	std::wstring nameW(prepareWin32DirectoryName(url.Get()));
 	if (nameW.empty())
@@ -127,7 +127,7 @@ bool Win32Directory::Create(const CURL& url)
 	return true;
 }
 
-bool Win32Directory::Exists(const CURL& url)
+bool Win32Directory::Exists(const CUrl& url)
 {
 	std::wstring nameW(prepareWin32DirectoryName(url.Get()));
 	if (nameW.empty())
@@ -140,7 +140,7 @@ bool Win32Directory::Exists(const CURL& url)
 	return true;
 }
 
-bool Win32Directory::Remove(const CURL& url)
+bool Win32Directory::Remove(const CUrl& url)
 {
 	std::wstring nameW(prepareWin32DirectoryName(url.Get()));
 	if (nameW.empty())

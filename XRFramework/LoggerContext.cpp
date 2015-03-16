@@ -19,15 +19,12 @@ Context::Context()
 	// instantiate
 	impl->loggerImpl = new XR::LogImpl;
 
-	// set
-	//XbmcCommons::Exception::SetLogger(impl->loggerImpl);
 	CThread::SetLogger(impl->loggerImpl);
 }
 
 Context::~Context()
 {
 	// cleanup
-	//XbmcCommons::Exception::SetLogger(NULL);
 	CThread::SetLogger(NULL);
 	delete impl->loggerImpl;
 

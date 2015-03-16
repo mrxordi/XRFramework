@@ -3,7 +3,7 @@
 #include "utils/SpecialProtocol.h"
 #include "Directory.h"
 #include "utils/StringUtils.h"
-#include "utils/URIUtils.h"
+#include "utils/UrlUtils.h"
 #include "FileItem.h"
 #include "utils/URL.h"
 
@@ -16,7 +16,7 @@ SpecialProtocolDirectory::~SpecialProtocolDirectory(void)
 {
 }
 
-bool SpecialProtocolDirectory::GetDirectory(const CURL& url, FileItemList &items)
+bool SpecialProtocolDirectory::GetDirectory(const CUrl& url, FileItemList &items)
 {
 	const std::string pathToUrl(url.Get());
 	std::string translatedPath = CSpecialProtocol::TranslatePath(url);
@@ -27,26 +27,26 @@ bool SpecialProtocolDirectory::GetDirectory(const CURL& url, FileItemList &items
 		{
 			FileItemPtr item = items[i];
 			if (StringUtils::StartsWith(item->GetPath(), translatedPath))
-				item->SetPath(URIUtils::AddFileToFolder(pathToUrl, item->GetPath().substr(translatedPath.size())));
+				item->SetPath(UrlUtils::AddFileToFolder(pathToUrl, item->GetPath().substr(translatedPath.size())));
 		}
 		return true;
 	}
 	return false;
 }
 
-bool SpecialProtocolDirectory::Create(const CURL& url)
+bool SpecialProtocolDirectory::Create(const CUrl& url)
 {
 	std::string translatedPath = CSpecialProtocol::TranslatePath(url);
 	return Directory::Create(translatedPath.c_str());
 }
 
-bool SpecialProtocolDirectory::Remove(const CURL& url)
+bool SpecialProtocolDirectory::Remove(const CUrl& url)
 {
 	std::string translatedPath = CSpecialProtocol::TranslatePath(url);
 	return Directory::Remove(translatedPath.c_str());
 }
 
-bool SpecialProtocolDirectory::Exists(const CURL& url)
+bool SpecialProtocolDirectory::Exists(const CUrl& url)
 {
 	std::string translatedPath = CSpecialProtocol::TranslatePath(url);
 	return Directory::Exists(translatedPath.c_str());

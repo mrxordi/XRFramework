@@ -3,7 +3,7 @@
 #include "Util.h"
 #include "log/Log.h"
 #include "URL.h"
-#include "utils/URIUtils.h"
+#include "utils/UrlUtils.h"
 #include "utils/StringUtils.h"
 
 using namespace std;
@@ -42,7 +42,7 @@ bool CSpecialProtocol::ComparePath(const std::string &path1, const std::string &
 
 std::string CSpecialProtocol::TranslatePath(const std::string &path)
 {
-	CURL url(path);
+	CUrl url(path);
 	// check for special-protocol, if not, return
 	if (url.GetProtocol() != "special")
 	{
@@ -51,7 +51,7 @@ std::string CSpecialProtocol::TranslatePath(const std::string &path)
 	return TranslatePath(url);
 }
 
-std::string CSpecialProtocol::TranslatePath(const CURL &url)
+std::string CSpecialProtocol::TranslatePath(const CUrl &url)
 {
 	// check for special-protocol, if not, return
 	if (!(url.GetProtocol() == "special"))
@@ -78,25 +78,25 @@ std::string CSpecialProtocol::TranslatePath(const CURL &url)
 		RootDir = FullFileName;
 
 	//   if (RootDir.Equals("subtitles"))
-	//     translatedPath = URIUtils::AddFileToFolder(CSettings::Get().GetString("subtitles.custompath"), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CSettings::Get().GetString("subtitles.custompath"), FileName);
 	//   else if (RootDir.Equals("userdata"))
-	//     translatedPath = URIUtils::AddFileToFolder(CProfilesManager::Get().GetUserDataFolder(), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CProfilesManager::Get().GetUserDataFolder(), FileName);
 	//   else if (RootDir.Equals("database"))
-	//     translatedPath = URIUtils::AddFileToFolder(CProfilesManager::Get().GetDatabaseFolder(), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CProfilesManager::Get().GetDatabaseFolder(), FileName);
 	//   else if (RootDir.Equals("thumbnails"))
-	//     translatedPath = URIUtils::AddFileToFolder(CProfilesManager::Get().GetThumbnailsFolder(), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CProfilesManager::Get().GetThumbnailsFolder(), FileName);
 	//   else if (RootDir.Equals("recordings") || RootDir.Equals("cdrips"))
-	//     translatedPath = URIUtils::AddFileToFolder(CSettings::Get().GetString("audiocds.recordingpath"), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CSettings::Get().GetString("audiocds.recordingpath"), FileName);
 	//   else if (RootDir.Equals("screenshots"))
-	//     translatedPath = URIUtils::AddFileToFolder(CSettings::Get().GetString("debug.screenshotpath"), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CSettings::Get().GetString("debug.screenshotpath"), FileName);
 	//   else if (RootDir.Equals("musicplaylists"))
-	//     translatedPath = URIUtils::AddFileToFolder(CUtil::MusicPlaylistsLocation(), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CUtil::MusicPlaylistsLocation(), FileName);
 	//   else if (RootDir.Equals("videoplaylists"))
-	//     translatedPath = URIUtils::AddFileToFolder(CUtil::VideoPlaylistsLocation(), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(CUtil::VideoPlaylistsLocation(), FileName);
 	//   else if (RootDir.Equals("skin"))
-	//     translatedPath = URIUtils::AddFileToFolder(g_graphicsContext.GetMediaDir(), FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(g_graphicsContext.GetMediaDir(), FileName);
 	//   else if (RootDir.Equals("logpath"))
-	//     translatedPath = URIUtils::AddFileToFolder(g_advancedSettings.m_logFolder, FileName);
+	//     translatedPath = UrlUtils::AddFileToFolder(g_advancedSettings.m_logFolder, FileName);
 
 
 	// from here on, we have our "real" special paths
@@ -109,7 +109,7 @@ std::string CSpecialProtocol::TranslatePath(const CURL &url)
 	{
 		std::string basePath = GetPath(RootDir);
 		if (!basePath.empty())
-			translatedPath = URIUtils::AddFileToFolder(basePath, FileName);
+			translatedPath = UrlUtils::AddFileToFolder(basePath, FileName);
 		else
 			translatedPath.clear();
 	}

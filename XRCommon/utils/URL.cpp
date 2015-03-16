@@ -5,22 +5,22 @@
 #include "log/Log.h"
 
 
-CURL::CURL(const std::string& strURL1)
+CUrl::CUrl(const std::string& strURL1)
 {
 	Parse(strURL1);
 }
 
-CURL::CURL(void)
+CUrl::CUrl(void)
 {
 	m_iPort = 0;
 }
 
 
-CURL::~CURL(void)
+CUrl::~CUrl(void)
 {
 }
 
-void CURL::Reset()
+void CUrl::Reset()
 {
 	m_strHostName.clear();
 	m_strDomain.clear();
@@ -37,7 +37,7 @@ void CURL::Reset()
 	m_iPort = 0;
 }
 
-void CURL::Parse(const std::string& strURL1)
+void CUrl::Parse(const std::string& strURL1)
 {
 	Reset();
 	// start by validating the path
@@ -217,7 +217,7 @@ void CURL::Parse(const std::string& strURL1)
 	SetFileName(m_strFileName);
 
 	/* decode urlencoding on this stuff */
-	if (URIUtils::HasEncodedHostname(*this))
+	if (UrlUtils::HasEncodedHostname(*this))
 	{
 		m_strHostName = Decode(m_strHostName);
 		SetHostName(m_strHostName);
@@ -231,7 +231,7 @@ void CURL::Parse(const std::string& strURL1)
 
 }
 
-void CURL::SetFileName(const std::string& strFileName)
+void CUrl::SetFileName(const std::string& strFileName)
 {
 	m_strFileName = strFileName;
 
@@ -247,29 +247,29 @@ void CURL::SetFileName(const std::string& strFileName)
 	StringUtils::ToLower(m_strFileType);
 }
 
-void CURL::SetHostName(const std::string& strHostName)
+void CUrl::SetHostName(const std::string& strHostName)
 {
 	m_strHostName = strHostName;
 }
 
-void CURL::SetUserName(const std::string& strUserName)
+void CUrl::SetUserName(const std::string& strUserName)
 {
 	m_strUserName = strUserName;
 }
 
-void CURL::SetPassword(const std::string& strPassword)
+void CUrl::SetPassword(const std::string& strPassword)
 {
 	m_strPassword = strPassword;
 }
 
-void CURL::SetProtocol(const std::string& strProtocol)
+void CUrl::SetProtocol(const std::string& strProtocol)
 {
 	m_strProtocol = strProtocol;
 	StringUtils::ToLower(m_strProtocol);
 
 }
 
-void CURL::SetOptions(const std::string& strOptions)
+void CUrl::SetOptions(const std::string& strOptions)
 {
 	m_strOptions.clear();
 	m_options.Clear();
@@ -288,7 +288,7 @@ void CURL::SetOptions(const std::string& strOptions)
 	}
 }
 
-void CURL::SetProtocolOptions(const std::string& strOptions)
+void CUrl::SetProtocolOptions(const std::string& strOptions)
 {
 	m_strProtocolOptions.clear();
 	m_protocolOptions.Clear();
@@ -302,94 +302,94 @@ void CURL::SetProtocolOptions(const std::string& strOptions)
 	}
 }
 
-void CURL::SetProtocolOption(const std::string &key, const std::string &value)
+void CUrl::SetProtocolOption(const std::string &key, const std::string &value)
 {
 	m_protocolOptions.AddOption(key, value);
 	m_strProtocolOptions = m_protocolOptions.GetOptionsString(false);
 }
 
-void CURL::SetOption(const std::string &key, const std::string &value)
+void CUrl::SetOption(const std::string &key, const std::string &value)
 {
 	m_options.AddOption(key, value);
 	SetOptions(m_options.GetOptionsString(true));
 }
 
-void CURL::SetPort(int port)
+void CUrl::SetPort(int port)
 {
 	m_iPort = port;
 }
 
-const std::string& CURL::GetFileName() const
+const std::string& CUrl::GetFileName() const
 {
 	return m_strFileName;
 }
 
-const std::string& CURL::GetHostName() const
+const std::string& CUrl::GetHostName() const
 {
 	return m_strHostName;
 }
 
-const std::string& CURL::GetUserName() const
+const std::string& CUrl::GetUserName() const
 {
 	return m_strUserName;
 }
 
-const std::string& CURL::GetPassWord() const
+const std::string& CUrl::GetPassWord() const
 {
 	return m_strPassword;
 }
 
-const std::string& CURL::GetProtocol() const
+const std::string& CUrl::GetProtocol() const
 {
 	return m_strProtocol;
 }
 
-const std::string& CURL::GetOptions() const
+const std::string& CUrl::GetOptions() const
 {
 	return m_options.GetOptionsString();
 }
 
-const std::string& CURL::GetProtocolOptions() const
+const std::string& CUrl::GetProtocolOptions() const
 {
 	return m_strProtocolOptions;
 }
 
-void CURL::GetProtocolOptions(std::map<std::string, std::string> &options) const
+void CUrl::GetProtocolOptions(std::map<std::string, std::string> &options) const
 {
 	CUrlOptions::UrlOptions optionsMap = m_protocolOptions.GetOptions();
 	for (CUrlOptions::UrlOptions::const_iterator option = optionsMap.begin(); option != optionsMap.end(); option++)
 		options[option->first] = option->second.asString();
 }
 
-const std::string& CURL::GetFileType() const
+const std::string& CUrl::GetFileType() const
 {
 	return m_strFileType;
 }
 
-const std::string&  CURL::GetShareName() const
+const std::string&  CUrl::GetShareName() const
 {
 	return m_strShareName;
 }
 
-const std::string& CURL::GetDomain() const
+const std::string& CUrl::GetDomain() const
 {
 	return m_strDomain;
 }
 
-const std::string CURL::GetFileNameWithoutPath() const
+const std::string CUrl::GetFileNameWithoutPath() const
 {
 	// otherwise, we've already got the filepath, so just grab the filename portion
 	std::string file(m_strFileName);
-	URIUtils::RemoveSlashAtEnd(file);
-	return URIUtils::GetFileName(file);
+	UrlUtils::RemoveSlashAtEnd(file);
+	return UrlUtils::GetFileName(file);
 }
 
-const std::string CURL::GetTranslatedProtocol() const
+const std::string CUrl::GetTranslatedProtocol() const
 {
 	return TranslateProtocol(m_strProtocol);
 }
 
-std::string CURL::GetWithoutFilename() const
+std::string CUrl::GetWithoutFilename() const
 {
 	if (m_strProtocol == "")
 		return "";
@@ -441,7 +441,7 @@ std::string CURL::GetWithoutFilename() const
 	return strURL;
 }
 
-std::string CURL::GetWithoutUserDetails(bool redact) const
+std::string CUrl::GetWithoutUserDetails(bool redact) const
 {
 	std::string strURL;
 
@@ -497,7 +497,7 @@ std::string CURL::GetWithoutUserDetails(bool redact) const
 	return strURL;
 }
 
-bool CURL::GetOption(const std::string &key, std::string &value) const
+bool CUrl::GetOption(const std::string &key, std::string &value) const
 {
 	CVariant valueObj;
 	if (!m_options.GetOption(key, valueObj))
@@ -507,7 +507,7 @@ bool CURL::GetOption(const std::string &key, std::string &value) const
 	return true;
 }
 
-std::string CURL::GetOption(const std::string &key) const
+std::string CUrl::GetOption(const std::string &key) const
 {
 	std::string value;
 	if (!GetOption(key, value))
@@ -516,7 +516,7 @@ std::string CURL::GetOption(const std::string &key) const
 	return value;
 }
 
-bool CURL::GetProtocolOption(const std::string &key, std::string &value) const
+bool CUrl::GetProtocolOption(const std::string &key, std::string &value) const
 {
 	CVariant valueObj;
 	if (!m_protocolOptions.GetOption(key, valueObj))
@@ -526,7 +526,7 @@ bool CURL::GetProtocolOption(const std::string &key, std::string &value) const
 	return true;
 }
 
-std::string CURL::GetProtocolOption(const std::string &key) const
+std::string CUrl::GetProtocolOption(const std::string &key) const
 {
 	std::string value;
 	if (!GetProtocolOption(key, value))
@@ -535,12 +535,12 @@ std::string CURL::GetProtocolOption(const std::string &key) const
 	return value;
 }
 
-int CURL::GetPort() const
+int CUrl::GetPort() const
 {
 	return m_iPort;
 }
 
-std::string CURL::Get() const
+std::string CUrl::Get() const
 {
 	unsigned int sizeneed = m_strProtocol.length()
 		+ m_strDomain.length()
@@ -569,64 +569,64 @@ std::string CURL::Get() const
 	return strURL;
 }
 
-char CURL::GetDirectorySeparator() const
+char CUrl::GetDirectorySeparator() const
 {
 	return '/';
 }
 
-std::string CURL::GetRedacted() const
+std::string CUrl::GetRedacted() const
 {
 	return GetWithoutUserDetails(true);
 }
 
-std::string CURL::GetRedacted(const std::string& path)
+std::string CUrl::GetRedacted(const std::string& path)
 {
-	return CURL(path).GetRedacted();
+	return CUrl(path).GetRedacted();
 }
 
-void CURL::RemoveOption(const std::string &key)
+void CUrl::RemoveOption(const std::string &key)
 {
 	m_options.RemoveOption(key);
 	SetOptions(m_options.GetOptionsString(true));
 }
 
-void CURL::RemoveProtocolOption(const std::string &key)
+void CUrl::RemoveProtocolOption(const std::string &key)
 {
 	m_protocolOptions.RemoveOption(key);
 	m_strProtocolOptions = m_protocolOptions.GetOptionsString(false);
 }
 
-bool CURL::HasPort() const
+bool CUrl::HasPort() const
 {
 	return (m_iPort != 0);
 }
 
-bool CURL::HasProtocolOption(const std::string &key) const
+bool CUrl::HasProtocolOption(const std::string &key) const
 {
 	return m_protocolOptions.HasOption(key);
 }
 
-bool CURL::HasOption(const std::string &key) const
+bool CUrl::HasOption(const std::string &key) const
 {
 	return m_options.HasOption(key);
 }
 
-bool CURL::IsLocal() const
+bool CUrl::IsLocal() const
 {
 	return (IsLocalHost() || m_strProtocol.empty());
 }
 
-bool CURL::IsLocalHost() const
+bool CUrl::IsLocalHost() const
 {
 	return (m_strHostName == "localhost" || m_strHostName == "127.0.0.1");
 }
 
-bool CURL::IsFileOnly(const std::string &url)
+bool CUrl::IsFileOnly(const std::string &url)
 {
 	return url.find_first_of("/\\") == std::string::npos;
 }
 
-bool CURL::IsFullPath(const std::string &url)
+bool CUrl::IsFullPath(const std::string &url)
 {
 	if (url.size() && url[0] == '/') return true;     //   /foo/bar.ext
 	if (url.find("://") != std::string::npos) return true;                 //   foo://bar.ext
@@ -635,7 +635,7 @@ bool CURL::IsFullPath(const std::string &url)
 	return false;
 }
 
-std::string CURL::Decode(const std::string& strURLData)
+std::string CUrl::Decode(const std::string& strURLData)
 //modified to be more accomodating - if a non hex value follows a % take the characters directly and don't raise an error.
 // However % characters should really be escaped like any other non safe character (www.rfc-editor.org/rfc/rfc1738.txt)
 {
@@ -673,7 +673,7 @@ std::string CURL::Decode(const std::string& strURLData)
 	return strResult;
 }
 
-std::string CURL::Encode(const std::string& strURLData)
+std::string CUrl::Encode(const std::string& strURLData)
 {
 	std::string strResult;
 
@@ -695,7 +695,7 @@ std::string CURL::Encode(const std::string& strURLData)
 	return strResult;
 }
 
-std::string CURL::TranslateProtocol(const std::string& prot)
+std::string CUrl::TranslateProtocol(const std::string& prot)
 {
 	if (prot == "shout"
 		|| prot == "daap"

@@ -1,29 +1,11 @@
 #pragma once
-/*
-*      Copyright (C) 2005-2013 Team XBMC
-*      http://xbmc.org
-*
-*  This Program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2, or (at your option)
-*  any later version.
-*
-*  This Program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with XBMC; see the file COPYING.  If not, see
-*  <http://www.gnu.org/licenses/>.
-*
-*/
 
 #include "IFile.h"
 #include "utils/RingBuffer.h"
 #include <map>
 #include "utils/HttpHeader.h"
-#include "filesystem/DllLibCurl.h"
+#include "filesystem/CurlGlobal.h"
+
 
 typedef void CURL_HANDLE;
 typedef void CURLM;
@@ -43,13 +25,13 @@ public:
 
 	CCurlFile();
 	virtual ~CCurlFile();
-	virtual bool Open(const CURL& url);
-	virtual bool OpenForWrite(const CURL& url, bool bOverWrite = false);
-	virtual bool Exists(const CURL& url);
+	virtual bool Open(const CUrl& url);
+	virtual bool OpenForWrite(const CUrl& url, bool bOverWrite = false);
+	virtual bool Exists(const CUrl& url);
 	virtual int64_t  Seek(int64_t iFilePosition, int iWhence = SEEK_SET);
 	virtual int64_t GetPosition();
 	virtual int64_t  GetLength();
-	virtual int  Stat(const CURL& url, struct __stat64* buffer);
+	virtual int  Stat(const CUrl& url, struct __stat64* buffer);
 	virtual void Close();
 	virtual bool ReadString(char *szLine, int iLineLength)     { return m_state->ReadString(szLine, iLineLength); }
 	virtual ssize_t Read(void* lpBuf, int64_t uiBufSize)  { return m_state->Read(lpBuf, uiBufSize); }
@@ -88,14 +70,14 @@ public:
 	void SetBufferSize(unsigned int size);
 
 	const CHttpHeader& GetHttpHeader() { return m_state->m_httpheader; }
-	static bool GetMimeType(const CURL &url, std::string &content, const std::string &useragent = "");
+	static bool GetMimeType(const CUrl &url, std::string &content, const std::string &useragent = "");
 	std::string GetServerReportedCharset(void);
 
 	/* static function that will get content type of a file */
-	static bool GetHttpHeader(const CURL &url, CHttpHeader &headers);
+	static bool GetHttpHeader(const CUrl &url, CHttpHeader &headers);
 
 	/* static function that will get cookies stored by CURL in RFC 2109 format */
-	static bool GetCookies(const CURL &url, std::string &cookies);
+	static bool GetCookies(const CUrl &url, std::string &cookies);
 
 	class CReadState
 	{
@@ -104,7 +86,7 @@ public:
 		~CReadState();
 		CURL_HANDLE*    m_easyHandle;
 		CURLM*          m_multiHandle;
-		DllLibCurlGlobal& m_curlInterface;
+		//DllLibCurlGlobal& m_curlInterface;
 
 		CRingBuffer     m_buffer;           // our ringhold buffer
 		unsigned int    m_bufferSize;
@@ -147,14 +129,14 @@ public:
 	};
 
 protected:
-	void ParseAndCorrectUrl(CURL &url);
+	void ParseAndCorrectUrl(CUrl &url);
 	void SetCommonOptions(CReadState* state);
 	void SetRequestHeaders(CReadState* state);
 	void SetCorrectHeaders(CReadState* state);
 	bool Service(const std::string& strURL, std::string& strHTML);
 
 protected:
-	DllLibCurlGlobal& m_curlInterface;
+	//DllLibCurlGlobal& m_curlInterface;
 	CReadState*     m_state;
 	CReadState*     m_oldState;
 	unsigned int    m_bufferSize;

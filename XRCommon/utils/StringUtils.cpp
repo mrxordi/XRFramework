@@ -1,40 +1,7 @@
 #include "stdafx.h"
-/*
-*      Copyright (C) 2005-2013 Team XBMC
-*      http://xbmc.org
-*
-*  This Program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2, or (at your option)
-*  any later version.
-*
-*  This Program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with XBMC; see the file COPYING.  If not, see
-*  <http://www.gnu.org/licenses/>.
-*
-*/
-//-----------------------------------------------------------------------
-//
-//  File:      StringUtils.cpp
-//
-//  Purpose:   ATL split string utility
-//  Author:    Paul J. Weiss
-//
-//  Modified to use J O'Leary's std::string class by kraqh3d
-//
-//------------------------------------------------------------------------
-
-
 #include "StringUtils.h"
-//#include "RegExp.h"
-//#include <fstrcmp.h>
-#include <locale>
 
+#include <locale>
 #include <math.h>
 #include <sstream>
 #include <time.h>
@@ -894,30 +861,6 @@ void StringUtils::WordToDigits(std::string &word)
 	}
 }
 
-double StringUtils::CompareFuzzy(const std::string &left, const std::string &right)
-{
-	return (0.5 + fstrcmp(left.c_str(), right.c_str(), 0.0) * (left.length() + right.length())) / 2.0;
-}
-
-int StringUtils::FindBestMatch(const std::string &str, const StringArray &strings, double &matchscore)
-{
-	int best = -1;
-	matchscore = 0;
-
-	int i = 0;
-	for (StringArray::const_iterator it = strings.begin(); it != strings.end(); it++, i++)
-	{
-		int maxlength = max(str.length(), it->length());
-		double score = StringUtils::CompareFuzzy(str, *it) / maxlength;
-		if (score > matchscore)
-		{
-			matchscore = score;
-			best = i;
-		}
-	}
-	return best;
-}
-
 bool StringUtils::ContainsKeyword(const std::string &str, const StringArray &keywords)
 {
 	for (StringArray::const_iterator it = keywords.begin(); it != keywords.end(); it++)
@@ -1049,93 +992,3 @@ std::wstring StringUtils::char_to_wchar_string(const char* ansiString) {
 
 	return wcharString;
 }
-
-
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-#include <string.h>
-
-	static int similar_text(const char *str1, const char *str2, int len1, int len2)
-	{
-		int sum;
-		int pos1 = 0, pos2 = 0;
-		int max = 0;
-
-		char *p, *q;
-		char *end1 = (char *)str1 + len1;
-		char *end2 = (char *)str2 + len2;
-		int l;
-
-		for (p = (char *)str1; p < end1; p++)
-		{
-			for (q = (char *)str2; q < end2; q++)
-			{
-				for (l = 0; (p + l < end1) && (q + l < end2) && (p[l] == q[l]); l++)
-					;
-				if (l > max)
-				{
-					max = l;
-					pos1 = p - str1;
-					pos2 = q - str2;
-				}
-			}
-		}
-		if ((sum = max))
-		{
-			if (pos1 && pos2)
-				sum += similar_text(str1, str2, pos1, pos2);
-
-			if ((pos1 + max < len1) && (pos2 + max < len2))
-				sum += similar_text(str1 + pos1 + max, str2 + pos2 + max,
-				len1 - pos1 - max, len2 - pos2 - max);
-		}
-
-		return sum;
-	}
-
-	/* NAME
-	fstrcmp - fuzzy string compare
-
-	SYNOPSIS
-	double fstrcmp(const char *, const char *, double);
-
-	DESCRIPTION
-	The fstrcmp function may be used to compare two string for
-	similarity.  It is very useful in reducing "cascade" or
-	"secondary" errors in compilers or other situations where
-	symbol tables occur.
-
-	RETURNS
-	double; 0 if the strings are entirly dissimilar, 1 if the
-	strings are identical, and a number in between if they are
-	similar.  */
-
-	double
-		fstrcmp(const char *string1, const char *string2, double minimum)
-	{
-		int len1, len2, score;
-
-		len1 = (int)strlen(string1);
-		len2 = (int)strlen(string2);
-
-		/* short-circuit obvious comparisons */
-		if (len1 == 0 && len2 == 0)
-			return 1.0;
-		if (len1 == 0 || len2 == 0)
-			return 0.0;
-
-		score = similar_text(string1, string2, len1, len2);
-		/* The result is
-		((number of chars in common) / (average length of the strings)).
-		This is admittedly biased towards finding that the strings are
-		similar, however it does produce meaningful results.  */
-		return ((double)score * 2.0 / (len1 + len2));
-	}
-
-#ifdef __cplusplus
-} // extern "C"
-#endif

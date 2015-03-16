@@ -115,7 +115,7 @@ IFile *FileCache::GetFileImp()
 	return m_source.GetImplemenation();
 }
 
-bool FileCache::Open(const CURL& url)
+bool FileCache::Open(const CUrl& url)
 {
 	Close();
 
@@ -312,12 +312,12 @@ void FileCache::OnExit()
 	m_seekEnded.Set();
 }
 
-bool FileCache::Exists(const CURL& url)
+bool FileCache::Exists(const CUrl& url)
 {
 	return File::Exists(url.Get());
 }
 
-int FileCache::Stat(const CURL& url, struct __stat64* buffer)
+int FileCache::Stat(const CUrl& url, struct __stat64* buffer)
 {
 	return File::Stat(url.Get(), buffer);
 }

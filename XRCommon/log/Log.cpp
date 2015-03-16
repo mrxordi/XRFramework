@@ -4,7 +4,7 @@
 #include <inttypes.h>
 
 #include "FilePathUtils.h"
-#include "utils/URIUtils.h"
+#include "utils/UrlUtils.h"
 #include "utils/StringUtils.h"
 #include "utils/SpecialProtocol.h"
 #include "../XRThreads/SingleLock.h"
@@ -38,7 +38,7 @@ bool CLog::Init(std::string& path) {
 		return false;
 	}
 	else {
-		if (!URIUtils::IsURL(path))			//If only filename without path 
+		if (!UrlUtils::IsURL(path))			//If only filename without path 
 		{
 			pathFileName += "special://app/";
 			pathFileName += path;

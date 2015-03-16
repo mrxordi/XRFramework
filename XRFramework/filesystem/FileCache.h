@@ -20,10 +20,10 @@ public:
 	void SetCacheStrategy(CacheStrategy *pCache, bool bDeleteCache = true);
 
 	// IFIle methods
-	virtual bool          Open(const CURL& url);
+	virtual bool          Open(const CUrl& url);
 	virtual void          Close();
-	virtual bool          Exists(const CURL& url);
-	virtual int           Stat(const CURL& url, struct __stat64* buffer);
+	virtual bool          Exists(const CUrl& url);
+	virtual int           Stat(const CUrl& url, struct __stat64* buffer);
 
 	virtual ssize_t       Read(void* lpBuf, int64_t uiBufSize);
 

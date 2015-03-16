@@ -11,16 +11,16 @@ class FileItem
 public:
 	FileItem();
 	FileItem(const FileItem& item);
-	FileItem(const CURL& path, bool bIsFolder);
+	FileItem(const CUrl& path, bool bIsFolder);
 	FileItem(const std::string& strPath, bool bIsFolder);
 	~FileItem();
 
 
-	const CURL GetURL() const { CURL url(m_strPath); return url; };
-	void SetURL(const CURL& url);
-	bool IsURL(const CURL& url) const;
+	const CUrl GetURL() const { CUrl url(m_strPath); return url; };
+	void SetURL(const CUrl& url);
+	bool IsURL(const CUrl& url) const;
 	const std::string &GetPath() const { return m_strPath; };
-	void SetPath(const std::string &path) { m_strPath = path; m_url = CURL(path); FillInMimeType(); };
+	void SetPath(const std::string &path) { m_strPath = path; m_url = CUrl(path); FillInMimeType(); };
 	bool IsPath(const std::string& path) const;
 
 	/*! \brief reset class to it's default values as per construction.
@@ -55,7 +55,7 @@ private:
 
 	std::string m_strPath,
 				m_mimetype;
-	CURL		m_url;
+	CUrl		m_url;
 	CVariant    m_properties;
 };
 

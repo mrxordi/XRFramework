@@ -90,6 +90,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DelayedDllLoad.cpp" />
+    <ClCompile Include="FileOpsTests.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -99,6 +100,7 @@
     <ClCompile Include="wxDX10renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileOpsTests.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="resource.h" />

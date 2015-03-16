@@ -505,8 +505,7 @@ string Mime::GetMimeType(const string &extension)
 	return "";
 }
 
-
-std::string Mime::GetMimeType(const CURL& url, bool lookup) {
+std::string Mime::GetMimeType(const CUrl& url, bool lookup) {
 
 	std::string strMimeType;
 
@@ -539,5 +538,5 @@ std::string Mime::GetMimeType(const CURL& url, bool lookup) {
 string Mime::GetMimeType(const FileItem &item)
 {
 	std::string path = item.GetPath();
-	return GetMimeType(URIUtils::GetExtension(path));
+	return GetMimeType(UrlUtils::GetExtension(path));
 }

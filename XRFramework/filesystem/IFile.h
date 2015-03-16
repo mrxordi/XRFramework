@@ -1,30 +1,4 @@
 #pragma once
-/*
- *      Copyright (c) 2002 Frodo
- *      Portions Copyright (c) by the authors of ffmpeg and xvid
- *      Copyright (C) 2002-2013 Team XBMC
- *      http://xbmc.org
- *
- *  This Program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
- *
- *  This Program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
- */
-// IFile.h: interface for the IFile class.
-//
-//////////////////////////////////////////////////////////////////////
-
-
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/stat.h>
@@ -32,7 +6,7 @@
 #include "IFileTypes.h"
 #include "Base.h"
 
-class CURL;
+class CUrl;
 
 class IFile
 {
@@ -40,13 +14,13 @@ public:
 	IFile();
 	virtual ~IFile();
 
-	virtual bool Open(const CURL& url) = 0;
-	virtual bool OpenForWrite(const CURL& url, bool bOverWrite = false) { return false; };
+	virtual bool Open(const CUrl& url) = 0;
+	virtual bool OpenForWrite(const CUrl& url, bool bOverWrite = false) { return false; };
 	virtual void Close() = 0;
 
-	virtual bool Exists(const CURL& url) = 0;
+	virtual bool Exists(const CUrl& url) = 0;
 
-	virtual int Stat(const CURL& url, struct __stat64* buffer) = 0;
+	virtual int Stat(const CUrl& url, struct __stat64* buffer) = 0;
 	virtual int Stat(struct __stat64* buffer);
 
 	virtual ssize_t Read(void* lpBuf, int64_t uiBufSize) = 0;
@@ -71,9 +45,9 @@ public:
 
 	virtual bool SkipNext(){ return false; }
 
-	virtual bool Delete(const CURL& url) { return false; }
-	virtual bool Rename(const CURL& url, const CURL& urlnew) { return false; }
-	virtual bool SetHidden(const CURL& url, bool hidden) { return false; }
+	virtual bool Delete(const CUrl& url) { return false; }
+	virtual bool Rename(const CUrl& url, const CUrl& urlnew) { return false; }
+	virtual bool SetHidden(const CUrl& url, bool hidden) { return false; }
 
 	virtual int IoControl(EIoControl request, void* param) { return -1; }
 
@@ -85,9 +59,9 @@ class CRedirectException
 {
 public:
 	IFile *m_pNewFileImp;
-	CURL  *m_pNewUrl;
+	CUrl  *m_pNewUrl;
 
 	CRedirectException();
 
-	CRedirectException(IFile *pNewFileImp, CURL *pNewUrl = NULL);
+	CRedirectException(IFile *pNewFileImp, CUrl *pNewUrl = NULL);
 };

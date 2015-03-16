@@ -49,14 +49,14 @@ public:
 	~File();
 
 	bool Open(const std::string& strFileName, const unsigned int flags = 0);
-	bool Open(const CURL& file, const unsigned int flags = 0);
+	bool Open(const CUrl& file, const unsigned int flags = 0);
 
 	bool OpenForWrite(const std::string& strFileName, bool bOverWrite = false);
-	bool OpenForWrite(const CURL& file, bool bOverWrite = false);
+	bool OpenForWrite(const CUrl& file, bool bOverWrite = false);
 
 	//Function returns how large in memory is the file.
 	ssize_t LoadFile(const std::string &filename, auto_buffer& outputBuffer);
-	ssize_t LoadFile(const CURL &file, auto_buffer& outputBuffer);
+	ssize_t LoadFile(const CUrl &file, auto_buffer& outputBuffer);
 
 	//Attempt to read bufSize bytes from currently opened file into buffer bufPtr.
 	//Error returns -1, num bytes readed return when success
@@ -111,25 +111,25 @@ public:
 	* @return zero of success, -1 otherwise.
 	*/
 	static int  Stat(const std::string& strFileName, struct __stat64* buffer);
-	static int  Stat(const CURL& file, struct __stat64* buffer);
+	static int  Stat(const CUrl& file, struct __stat64* buffer);
 
 	static bool Exists(const std::string& strFileName, bool bUseCache = true);
-	static bool Exists(const CURL& file, bool bUseCache = true);
+	static bool Exists(const CUrl& file, bool bUseCache = true);
 
 	static bool Delete(const std::string& strFileName);
-	static bool Delete(const CURL& file);
+	static bool Delete(const CUrl& file);
 
 	static bool Rename(const std::string& strFileName, const std::string& strNewFileName);
-	static bool Rename(const CURL& file, const CURL& urlNew);
+	static bool Rename(const CUrl& file, const CUrl& urlNew);
 
 	static bool Copy(const std::string& strFileName, const std::string& strDest, IFileCallback* pCallback = NULL, void* pContext = NULL);
-	static bool Copy(const CURL& file, const CURL& dest, IFileCallback* pCallback = NULL, void* pContext = NULL);
+	static bool Copy(const CUrl& file, const CUrl& dest, IFileCallback* pCallback = NULL, void* pContext = NULL);
 
 	static bool SetHidden(const std::string& fileName, bool hidden);
-	static bool SetHidden(const CURL& file, bool hidden);
+	static bool SetHidden(const CUrl& file, bool hidden);
 
 	static IFile* FileFactory(const std::string& strFileName);
-	static IFile* FileFactory(CURL& url);
+	static IFile* FileFactory(CUrl& url);
 
 private:
 	unsigned int m_flags;
@@ -175,7 +175,7 @@ public:
 	~FileStream();
 
 	bool Open(const std::string& filename);
-	bool Open(const CURL& filename);
+	bool Open(const CUrl& filename);
 	void Close();
 
 	int64_t GetLength();

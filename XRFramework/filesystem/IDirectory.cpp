@@ -1,7 +1,7 @@
 #include "stdafxf.h"
 #include "IDirectory.h"
 #include "utils/StringUtils.h"
-#include "utils/URIUtils.h"
+#include "utils/UrlUtils.h"
 
 
 IDirectory::IDirectory()
@@ -22,13 +22,13 @@ IDirectory::~IDirectory()
 "vts_##_0.ifo". If extension is ".dat", filename format must be
 "AVSEQ##(#).DAT", "ITEM###(#).DAT" or "MUSIC##(#).DAT".
 */
-bool IDirectory::IsAllowed(const CURL& url) const
+bool IDirectory::IsAllowed(const CUrl& url) const
 {
 	if (m_strFileMask.empty())
 		return true;
 
 	// Check if strFile have an allowed extension
-	if (!URIUtils::HasExtension(url, m_strFileMask))
+	if (!UrlUtils::HasExtension(url, m_strFileMask))
 		return false;
 
 	return true;

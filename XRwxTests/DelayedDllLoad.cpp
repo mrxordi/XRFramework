@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "stdafxf.h"
 #include <delayimp.h>
 #include "../XRCommon/utils/SpecialProtocol.h"
 #include "../XRCommon/utils/StringUtils.h"

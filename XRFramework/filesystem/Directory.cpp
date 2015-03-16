@@ -19,11 +19,11 @@ private:
 
 	struct Result
 	{
-		Result(const CURL& dir, const CURL& listDir) : m_event(true), m_dir(dir), m_listDir(listDir), m_result(false) {}
+		Result(const CUrl& dir, const CUrl& listDir) : m_event(true), m_dir(dir), m_listDir(listDir), m_result(false) {}
 		CEvent        m_event;
 		FileItemList m_list;
-		CURL          m_dir;
-		CURL          m_listDir;
+		CUrl          m_dir;
+		CUrl          m_listDir;
 		bool          m_result;
 	};
 
@@ -50,7 +50,7 @@ private:
 
 public:
 
-	GetListDirectory(boost::shared_ptr<IDirectory>& imp, const CURL& dir, const CURL& listDir)
+	GetListDirectory(boost::shared_ptr<IDirectory>& imp, const CUrl& dir, const CUrl& listDir)
 		: m_result(new Result(dir, listDir))
 	{
 		m_id = CJobManager::GetInstance().AddJob(new GetJob(imp, m_result)
@@ -101,11 +101,11 @@ bool Directory::GetDirectory(const std::string& strPath, FileItemList &items, co
 
 bool Directory::GetDirectory(const std::string& strPath, FileItemList &items, const Hints &hints, bool allowThreads)
 {
-	const CURL pathToUrl(strPath);
+	const CUrl pathToUrl(strPath);
 	return GetDirectory(pathToUrl, items, hints, allowThreads);
 }
 
-bool Directory::GetDirectory(const CURL& url, FileItemList &items, const std::string &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/, bool allowThreads /* = false */)
+bool Directory::GetDirectory(const CUrl& url, FileItemList &items, const std::string &strMask /*=""*/, int flags /*=DIR_FLAG_DEFAULTS*/, bool allowThreads /* = false */)
 {
 	Hints hints;
 	hints.flags = flags;
@@ -113,11 +113,11 @@ bool Directory::GetDirectory(const CURL& url, FileItemList &items, const std::st
 	return GetDirectory(url, items, hints, allowThreads);
 }
 
-bool Directory::GetDirectory(const CURL& url, FileItemList &items, const Hints &hints, bool allowThreads)
+bool Directory::GetDirectory(const CUrl& url, FileItemList &items, const Hints &hints, bool allowThreads)
 {
 	try
 	{
-		CURL realURL = CURL(url);
+		CUrl realURL = CUrl(url);
 
 		boost::shared_ptr<IDirectory> pDirectory(DirectoryFactory(realURL));
 		if (!pDirectory.get())
@@ -129,7 +129,7 @@ bool Directory::GetDirectory(const CURL& url, FileItemList &items, const Hints &
 		while (!result && !cancel)
 		{
 			const std::string pathToUrl(url.Get());
-			if (g_iApplication->IsCurrentThreadId() && allowThreads && URIUtils::IsSpecial(pathToUrl))
+			if (g_iApplication->IsCurrentThreadId() && allowThreads && UrlUtils::IsSpecial(pathToUrl))
 			{
 
 				GetListDirectory get(pDirectory, realURL, url);
@@ -202,15 +202,15 @@ bool Directory::GetDirectory(const CURL& url, FileItemList &items, const Hints &
 
 bool Directory::Create(const std::string& strPath)
 {
-	const CURL pathToUrl(strPath);
+	const CUrl pathToUrl(strPath);
 	return Create(pathToUrl);
 }
 
-bool Directory::Create(const CURL& url)
+bool Directory::Create(const CUrl& url)
 {
 	try
 	{
-		CURL realURL(url);
+		CUrl realURL(url);
 		std::auto_ptr<IDirectory> pDirectory(DirectoryFactory(realURL));
 		if (pDirectory.get())
 			if (pDirectory->Create(realURL))
@@ -226,15 +226,15 @@ bool Directory::Create(const CURL& url)
 
 bool Directory::Exists(const std::string& strPath, bool bUseCache /* = true */)
 {
-	const CURL pathToUrl(strPath);
+	const CUrl pathToUrl(strPath);
 	return Exists(pathToUrl, bUseCache);
 }
 
-bool Directory::Exists(const CURL& url, bool bUseCache /* = true */)
+bool Directory::Exists(const CUrl& url, bool bUseCache /* = true */)
 {
 	try
 	{
-		CURL realURL(url);
+		CUrl realURL(url);
 		std::auto_ptr<IDirectory> pDirectory(DirectoryFactory(realURL));
 		if (pDirectory.get())
 			return pDirectory->Exists(realURL);
@@ -249,15 +249,15 @@ bool Directory::Exists(const CURL& url, bool bUseCache /* = true */)
 
 bool Directory::Remove(const std::string& strPath)
 {
-	const CURL pathToUrl(strPath);
+	const CUrl pathToUrl(strPath);
 	return Remove(pathToUrl);
 }
 
-bool Directory::Remove(const CURL& url)
+bool Directory::Remove(const CUrl& url)
 {
 	try
 	{
-		CURL realURL(url);
+		CUrl realURL(url);
 		std::auto_ptr<IDirectory> pDirectory(DirectoryFactory(realURL));
 
 		if (pDirectory.get())
@@ -273,7 +273,7 @@ bool Directory::Remove(const CURL& url)
 	return false;
 }
 
-IDirectory* DirectoryFactory(const CURL& url) 
+IDirectory* DirectoryFactory(const CUrl& url) 
 {
 
 	FileItem item(url.Get(), false);

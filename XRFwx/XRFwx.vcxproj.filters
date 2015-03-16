@@ -12,6 +12,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="wxDX10renderer.cpp" />
+    <ClCompile Include="FileOpsTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
@@ -19,6 +20,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="wxDX10renderer.h" />
     <ClInclude Include="stdafxf.h" />
+    <ClInclude Include="FileOpsTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

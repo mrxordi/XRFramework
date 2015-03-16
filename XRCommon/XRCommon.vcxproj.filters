@@ -34,9 +34,6 @@
     <ClCompile Include="utils\StringConverter.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="utils\URIUtils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="utils\StringUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
       <Filter>settings</Filter>
     </ClCompile>
     <ClCompile Include="utils\XMLFile.cpp" />
+    <ClCompile Include="utils\UrlUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -104,9 +104,6 @@
     <ClInclude Include="utils\StringConverter.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\URIUtils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\StringUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -114,9 +111,6 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\Singleton.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\URL.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\UrlOptions.h">
@@ -164,6 +158,12 @@
     </ClInclude>
     <ClInclude Include="utils\XMLFile.h" />
     <ClInclude Include="utils\XRect.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\URL.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\UrlUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>

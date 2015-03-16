@@ -111,12 +111,12 @@ bool FileOperationJob::DoProcess(FileAction action, FileItemList & items, const 
 		FileItemPtr pItem = items[iItem];
 
 		std::string strNoSlash = pItem->GetPath();
-		URIUtils::RemoveSlashAtEnd(strNoSlash);
-		std::string strFileName = URIUtils::GetFileName(strNoSlash);
+		UrlUtils::RemoveSlashAtEnd(strNoSlash);
+		std::string strFileName = UrlUtils::GetFileName(strNoSlash);
 
 		std::string strnewDestFile;
 		if (!strDestFile.empty()) // only do this if we have a destination
-			strnewDestFile = URIUtils::ChangeBasePath(pItem->GetPath(), strFileName, strDestFile); // Convert (URL) encoding + slashes (if source / target differ)
+			strnewDestFile = UrlUtils::ChangeBasePath(pItem->GetPath(), strFileName, strDestFile); // Convert (URL) encoding + slashes (if source / target differ)
 
 		if (pItem->m_bIsFolder) 
 		{
@@ -185,7 +185,7 @@ bool FileOperationJob::DoProcessFile(FileAction action, const std::string& strFi
 
 inline bool FileOperationJob::CanBeRenamed(const std::string &strFileA, const std::string &strFileB) 
 {
-	if (URIUtils::IsHD(strFileA) && URIUtils::IsHD(strFileB))
+	if (UrlUtils::IsHD(strFileA) && UrlUtils::IsHD(strFileB))
 		return true;
 
 	return false;
@@ -209,7 +209,7 @@ bool FileOperationJob::FileOperation::ExecuteOperation(FileOperationJob *base, d
 {
 	bool bResult = true;
 
-	base->m_currentFile = CURL(m_strFileA).GetFileNameWithoutPath();
+	base->m_currentFile = CUrl(m_strFileA).GetFileNameWithoutPath();
 	base->m_currentOperation = GetActionString(m_action);
 
 	if (base->ShouldCancel((unsigned)current, 100))

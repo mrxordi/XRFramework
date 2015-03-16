@@ -33,7 +33,7 @@
     <ClCompile Include="utils\SpecialProtocol.cpp" />
     <ClCompile Include="utils\StringConverter.cpp" />
     <ClCompile Include="utils\StringUtils.cpp" />
-    <ClCompile Include="utils\URIUtils.cpp" />
+    <ClCompile Include="utils\UrlUtils.cpp" />
     <ClCompile Include="utils\URL.cpp" />
     <ClCompile Include="utils\UrlOptions.cpp" />
     <ClCompile Include="utils\Variant.cpp" />
@@ -65,7 +65,7 @@
     <ClInclude Include="utils\SpecialProtocol.h" />
     <ClInclude Include="utils\StringConverter.h" />
     <ClInclude Include="utils\StringUtils.h" />
-    <ClInclude Include="utils\URIUtils.h" />
+    <ClInclude Include="utils\UrlUtils.h" />
     <ClInclude Include="utils\URL.h" />
     <ClInclude Include="utils\UrlOptions.h" />
     <ClInclude Include="utils\Variant.h" />

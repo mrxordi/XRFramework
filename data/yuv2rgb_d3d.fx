@@ -73,16 +73,16 @@ sampler VSampler = sampler_state
 
 float4 PS(PixelInput input) : SV_Target {
 
-#if defined(XBMC_YV12)
+#if defined(XR_YV12)
 	float4 YUV = float4(g_YTexture.Sample(YSampler, input.TexY).r, 
 						g_UTexture.Sample(USampler, input.TexU).r, 
 						g_VTexture.Sample(VSampler, input.TexV).r, 
 						1.0);
-#elif defined(XBMC_NV12)
+#elif defined(XR_NV12)
 	float4 YUV = float4(g_YTexture.Sample(YSampler, input.TexY).r,
 						g_UTexture.Sample(USampler, input.TexU).rg,
 						1.0);
-#elif defined(XBMC_YUY2) || defined(XBMC_UYVY)
+#elif defined(XR_YUY2) || defined(XR_UYVY)
 	// The HLSL compiler is smart enough to optimize away these redundant assignments.
 	// That way the code is almost identical to the OGL shader.
 	float2 stepxy = g_StepXY;
@@ -98,11 +98,11 @@ float4 PS(PixelInput input) : SV_Target {
 		/* each pixel has two Y subpixels and one UV subpixel
 		YUV  Y  YUV
 		check if we're left or right of the middle Y subpixel and interpolate accordingly*/
-#if defined(XBMC_YUY2) // BGRA = YUYV
+#if defined(XR_YUY2) // BGRA = YUYV
 		float  leftY = lerp(c1.b, c1.r, f.x * 2.0);
 	float  rightY = lerp(c1.r, c2.b, f.x * 2.0 - 1.0);
 	float2 outUV = lerp(c1.ga, c2.ga, f.x);
-#elif defined(XBMC_UYVY) // BGRA = UYVY
+#elif defined(XR_UYVY) // BGRA = UYVY
 		float  leftY = lerp(c1.g, c1.a, f.x * 2.0);
 	float  rightY = lerp(c1.a, c2.g, f.x * 2.0 - 1.0);
 	float2 outUV = lerp(c1.br, c2.br, f.x);

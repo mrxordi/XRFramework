@@ -116,8 +116,8 @@
     <ClInclude Include="dvdplayer\FFmpeg.h" />
     <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
+    <ClInclude Include="filesystem\CurlGlobal.h" />
     <ClInclude Include="filesystem\Directory.h" />
-    <ClInclude Include="filesystem\DllLibCurl.h" />
     <ClInclude Include="filesystem\File.h" />
     <ClInclude Include="filesystem\FileCache.h" />
     <ClInclude Include="filesystem\FileItem.h" />
@@ -169,8 +169,8 @@
     <ClCompile Include="dvdplayer\FFmpeg.cpp" />
     <ClCompile Include="filesystem\CacheStrategy.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp" />
+    <ClCompile Include="filesystem\CurlGlobal.cpp" />
     <ClCompile Include="filesystem\Directory.cpp" />
-    <ClCompile Include="filesystem\DllLibCurl.cpp" />
     <ClCompile Include="filesystem\File.cpp" />
     <ClCompile Include="filesystem\FileCache.cpp" />
     <ClCompile Include="filesystem\FileItem.cpp" />

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WIN32Utils.h"
 #include "StringConverter.h"
-#include "URIUtils.h"
+#include "UrlUtils.h"
 
 
 WIN32Utils::WIN32Utils()

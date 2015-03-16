@@ -9,7 +9,6 @@ m_sourceCharset(sourceCharset), m_targetCharset(targetCharset), m_targetSingleCh
 {
 }
 
-
 Converter::~Converter()
 {
 	XR::CSingleLock lock(*this);

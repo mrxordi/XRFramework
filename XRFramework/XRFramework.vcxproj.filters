@@ -21,18 +21,6 @@
     <ClInclude Include="render\ID3DResource.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\CurlFile.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\DllLibCurl.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\IFile.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\IFileTypes.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="utils\RingBuffer.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -79,35 +67,11 @@
     <ClInclude Include="utils\JobManager.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\Win32File.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="Base.h" />
     <ClInclude Include="window\StatusBar.h">
       <Filter>window</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\File.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\FileItem.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\IDirectory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="filesystem\MimeTypes.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\Directory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\Win32Directory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\CacheStrategy.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem\FileCache.h">
       <Filter>filesystem</Filter>
     </ClInclude>
     <ClInclude Include="utils\BitstreamStats.h">
@@ -141,9 +105,6 @@
     <ClInclude Include="filesystem\FileOperationJob.h">
       <Filter>filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem\SpecialProtocolDirectory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="dvdplayer\FFmpeg.h">
       <Filter>dvdplayer</Filter>
     </ClInclude>
@@ -152,6 +113,45 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\MyEvents.h" />
+    <ClInclude Include="filesystem\CurlFile.h">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\File.h">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\FileItem.h">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\IFile.h">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\Win32File.h">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\Directory.h">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\IDirectory.h">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\Win32Directory.h">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\FileCache.h">
+      <Filter>filesystem\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\CacheStrategy.h">
+      <Filter>filesystem\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\SpecialProtocolDirectory.h">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\CurlGlobal.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\IFileTypes.h">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -172,15 +172,6 @@
     </ClCompile>
     <ClCompile Include="render\ID3DResource.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem\CurlFile.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem\DllLibCurl.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem\IFile.cpp">
-      <Filter>filesystem</Filter>
     </ClCompile>
     <ClCompile Include="utils\RingBuffer.cpp">
       <Filter>utils</Filter>
@@ -206,9 +197,6 @@
     <ClCompile Include="utils\HttpHeader.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem\File.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="utils\AutoBuffer.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -225,34 +213,13 @@
     <ClCompile Include="utils\JobManager.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem\Win32File.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="window\StatusBar.cpp">
       <Filter>window</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem\FileItem.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem\IDirectory.cpp">
-      <Filter>filesystem</Filter>
     </ClCompile>
     <ClCompile Include="filesystem\MimeTypes.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem\Directory.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem\Win32Directory.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="IApplication.cpp" />
-    <ClCompile Include="filesystem\CacheStrategy.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem\FileCache.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="utils\BitstreamStats.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -278,14 +245,47 @@
     <ClCompile Include="filesystem\FileOperationJob.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="dvdplayer\FFmpeg.cpp">
       <Filter>dvdplayer</Filter>
     </ClCompile>
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="utils\MyEvents.cpp" />
+    <ClCompile Include="filesystem\CurlFile.cpp">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\File.cpp">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\FileItem.cpp">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\IFile.cpp">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\Win32File.cpp">
+      <Filter>filesystem\IFileChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\Directory.cpp">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\IDirectory.cpp">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\Win32Directory.cpp">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\FileCache.cpp">
+      <Filter>filesystem\Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\CacheStrategy.cpp">
+      <Filter>filesystem\Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp">
+      <Filter>filesystem\IDirectoryChild</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem\CurlGlobal.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">
@@ -323,6 +323,15 @@
     </Filter>
     <Filter Include="core\VideoRenderers">
       <UniqueIdentifier>{daf4cb0c-6c68-4614-81ce-fe17688b1bb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="filesystem\IFileChild">
+      <UniqueIdentifier>{2a391883-8747-4f0c-a718-96491081cb97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="filesystem\IDirectoryChild">
+      <UniqueIdentifier>{dd2f2408-9177-49c1-b7a8-c5348de8fd31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="filesystem\Cache">
+      <UniqueIdentifier>{48ed7b73-4f8e-43bf-8a7c-f34ec46226cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

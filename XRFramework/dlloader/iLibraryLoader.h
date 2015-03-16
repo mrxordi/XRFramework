@@ -16,9 +16,9 @@ public:
 	virtual HMODULE GetHModule() = 0;
 	virtual bool HasSymbols() = 0;
 
-	char* GetName(); // eg "mplayer.dll"
-	char* GetFileName(); // "special://xbmcbin/system/mplayer/players/mplayer.dll"
-	char* GetPath(); // "special://xbmcbin/system/mplayer/players/"
+	char* GetName();
+	char* GetFileName();
+	char* GetPath(); 
 
 	int IncrRef();
 	int DecrRef();

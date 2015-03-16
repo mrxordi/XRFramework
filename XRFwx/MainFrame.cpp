@@ -41,6 +41,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 	wxDX10renderer* widget = new wxDX10renderer(this, -1);
 	wxGetApp().m_VideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, widget);
+
 }
 
 

@@ -6,16 +6,13 @@
 
 /* paths are as follows:
 
- special://app/          - the main XBMC folder (i.e. where the app resides).
- special://appbin/          - the main XBMC folder (i.e. where the app resides).
- special://home/          - a writeable version of the main XBMC folder
- Win32: ~/Application Data/XBMC/
- special://doc/      - a writable version of the user home directory
- Win32: home directory of user
- special://temp/          - the temporary directory.
- Win32: ~/Application Data/XBMC/cache
+ special://app/      - the main app folder
+ special://appbin/   - the main app folder 
+ special://home/     - a writeable version of the main folder Win32: ~/Application Data/app/
+ special://doc/      - a writable version of the user home directory Win32: home directory of user
+ special://temp/     - the temporary directory. Win32: ~/Application Data/app/cache
  */
-class CURL;
+class CUrl;
 class CSpecialProtocol
 {
 public:
@@ -29,7 +26,7 @@ public:
 	static void LogPaths();
 
 	static std::string TranslatePath(const std::string &path);
-	static std::string TranslatePath(const CURL &url);
+	static std::string TranslatePath(const CUrl &url);
 	static std::string TranslatePathConvertCase(const std::string& path);
 
 private:

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Util.h"
 #include "utils/StringUtils.h"
-#include "utils/URIUtils.h"
+#include "utils/UrlUtils.h"
 #include "utils/SpecialProtocol.h"
 #include <shlobj.h>
 
@@ -10,9 +10,8 @@ std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes 
 	std::string result = path;
 
 	// Don't do any stuff on URLs containing %-characters or protocols that embed
-	// filenames. NOTE: Don't use IsInZip or IsInRar here since it will infinitely
-	// recurse and crash XBMC
-	if (URIUtils::IsURL(path) &&
+	// filenames. 
+	if (UrlUtils::IsURL(path) &&
 		(path.find('%') != std::string::npos ||
 		StringUtils::StartsWithNoCase(path, "apk:") ||
 		StringUtils::StartsWithNoCase(path, "zip:") ||
@@ -23,7 +22,7 @@ std::string CUtil::ValidatePath(const std::string &path, bool bFixDoubleSlashes 
 		return result;
 
 	// check the path for incorrect slashes
-	if (URIUtils::IsDOSPath(path))
+	if (UrlUtils::IsDOSPath(path))
 	{
 		StringUtils::Replace(result, '/', '\\');
 		/* The double slash correction should only be used when *absolutely*
@@ -130,13 +129,13 @@ std::string CUtil::ResolveDocPath()
 
 bool CUtil::IsPicture(const std::string& strFile)
 {
-	return URIUtils::HasExtension(strFile,
-		std::string(URIUtils::pictureExtensions));
+	return UrlUtils::HasExtension(strFile,
+		std::string(UrlUtils::pictureExtensions));
 }
 
 // Retrieve the filename of the process that currently has the focus.
 // Typically this will be some process using the system tray grabbing
-// the focus and causing XBMC to minimize. Logging the offending
+// the focus and causing to minimize. Logging the offending
 // process name can help the user fix the problem.
 bool CUtil::GetFocussedProcess(std::wstring &strProcessFile)
 {

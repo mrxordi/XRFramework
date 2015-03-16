@@ -64,7 +64,7 @@ int SimpleFileCache::Open()
 		return CACHE_RC_ERROR;
 	}
 
-	CURL fileURL(m_filename);
+	CUrl fileURL(m_filename);
 
 	if (!m_cacheFileWrite->OpenForWrite(fileURL, false))
 	{
@@ -93,7 +93,7 @@ void SimpleFileCache::Close()
 	m_cacheFileWrite->Close();
 	m_cacheFileRead->Close();
 
-	if (!m_cacheFileRead->Delete(CURL(m_filename)))
+	if (!m_cacheFileRead->Delete(CUrl(m_filename)))
 		LOGWARN("Failed to delete temporary file \"%s\"", m_filename.c_str());
 
 	m_filename.clear();
