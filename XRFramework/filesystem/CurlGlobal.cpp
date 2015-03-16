@@ -149,7 +149,6 @@ CURL_HANDLE* CCurlGlobal::easy_duphandle(CURL_HANDLE* easy_handle)
 	return curl_easy_duphandle(easy_handle);
 }
 
-
 void CCurlGlobal::CheckIdle()
 {
 	/* avoid locking section here, to avoid stalling gfx thread on loads*/
