@@ -1,6 +1,6 @@
 #pragma once
 
-class CUrl;
+class CURL;
 
 class UrlUtils
 {
@@ -11,7 +11,7 @@ public:
 	static bool IsURL(const std::string& strFile);
 
 	static bool IsInternetStream(const std::string& path, bool bStrictCheck = false);
-	static bool IsInternetStream(const CUrl& url, bool bStrictCheck = false);
+	static bool IsInternetStream(const CURL& url, bool bStrictCheck = false);
 
 	static bool IsDOSPath(const std::string& path);
 	static bool IsSpecial(const std::string& strFile);
@@ -20,18 +20,18 @@ public:
 	static bool IsHD(const std::string& strFileName);
 
 	static const std::string GetFileName(const std::string& strFileNameAndPath);
-	static const std::string GetFileName(const CUrl& url);
+	static const std::string GetFileName(const CURL& url);
 
 	static void AddSlashAtEnd(std::string& strFolder);
 	static bool HasSlashAtEnd(const std::string& strFile, bool checkURL = false);
 	static void RemoveSlashAtEnd(std::string& strFolder);
 	static std::string AddFileToFolder(const std::string& strFolder, const std::string& strFile);
 
-	static bool HasParentInHostname(const CUrl& url);
-	static bool HasEncodedHostname(const CUrl& url);
-	static bool HasEncodedFilename(const CUrl& url);
+	static bool HasParentInHostname(const CURL& url);
+	static bool HasEncodedHostname(const CURL& url);
+	static bool HasEncodedFilename(const CURL& url);
 
-	static std::string GetExtension(const CUrl& url);
+	static std::string GetExtension(const CURL& url);
 	static std::string GetExtension(const std::string& strFileName);
 
 	static std::string GetDirectory(const std::string &strFilePath);
@@ -64,7 +64,7 @@ public:
 	\sa GetExtension
 	*/
 	static bool HasExtension(const std::string& strFileName, const std::string& strExtensions);
-	static bool HasExtension(const CUrl& url, const std::string& strExtensions);
+	static bool HasExtension(const CURL& url, const std::string& strExtensions);
 
 	static void RemoveExtension(std::string& strFileName);
 	static std::string ReplaceExtension(const std::string& strFile,

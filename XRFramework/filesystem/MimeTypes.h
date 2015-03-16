@@ -2,14 +2,14 @@
 #include <map>
 #include <string>
 
-class CUrl;
+class CURL;
 class FileItem;
 
 class Mime
 {
 public:
 	static std::string GetMimeType(const std::string &extension);
-	static std::string GetMimeType(const CUrl& url, bool lookup = true);
+	static std::string GetMimeType(const CURL& url, bool lookup = true);
 	static std::string GetMimeType(const FileItem& item);
 
 private:

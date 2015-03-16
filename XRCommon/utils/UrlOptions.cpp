@@ -29,9 +29,9 @@ std::string CUrlOptions::GetOptionsString(bool withLeadingSeperator /* = false *
 		if (opt != m_options.begin())
 			options += "&";
 
-		options += CUrl::Encode(opt->first);
+		options += CURL::Encode(opt->first);
 		if (!opt->second.empty())
-			options += "=" + CUrl::Encode(opt->second.asString());
+			options += "=" + CURL::Encode(opt->second.asString());
 	}
 
 	if (withLeadingSeperator && !options.empty())
@@ -122,9 +122,9 @@ void CUrlOptions::AddOptions(const std::string &options)
 		string key, value;
 
 		size_t pos = option->find('=');
-		key = CUrl::Decode(option->substr(0, pos));
+		key = CURL::Decode(option->substr(0, pos));
 		if (pos != string::npos)
-			value = CUrl::Decode(option->substr(pos + 1));
+			value = CURL::Decode(option->substr(pos + 1));
 
 		// the key cannot be empty
 		if (!key.empty())

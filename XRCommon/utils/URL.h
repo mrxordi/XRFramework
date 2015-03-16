@@ -4,7 +4,7 @@
 
 #undef SetPort // WIN32INCLUDES this is defined as SetPortA in WinSpool.h which is being included _somewhere_
 
-class CUrl {
+class CURL {
 public:
 	enum _URLTYPE {
 		UKNOWN = 0,
@@ -15,9 +15,9 @@ public:
 		FULLPATH
 	}URLTYPE;
 public:
-	CUrl(const std::string& strURL1);
-	CUrl(void);
-	virtual ~CUrl(void);
+	CURL(const std::string& strURL1);
+	CURL(void);
+	virtual ~CURL(void);
 
 	void Reset();
 	void Parse(const std::string& strURL);

@@ -42,7 +42,7 @@ bool CSpecialProtocol::ComparePath(const std::string &path1, const std::string &
 
 std::string CSpecialProtocol::TranslatePath(const std::string &path)
 {
-	CUrl url(path);
+	CURL url(path);
 	// check for special-protocol, if not, return
 	if (url.GetProtocol() != "special")
 	{
@@ -51,7 +51,7 @@ std::string CSpecialProtocol::TranslatePath(const std::string &path)
 	return TranslatePath(url);
 }
 
-std::string CSpecialProtocol::TranslatePath(const CUrl &url)
+std::string CSpecialProtocol::TranslatePath(const CURL &url)
 {
 	// check for special-protocol, if not, return
 	if (!(url.GetProtocol() == "special"))

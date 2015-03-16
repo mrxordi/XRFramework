@@ -505,7 +505,7 @@ string Mime::GetMimeType(const string &extension)
 	return "";
 }
 
-std::string Mime::GetMimeType(const CUrl& url, bool lookup) {
+std::string Mime::GetMimeType(const CURL& url, bool lookup) {
 
 	std::string strMimeType;
 

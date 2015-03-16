@@ -22,7 +22,7 @@ const std::string UrlUtils::GetFileName(const std::string& strFileNameAndPath)
 {
 	if (IsURL(strFileNameAndPath))
 	{
-		CUrl url(strFileNameAndPath);
+		CURL url(strFileNameAndPath);
 		return GetFileName(url.GetFileName());
 	}
 
@@ -31,7 +31,7 @@ const std::string UrlUtils::GetFileName(const std::string& strFileNameAndPath)
 	return strFileNameAndPath.substr(slash + 1);
 }
 
-const std::string UrlUtils::GetFileName(const CUrl& url)
+const std::string UrlUtils::GetFileName(const CURL& url)
 {
 	return GetFileName(url.GetFileName());
 }
@@ -40,7 +40,7 @@ void UrlUtils::AddSlashAtEnd(std::string& strFolder)
 {
 	if (IsURL(strFolder))
 	{
-		CUrl url(strFolder);
+		CURL url(strFolder);
 		std::string file = url.GetFileName();
 		if (!file.empty() && file != strFolder)
 		{
@@ -65,7 +65,7 @@ bool UrlUtils::HasSlashAtEnd(const std::string& strFile, bool checkURL /* = fals
 	if (strFile.empty()) return false;
 	if (checkURL && IsURL(strFile))
 	{
-		CUrl url(strFile);
+		CURL url(strFile);
 		std::string file = url.GetFileName();
 		return file.empty() || HasSlashAtEnd(file, false);
 	}
@@ -81,7 +81,7 @@ void UrlUtils::RemoveSlashAtEnd(std::string& strFolder)
 {
 	if (IsURL(strFolder))
 	{
-		CUrl url(strFolder);
+		CURL url(strFolder);
 		std::string file = url.GetFileName();
 		if (!file.empty() && file != strFolder)
 		{
@@ -132,7 +132,7 @@ std::string UrlUtils::AddFileToFolder(const std::string& strFolder,
 {
 	if (IsURL(strFolder))
 	{
-		CUrl url(strFolder);
+		CURL url(strFolder);
 		if (url.GetFileName() != strFolder)
 		{
 			url.SetFileName(AddFileToFolder(url.GetFileName(), strFile));
@@ -159,7 +159,7 @@ std::string strResult = strFolder;
 	return strResult;
 }
 
-bool UrlUtils::HasParentInHostname(const CUrl& url)
+bool UrlUtils::HasParentInHostname(const CURL& url)
 {
 	return url.IsProtocol("zip")
 		|| url.IsProtocol("rar")
@@ -168,7 +168,7 @@ bool UrlUtils::HasParentInHostname(const CUrl& url)
 		|| url.IsProtocol("udf");
 }
 
-bool UrlUtils::HasEncodedHostname(const CUrl& url)
+bool UrlUtils::HasEncodedHostname(const CURL& url)
 {
 	return HasParentInHostname(url)
 		|| url.IsProtocol("musicsearch")
@@ -177,7 +177,7 @@ bool UrlUtils::HasEncodedHostname(const CUrl& url)
 
 bool UrlUtils::IsHD(const std::string& strFileName)
 {
-	CUrl url(strFileName);
+	CURL url(strFileName);
 
 	if (IsProtocol(strFileName, "special"))
 		return IsHD(CSpecialProtocol::TranslatePath(strFileName));
@@ -188,22 +188,22 @@ bool UrlUtils::IsHD(const std::string& strFileName)
 	return url.GetProtocol().empty() || url.IsProtocol("file");
 }
 
-bool UrlUtils::HasEncodedFilename(const CUrl& url)
+bool UrlUtils::HasEncodedFilename(const CURL& url)
 {
 	const std::string prot2 = url.GetTranslatedProtocol();
 
 	// For now assume only (quasi) http internet streams use URL encoding
-	return CUrl::IsProtocolEqual(prot2, "http") ||
-		CUrl::IsProtocolEqual(prot2, "https");
+	return CURL::IsProtocolEqual(prot2, "http") ||
+		CURL::IsProtocolEqual(prot2, "https");
 }
 
 bool UrlUtils::IsInternetStream(const std::string &path, bool bStrictCheck /* = false */)
 {
-	const CUrl pathToUrl(path);
+	const CURL pathToUrl(path);
 	return IsInternetStream(pathToUrl, bStrictCheck);
 }
 
-bool UrlUtils::IsInternetStream(const CUrl& url, bool bStrictCheck /* = false */)
+bool UrlUtils::IsInternetStream(const CURL& url, bool bStrictCheck /* = false */)
 {
 	if (url.GetProtocol().empty())
 		return false;
@@ -219,21 +219,21 @@ bool UrlUtils::IsInternetStream(const CUrl& url, bool bStrictCheck /* = false */
 		return bStrictCheck;
 
 	std::string protocol = url.GetTranslatedProtocol();
-	if (CUrl::IsProtocolEqual(protocol, "http") || CUrl::IsProtocolEqual(protocol, "https") ||
-		CUrl::IsProtocolEqual(protocol, "tcp") || CUrl::IsProtocolEqual(protocol, "udp") ||
-		CUrl::IsProtocolEqual(protocol, "rtp") || CUrl::IsProtocolEqual(protocol, "sdp") ||
-		CUrl::IsProtocolEqual(protocol, "mms") || CUrl::IsProtocolEqual(protocol, "mmst") ||
-		CUrl::IsProtocolEqual(protocol, "mmsh") || CUrl::IsProtocolEqual(protocol, "rtsp") ||
-		CUrl::IsProtocolEqual(protocol, "rtmp") || CUrl::IsProtocolEqual(protocol, "rtmpt") ||
-		CUrl::IsProtocolEqual(protocol, "rtmpe") || CUrl::IsProtocolEqual(protocol, "rtmpte") ||
-		CUrl::IsProtocolEqual(protocol, "rtmps"))
+	if (CURL::IsProtocolEqual(protocol, "http") || CURL::IsProtocolEqual(protocol, "https") ||
+		CURL::IsProtocolEqual(protocol, "tcp") || CURL::IsProtocolEqual(protocol, "udp") ||
+		CURL::IsProtocolEqual(protocol, "rtp") || CURL::IsProtocolEqual(protocol, "sdp") ||
+		CURL::IsProtocolEqual(protocol, "mms") || CURL::IsProtocolEqual(protocol, "mmst") ||
+		CURL::IsProtocolEqual(protocol, "mmsh") || CURL::IsProtocolEqual(protocol, "rtsp") ||
+		CURL::IsProtocolEqual(protocol, "rtmp") || CURL::IsProtocolEqual(protocol, "rtmpt") ||
+		CURL::IsProtocolEqual(protocol, "rtmpe") || CURL::IsProtocolEqual(protocol, "rtmpte") ||
+		CURL::IsProtocolEqual(protocol, "rtmps"))
 		return true;
 
 	return false;
 }
 
 /* returns filename extension including period of filename */
-std::string UrlUtils::GetExtension(const CUrl& url)
+std::string UrlUtils::GetExtension(const CURL& url)
 {
 	return UrlUtils::GetExtension(url.GetFileName());
 }
@@ -242,7 +242,7 @@ std::string UrlUtils::GetExtension(const std::string& strFileName)
 {
 	if (IsURL(strFileName))
 	{
-		CUrl url(strFileName);
+		CURL url(strFileName);
 		return GetExtension(url.GetFileName());
 	}
 
@@ -257,7 +257,7 @@ bool UrlUtils::HasExtension(const std::string& strFileName)
 {
 	if (IsURL(strFileName))
 	{
-		CUrl url(strFileName);
+		CURL url(strFileName);
 		return HasExtension(url.GetFileName());
 	}
 
@@ -265,7 +265,7 @@ bool UrlUtils::HasExtension(const std::string& strFileName)
 	return iPeriod != std::string::npos && strFileName[iPeriod] == '.';
 }
 
-bool UrlUtils::HasExtension(const CUrl& url, const std::string& strExtensions)
+bool UrlUtils::HasExtension(const CURL& url, const std::string& strExtensions)
 {
 	return HasExtension(url.GetFileName(), strExtensions);
 }
@@ -274,7 +274,7 @@ bool UrlUtils::HasExtension(const std::string& strFileName, const std::string& s
 {
 	if (IsURL(strFileName))
 	{
-		CUrl url(strFileName);
+		CURL url(strFileName);
 		return HasExtension(url.GetFileName(), strExtensions);
 	}
 
@@ -307,7 +307,7 @@ void UrlUtils::RemoveExtension(std::string& strFileName)
 {
 	if (IsURL(strFileName))
 	{
-		CUrl url(strFileName);
+		CURL url(strFileName);
 		strFileName = url.GetFileName();
 		RemoveExtension(strFileName);
 		url.SetFileName(strFileName);
@@ -348,7 +348,7 @@ std::string UrlUtils::ReplaceExtension(const std::string& strFile,
 	using namespace std;
 	if (IsURL(strFile))
 	{
-		CUrl url(strFile);
+		CURL url(strFile);
 		url.SetFileName(ReplaceExtension(url.GetFileName(), strNewExtension));
 		return url.Get();
 	}
@@ -437,7 +437,7 @@ std::string URLEncodePath(const std::string& strPath)
 	using namespace std;
 	vector<string> segments = StringUtils::Split(strPath, "/");
 	for (vector<string>::iterator i = segments.begin(); i != segments.end(); ++i)
-		*i = CUrl::Encode(*i);
+		*i = CURL::Encode(*i);
 
 	return StringUtils::Join(segments, "/");
 }
@@ -447,7 +447,7 @@ std::string URLDecodePath(const std::string& strPath)
 	using namespace std;
 	vector<string> segments = StringUtils::Split(strPath, "/");
 	for (vector<string>::iterator i = segments.begin(); i != segments.end(); ++i)
-		*i = CUrl::Decode(*i);
+		*i = CURL::Decode(*i);
 
 	return StringUtils::Join(segments, "/");
 }
@@ -461,13 +461,13 @@ std::string UrlUtils::ChangeBasePath(const std::string &fromPath, const std::str
 		StringUtils::Replace(toFile, "\\", "/");
 
 	// Handle difference in URL encoded vs. not encoded
-	if (HasEncodedFilename(CUrl(fromPath))
-		&& !HasEncodedFilename(CUrl(toPath)))
+	if (HasEncodedFilename(CURL(fromPath))
+		&& !HasEncodedFilename(CURL(toPath)))
 	{
 		toFile = URLDecodePath(toFile); // Decode path
 	}
-	else if (!HasEncodedFilename(CUrl(fromPath))
-		&& HasEncodedFilename(CUrl(toPath)))
+	else if (!HasEncodedFilename(CURL(fromPath))
+		&& HasEncodedFilename(CURL(toPath)))
 	{
 		toFile = URLEncodePath(toFile); // Encode path
 	}

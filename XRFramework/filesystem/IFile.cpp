@@ -1,12 +1,5 @@
 #include "stdafxf.h"
 #include "IFile.h"
-#include "utils/URL.h"
-#include <cstring>
-#include <errno.h>
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 IFile::IFile()
 {
@@ -67,14 +60,4 @@ bool IFile::ReadString(char *szLine, int iLineLength)
 		}
 	}
 	return true;
-}
-
-CRedirectException::CRedirectException() :
-m_pNewFileImp(NULL), m_pNewUrl(NULL)
-{
-}
-
-CRedirectException::CRedirectException(IFile *pNewFileImp, CUrl *pNewUrl) :
-m_pNewFileImp(pNewFileImp), m_pNewUrl(pNewUrl)
-{
 }

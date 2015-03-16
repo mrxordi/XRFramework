@@ -83,7 +83,7 @@ std::wstring StringConverter::ConvertPathToWin32Form(const std::string& pathUtf8
 	return result;
 }
 
-std::wstring StringConverter::ConvertPathToWin32Form(const CUrl& url)
+std::wstring StringConverter::ConvertPathToWin32Form(const CURL& url)
 {
 	assert(url.GetProtocol().empty() || url.IsProtocol("smb"));
 
