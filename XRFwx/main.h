@@ -14,8 +14,8 @@ public:
 	MyApp();
 	virtual ~MyApp();
 	virtual bool OnInit();
-
 	virtual int OnExit() override;
+	virtual bool IsCurrentThread() const;
 
 	std::unique_ptr<CAppSettings> m_settings;
 	std::unique_ptr<CMonitors> m_monitors;
@@ -23,6 +23,8 @@ public:
 	MyFrame* m_mainFrame;
 	std::shared_ptr<cRenderSystemDX> m_renderSystem;
 	std::unique_ptr<WinRenderer> m_VideoRenderer;
+private:
+	DWORD m_threadId;
 };
 
 wxDECLARE_EVENT(EVT_RENDER, wxIdleEvent);

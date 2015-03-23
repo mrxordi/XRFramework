@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "XMLFile.h"
-
-
+#include "XRFramework/utils/AutoBuffer.h"
 
 CXMLFile::~CXMLFile()
 {
@@ -14,7 +13,7 @@ bool CXMLFile::LoadFile(const char* _filename)
 
 bool CXMLFile::LoadFile(const std::string& _filename)
 {
-	File file;
+	CFile file;
 	auto_buffer buffer;
 
 	if (file.LoadFile(_filename, buffer) <= 0) {
@@ -40,7 +39,7 @@ bool CXMLFile::SaveFile(const char* _filename) const
 
 bool CXMLFile::SaveFile(const std::string& filename) const
 {
-	File file;
+	CFile file;
 	if (file.OpenForWrite(filename, true))
 	{
 		tinyxml2::XMLPrinter printer;

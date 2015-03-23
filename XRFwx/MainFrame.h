@@ -1,8 +1,6 @@
 #pragma once
 #include "wx/frame.h"
 #include <memory>
-#include "FileOpsTests.h"
-
 
 class MyFrame : public wxFrame
 {
@@ -17,8 +15,6 @@ public:
 	void DebugToggle(wxCommandEvent& event);
 
 	void OnCloseWindow(wxCloseEvent& event);
-
-	FileOpsTests m_fileopstest;
 	
 	DECLARE_EVENT_TABLE()
 };

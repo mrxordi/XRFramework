@@ -10,8 +10,6 @@
 #include "XRThreads/CriticalSection.h"
 #include "XRThreads/SingleLock.h"
 #include "log/Log.h"
-#include "window/RenderControl.h"
-
 
 using namespace DirectX;
 using namespace PackedVector;
@@ -27,7 +25,7 @@ public:
 	//static cRenderSystemDX& Create() { return *new cRenderSystemDX(); }
 	//static void				Destroy() { delete cRenderSystemDX::getSingletonPtr(); }
 
-	virtual bool InitRenderSystem(RenderControl* pControl = NULL, HWND hwnd = NULL);
+	virtual bool InitRenderSystem(HWND hwnd = NULL);
 	virtual bool DestroyRenderSystem();
 	bool OnResize();
 	virtual bool OnMove();
@@ -103,7 +101,6 @@ protected:
 
 	IDXGIAdapter* m_pAdapter;  //Current used adapter
 	IDXGIOutput*  m_pOutput;   //Current used Output
-	RenderControl* m_renderControl;
 
 	std::string		m_RenderRenderer;
 	std::string		m_RenderVendor;

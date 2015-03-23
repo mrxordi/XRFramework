@@ -12,7 +12,8 @@ public:
 		LIBRARY,
 		URL,
 		PATH,
-		FULLPATH
+		FULLPATH,
+		FOLDER
 	}URLTYPE;
 public:
 	CURL(const std::string& strURL1);

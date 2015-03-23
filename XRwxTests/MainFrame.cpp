@@ -8,7 +8,8 @@ EVT_MENU(ID_Quit, MyFrame::OnQuit)
 EVT_MENU(ID_About, MyFrame::OnAbout)
 EVT_MENU_RANGE(ID_Debug_ffmpeg, ID_Debug_curl, MyFrame::DebugToggle)
 EVT_CLOSE(MyFrame::OnCloseWindow)
-EVT_BUTTON(ID_CreateCurlSession, MyFrame::OnCreateSession)
+EVT_BUTTON(ID_AddCurlSession, MyFrame::OnAddSession)
+EVT_BUTTON(ID_RunCurlSession, MyFrame::OnRunSession)
 EVT_BUTTON(ID_CheckIdle, MyFrame::OnCheckIdle)
 EVT_BUTTON(ID_DeleteAll, MyFrame::OnDeleteAll)
 END_EVENT_TABLE()
@@ -43,10 +44,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	//wxPanel *panel = new wxPanel(this, -1);
 	wxBoxSizer *hbox = new wxBoxSizer(wxVERTICAL);
 	wxBoxSizer *vbox = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer = new wxFlexGridSizer(1, 2, 9, 25);
+	m_sizer = new wxFlexGridSizer(2, 2, 9, 25);
 	
 
-	wxButton* button = new wxButton(this, ID_CreateCurlSession, "Create Session");
+	wxButton* button = new wxButton(this, ID_AddCurlSession, "Add Session");
+	button = new wxButton(this, ID_RunCurlSession, "Run Session");
 	m_text = new wxTextCtrl(this, ID_Text, wxEmptyString, wxDefaultPosition, wxSize(300, 25));
 
 	m_sizer->Add(button);
@@ -112,12 +114,17 @@ void MyFrame::DebugToggle(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::OnCreateSession(wxCommandEvent& event)
+void MyFrame::OnAddSession(wxCommandEvent& event)
 {
 	std::string aaa = m_text->GetLineText(0);
 
-	CCurlGlobal::easy_aquire("http", aaa.c_str(), &m_handle, nullptr);
-	LOGINFO("Aquired new handle %x", m_handle);
+	m_list.Add(CFileItemPtr(new CFileItem(aaa, false)));
+}
+
+void MyFrame::OnRunSession(wxCommandEvent& event)
+{
+	m_job.SetFileOperation(FileOperationJob::ActionCopy, m_list, "special://app/");
+	CJobManager::GetInstance().AddJob(&m_job, this);
 }
 
 void MyFrame::OnCheckIdle(wxCommandEvent& event)
@@ -128,5 +135,15 @@ void MyFrame::OnCheckIdle(wxCommandEvent& event)
 void MyFrame::OnDeleteAll(wxCommandEvent& event)
 {
 	CCurlGlobal::UnloadAll();
+}
+
+void MyFrame::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+{
+	LOGINFO("Job completed");
+}
+
+void MyFrame::OnJobProgress(unsigned int jobID, unsigned int progress, unsigned int total, const CJob *job)
+{
+	LOGINFO("Job ID:%u Progress:%u Total:%u", jobID, progress, total);
 }
 

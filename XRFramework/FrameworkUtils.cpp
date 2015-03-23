@@ -17,8 +17,8 @@ std::string CFUtil::GetNextFilename(const std::string &fn_template, int max)
 	std::string mask = UrlUtils::GetExtension(fn_template);
 	std::string name = StringUtils::Format(fn_template.c_str(), 0);
 
-	FileItemList items;
-	if (!Directory::GetDirectory(searchPath, items, mask, DIR_FLAG_NO_FILE_DIRS))
+	CFileItemList items;
+	if (!CDirectory::GetDirectory(searchPath, items, mask, DIR_FLAG_NO_FILE_DIRS))
 		return name;
 
 	items.SetFastLookup(true);
@@ -39,7 +39,7 @@ std::string CFUtil::GetNextPathname(const std::string &path_template, int max)
 	for (int i = 0; i <= max; i++)
 	{
 		std::string name = StringUtils::Format(path_template.c_str(), i);
-		if (!File::Exists(name) && !Directory::Exists(name))
+		if (!CFile::Exists(name) && !CDirectory::Exists(name))
 			return name;
 	}
 	return "";

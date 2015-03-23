@@ -24,6 +24,7 @@ MyApp::~MyApp()
 MyApp::MyApp()
 {
 	CLog::Create();
+	m_threadId = ::GetCurrentThreadId();
 }
 
 
@@ -79,4 +80,9 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
 	return wxApp::OnExit();
+}
+
+bool MyApp::IsCurrentThread() const
+{
+	return (::GetCurrentThreadId() == m_threadId);
 }

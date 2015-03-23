@@ -1,14 +1,6 @@
 #include "stdafxf.h"
 #include "IFile.h"
 
-IFile::IFile()
-{
-}
-
-IFile::~IFile()
-{
-}
-
 int IFile::Stat(struct __stat64* buffer)
 {
 	memset(buffer, 0, sizeof(struct __stat64));

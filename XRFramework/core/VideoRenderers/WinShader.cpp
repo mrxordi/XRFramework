@@ -1,6 +1,7 @@
 #include "stdafxf.h"
 #include "WinShader.h"
 #include "filesystem/File.h"
+#include "filesystem/StreamFile.h"
 #include "render/RenderSystemDX.h"
 
 WinShader::~WinShader()
@@ -65,7 +66,7 @@ bool WinShader::LoadEffect(const std::string& filename, DefinesMap* defines)
 {
 	LOGDEBUG(" loading shader %s", filename.c_str());
 
-	FileStream file;
+	CFileStream file;
 
 	if (!file.Open(filename)) 
 	{

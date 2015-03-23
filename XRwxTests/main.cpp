@@ -29,6 +29,10 @@ MyApp::MyApp()
 
 bool MyApp::OnInit()
 {
+	// Initialise Winsock
+	WSADATA wd;
+	WSAStartup(MAKEWORD(2, 2), &wd);
+
 	std::string appPath, tempPath, docPath, homePath;
 
 	appPath = CUtil::ResolveExecutablePath();
@@ -77,5 +81,7 @@ bool MyApp::OnInit()
 
 int MyApp::OnExit()
 {
+	WSACleanup();
+
 	return wxApp::OnExit();
 }

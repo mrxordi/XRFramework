@@ -2,9 +2,9 @@
 #include <algorithm>
 
 #include "MimeTypes.h"
-#include "utils/URL.h"
 #include "CurlFile.h"
 #include "FileItem.h"
+#include "utils/URL.h"
 #include "utils/StringUtils.h"
 
 using namespace std;
@@ -535,7 +535,7 @@ std::string Mime::GetMimeType(const CURL& url, bool lookup) {
 	return strMimeType;
 }
 
-string Mime::GetMimeType(const FileItem &item)
+string Mime::GetMimeType(const CFileItem &item)
 {
 	std::string path = item.GetPath();
 	return GetMimeType(UrlUtils::GetExtension(path));

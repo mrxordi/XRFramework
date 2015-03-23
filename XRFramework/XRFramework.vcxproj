@@ -19,14 +19,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
@@ -43,7 +43,13 @@
     <Import Project="..\XRFrameworkDef.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)BUILD\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)BUILD\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -114,14 +120,21 @@
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
     <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
     <ClInclude Include="dvdplayer\FFmpeg.h" />
+    <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\CurlGlobal.h" />
+    <ClInclude Include="filesystem\Directory.h" />
     <ClInclude Include="filesystem\File.h" />
+    <ClInclude Include="filesystem\FileCache.h" />
+    <ClInclude Include="filesystem\FileItem.h" />
+    <ClInclude Include="filesystem\FileOperationJob.h" />
+    <ClInclude Include="filesystem\IDirectory.h" />
     <ClInclude Include="filesystem\IFile.h" />
     <ClInclude Include="filesystem\MimeTypes.h" />
+    <ClInclude Include="filesystem\SpecialProtocolDirectory.h" />
     <ClInclude Include="filesystem\StreamFile.h" />
+    <ClInclude Include="filesystem\Win32Directory.h" />
     <ClInclude Include="filesystem\Win32File.h" />
-    <ClInclude Include="IApplication.h" />
     <ClInclude Include="LoggerContext.h" />
     <ClInclude Include="render\D3D10Enumeration.h" />
     <ClInclude Include="render\dxerr.h" />
@@ -129,7 +142,10 @@
     <ClInclude Include="render\RenderSystemDX.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="system\SysInfo.h" />
-    <ClInclude Include="FrameworkUtils.h" />
+    <ClInclude Include="FrameworkUtils.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="utils\AutoBuffer.h" />
     <ClInclude Include="utils\AutoPtrHandle.h" />
     <ClInclude Include="utils\BitstreamStats.h" />
@@ -142,9 +158,6 @@
     <ClInclude Include="utils\RingBuffer.h" />
     <ClInclude Include="utils\Timer.h" />
     <ClInclude Include="utils\XRect.h" />
-    <ClInclude Include="window\RenderControl.h" />
-    <ClInclude Include="window\StatusBar.h" />
-    <ClInclude Include="window\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\VideoRenderers\TestShader.cpp" />
@@ -159,14 +172,21 @@
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="dvdplayer\FFmpeg.cpp" />
+    <ClCompile Include="filesystem\CacheStrategy.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp" />
     <ClCompile Include="filesystem\CurlGlobal.cpp" />
+    <ClCompile Include="filesystem\Directory.cpp" />
     <ClCompile Include="filesystem\File.cpp" />
+    <ClCompile Include="filesystem\FileCache.cpp" />
+    <ClCompile Include="filesystem\FileItem.cpp" />
+    <ClCompile Include="filesystem\FileOperationJob.cpp" />
+    <ClCompile Include="filesystem\IDirectory.cpp" />
     <ClCompile Include="filesystem\IFile.cpp" />
     <ClCompile Include="filesystem\MimeTypes.cpp" />
+    <ClCompile Include="filesystem\SpecialProtocolDirectory.cpp" />
     <ClCompile Include="filesystem\StreamFile.cpp" />
+    <ClCompile Include="filesystem\Win32Directory.cpp" />
     <ClCompile Include="filesystem\Win32File.cpp" />
-    <ClCompile Include="IApplication.cpp" />
     <ClCompile Include="LoggerContext.cpp" />
     <ClCompile Include="render\D3D10Enumeration.cpp" />
     <ClCompile Include="render\dxerr.cpp" />
@@ -177,7 +197,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\SysInfo.cpp" />
-    <ClCompile Include="FrameworkUtils.cpp" />
+    <ClCompile Include="FrameworkUtils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="utils\AutoBuffer.cpp" />
     <ClCompile Include="utils\AutoPtrHandle.cpp" />
     <ClCompile Include="utils\BitstreamStats.cpp" />
@@ -188,9 +211,6 @@
     <ClCompile Include="utils\MyEvents.cpp" />
     <ClCompile Include="utils\RingBuffer.cpp" />
     <ClCompile Include="utils\Timer.cpp" />
-    <ClCompile Include="window\RenderControl.cpp" />
-    <ClCompile Include="window\StatusBar.cpp" />
-    <ClCompile Include="window\WindowEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XRCommon\XRCommon.vcxproj">

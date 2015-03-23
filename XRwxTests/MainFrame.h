@@ -4,11 +4,14 @@
 #include "wx/sizer.h"
 #include "wx/textctrl.h"
 #include <memory>
-#include "FileOpsTests.h"
+#include "FileOpsTest.h"
 #include "XRFramework/filesystem/CurlGlobal.h"
+#include "XRFramework/filesystem/FileItem.h"
+#include "XRFramework/filesystem/FileOperationJob.h"
+#include "XRFramework/utils/JobManager.h"
 
 
-class MyFrame : public wxFrame
+class MyFrame : public wxFrame, public IJobCallback
 {
 public:
 
@@ -21,7 +24,8 @@ public:
 	void DebugToggle(wxCommandEvent& event);
 
 	void OnCloseWindow(wxCloseEvent& event);
-	void OnCreateSession(wxCommandEvent& event);
+	void OnAddSession(wxCommandEvent& event);
+	void OnRunSession(wxCommandEvent& event);
 	void OnCheckIdle(wxCommandEvent& event);
 	void OnDeleteAll(wxCommandEvent& event);
 
@@ -32,6 +36,15 @@ public:
 	CURL_HANDLE* m_handle;
 	
 	DECLARE_EVENT_TABLE()
+
+	virtual void OnJobComplete(unsigned int jobID, bool success, CJob *job) override;
+
+	virtual void OnJobProgress(unsigned int jobID, unsigned int progress, unsigned int total, const CJob *job) override;
+
+	//FileOpsTests testy;
+
+	FileOperationJob m_job;
+	CFileItemList m_list;
 
 };
 
@@ -48,7 +61,8 @@ enum
 {
 	ID_CheckIdle = 20,
 	ID_Text,
-	ID_CreateCurlSession,
+	ID_AddCurlSession,
+	ID_RunCurlSession,
 	ID_DeleteAll
 
 };

@@ -12,5 +12,4 @@
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
-
 #include "wx/wx.h"

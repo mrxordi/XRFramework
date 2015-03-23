@@ -30,7 +30,6 @@ cRenderSystemDX::cRenderSystemDX(void)
 	m_pOutput = NULL;
 
 	m_width = m_height = 0;
-	m_renderControl = NULL;
 	XMStoreFloat4x4(&m_world,XMMatrixIdentity());
 }
 
@@ -38,7 +37,7 @@ cRenderSystemDX::~cRenderSystemDX(void)
 {
 }
 
-bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl, HWND hWnd)
+bool cRenderSystemDX::InitRenderSystem(HWND hWnd)
 {
 	m_enumeration.Initialize();
 
@@ -47,15 +46,7 @@ bool cRenderSystemDX::InitRenderSystem(RenderControl* pControl, HWND hWnd)
 		return false;
 	}
 
-	if (pControl) {
-
-		m_hFocusWnd = m_hDeviceWnd = pControl->GetHWND();
-
-		pControl->GetWH(m_width, m_height);
-		m_renderControl = pControl;
-	}
-
-	else if (hWnd) {
+	if (hWnd) {
 		m_hFocusWnd = m_hDeviceWnd = hWnd;
 
 		RECT rect;
@@ -175,10 +166,7 @@ bool cRenderSystemDX::OnResize()
 	if (!m_pDevice)
 		return false;
 
-	if (m_renderControl) {
-		m_renderControl->GetWH(m_width, m_height);
-	}
-	else if (m_hDeviceWnd) {
+	if (m_hDeviceWnd) {
 		RECT rect;
 		GetClientRect(m_hDeviceWnd, &rect);
 		if (m_width == rect.right - rect.left && m_height == rect.bottom - rect.top && m_bRenderCreated){

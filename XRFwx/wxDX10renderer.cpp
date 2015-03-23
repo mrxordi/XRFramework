@@ -52,7 +52,7 @@ bool wxDX10renderer::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/
 		NULL, pos, size, msflags, exStyle))
 		return false;
 
-	if (!GetAppDX().get() || !GetAppDX()->InitRenderSystem(nullptr, GetHWND())) 
+	if (!GetAppDX().get() || !GetAppDX()->InitRenderSystem(GetHWND())) 
 	{
 		LOGFATAL("Failed to initialize render system.")
 		parent->RemoveChild(this);

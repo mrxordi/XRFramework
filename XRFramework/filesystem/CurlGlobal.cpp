@@ -192,8 +192,8 @@ bool CCurlGlobal::Load()
 		s_curlReferences++;
 		return true;
 	}
-
-	if (curl_global_init(CURL_GLOBAL_ALL))
+	CURLcode code = curl_global_init(CURL_GLOBAL_ALL);
+	if (code)
 	{
 		LOGERR("Error initializing libcurl");
 		return false;

@@ -12,12 +12,12 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 #ifdef _DEBUG
-	#pragma comment(lib, "libcurld.lib")
+	#pragma comment(lib, "libcurl_debug.lib")
 #else // _DEBUG
 	#pragma comment(lib, "libcurl.lib")
 #endif
 
-
+#include <WinSock2.h>
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>
@@ -27,6 +27,8 @@
 #include <d3d10_1.h>
 #include <d3d10.h>
 #include <dxgi.h>
+#include <stdint.h>
+
 #define BOOST_LIB_TOOLSET "vc120"
 #define ASSERT(x) assert(x)
 
