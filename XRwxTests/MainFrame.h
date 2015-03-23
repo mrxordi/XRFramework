@@ -4,11 +4,10 @@
 #include "wx/sizer.h"
 #include "wx/textctrl.h"
 #include <memory>
-#include "FileOpsTest.h"
-#include "XRFramework/filesystem/CurlGlobal.h"
-#include "XRFramework/filesystem/FileItem.h"
-#include "XRFramework/filesystem/FileOperationJob.h"
 #include "XRFramework/utils/JobManager.h"
+#include "XRFramework/filesystem/FileItem.h"
+#include "XRFramework/filesystem/CurlGlobal.h"
+#include "XRFramework/filesystem/FileOperationJob.h"
 
 
 class MyFrame : public wxFrame, public IJobCallback

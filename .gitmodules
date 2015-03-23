@@ -1,0 +1,3 @@
+[submodule "XRDependencies"]
+	path = XRDependencies
+	url = https://github.com/mrxordi/XRDependencies
