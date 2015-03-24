@@ -264,9 +264,9 @@ std::string CSettingManager::GetString(const std::string &id) const
 	return ((CSettingString*)setting)->GetValue();
 }
 
-std::vector< boost::shared_ptr<CSetting> > CSettingManager::GetList(const std::string &id) const
+std::vector< std::shared_ptr<CSetting> > CSettingManager::GetList(const std::string &id) const
 {
-	return std::vector<boost::shared_ptr<CSetting>>();
+	return std::vector<std::shared_ptr<CSetting>>();
 }
 
 bool CSettingManager::SetBool(const std::string &id, bool value)

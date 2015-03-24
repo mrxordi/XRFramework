@@ -214,8 +214,6 @@ bool FileOperationJob::FileOperation::ExecuteOperation(FileOperationJob *base, d
 	if (base->ShouldCancel((unsigned)current, 100))
 		return false;
 
-	//if (base->m_hStatusBar) 
-	//	base->m_hStatusBar->SetText(StringUtils::Format("%s...%f %%", base->GetCurrentFile().c_str(), (float)current));
 	LOGINFO("%s...%f %%", base->GetCurrentFile().c_str(), (float)current);
 
 	DataHolder data = { base, current, opWeight };

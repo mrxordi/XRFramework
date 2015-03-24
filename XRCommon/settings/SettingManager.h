@@ -79,7 +79,7 @@ public:
 	/*!\brief Gets the values of the list setting with the given identifier.
 	\param id Setting identifier
 	\return List of values of the setting with the given identifier*/
-	std::vector< boost::shared_ptr<CSetting> > GetList(const std::string &id) const;
+	std::vector< std::shared_ptr<CSetting> > GetList(const std::string &id) const;
 	/*!\brief Sets the boolean value of the setting with the given identifier.
 	\param id Setting identifier
 	\param value Boolean value to set

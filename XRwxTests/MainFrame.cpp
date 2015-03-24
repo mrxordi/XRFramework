@@ -48,6 +48,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	
 
 	wxButton* button = new wxButton(this, ID_AddCurlSession, "Add Session");
+	m_sizer->Add(button);
+
 	button = new wxButton(this, ID_RunCurlSession, "Run Session");
 	m_text = new wxTextCtrl(this, ID_Text, wxEmptyString, wxDefaultPosition, wxSize(300, 25));
 
@@ -123,8 +125,9 @@ void MyFrame::OnAddSession(wxCommandEvent& event)
 
 void MyFrame::OnRunSession(wxCommandEvent& event)
 {
-	m_job.SetFileOperation(FileOperationJob::ActionCopy, m_list, "special://app/");
-	CJobManager::GetInstance().AddJob(&m_job, this);
+	m_job = new FileOperationJob;
+	m_job->SetFileOperation(FileOperationJob::ActionCopy, m_list, "special://app/");
+	CJobManager::GetInstance().AddJob(m_job, this);
 }
 
 void MyFrame::OnCheckIdle(wxCommandEvent& event)
@@ -144,6 +147,9 @@ void MyFrame::OnJobComplete(unsigned int jobID, bool success, CJob *job)
 
 void MyFrame::OnJobProgress(unsigned int jobID, unsigned int progress, unsigned int total, const CJob *job)
 {
+	CONST FileOperationJob* fjob = static_cast<CONST FileOperationJob*> (job);
 	LOGINFO("Job ID:%u Progress:%u Total:%u", jobID, progress, total);
+	LOGINFO("File:%s Averange speed:%s Operation:%s", fjob->GetCurrentFile().c_str(), fjob->GetAverageSpeed().c_str(), fjob->GetCurrentOperation().c_str());
+
 }
 

@@ -42,7 +42,7 @@ public:
 
 	//FileOpsTests testy;
 
-	FileOperationJob m_job;
+	FileOperationJob* m_job;
 	CFileItemList m_list;
 
 };
