@@ -92,9 +92,6 @@
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
     <ClInclude Include="FrameworkUtils.h" />
-    <ClInclude Include="dvdplayer\FFmpeg.h">
-      <Filter>dvdplayer</Filter>
-    </ClInclude>
     <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
     <ClInclude Include="utils\XRect.h">
       <Filter>utils</Filter>
@@ -222,9 +219,6 @@
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
     <ClCompile Include="FrameworkUtils.cpp" />
-    <ClCompile Include="dvdplayer\FFmpeg.cpp">
-      <Filter>dvdplayer</Filter>
-    </ClCompile>
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="utils\MyEvents.cpp" />
     <ClCompile Include="filesystem\CurlGlobal.cpp">

@@ -119,9 +119,6 @@
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
     <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
-    <ClInclude Include="dvdplayer\FFmpeg.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\CurlGlobal.h" />
@@ -173,9 +170,6 @@
     <ClCompile Include="DLLoader\LoaderFactory.cpp" />
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
-    <ClCompile Include="dvdplayer\FFmpeg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="filesystem\CacheStrategy.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp" />
     <ClCompile Include="filesystem\CurlGlobal.cpp" />

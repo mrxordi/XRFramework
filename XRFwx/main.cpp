@@ -9,6 +9,7 @@
 #include "../XRCommon/log/Log.h"
 #include "../XRCommon/settings/AppSettings.h"
 #include "../XRFramework/filesystem/CurlFile.h"
+#include "../XRFramework/system/SysInfo.h"
 
 IMPLEMENT_APP(MyApp)
 

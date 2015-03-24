@@ -24,15 +24,7 @@ std::string SysInfo::GetUserAgent()
 
 std::string SysInfo::GetUAWindowsVersion()
 {
-	OSVERSIONINFOEX osvi = {};
-
-	osvi.dwOSVersionInfoSize = sizeof(osvi);
 	std::string strVersion = "Windows NT";
-
-	if (GetVersionEx((LPOSVERSIONINFO)&osvi))
-	{
-		strVersion += StringUtils::Format(" %d.%d", osvi.dwMajorVersion, osvi.dwMinorVersion);
-	}
 
 	SYSTEM_INFO si = {};
 	GetSystemInfo(&si);
