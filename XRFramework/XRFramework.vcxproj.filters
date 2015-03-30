@@ -139,6 +139,10 @@
     <ClInclude Include="filesystem\FileItem.h">
       <Filter>filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="dvdplayer\InputSteams\IInputStream.h">
+      <Filter>dvdplayer\DVDInputStreams</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\InputSteams\RTMPStream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -263,6 +267,10 @@
     <ClCompile Include="filesystem\FileItem.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
+    <ClCompile Include="dvdplayer\InputSteams\IInputStream.cpp">
+      <Filter>dvdplayer\DVDInputStreams</Filter>
+    </ClCompile>
+    <ClCompile Include="dvdplayer\InputSteams\RTMPStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">

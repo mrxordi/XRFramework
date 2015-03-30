@@ -32,7 +32,7 @@ public:
 	void FillInMimeType(bool lookup = true/*= true*/);
 	/* sets the mime-type if known beforehand */
 	void SetMimeType(const std::string& mimetype) { m_mimetype = mimetype; };
-	std::string GetMimeType() { return m_mimetype; };
+	std::string GetMimeType() const { return m_mimetype; };
 
 	struct icompare
 	{

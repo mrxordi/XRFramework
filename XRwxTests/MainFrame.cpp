@@ -2,7 +2,6 @@
 #include "MainFrame.h"
 #include "main.h"
 #include "utils/XRect.h"
-
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU(ID_Quit, MyFrame::OnQuit)
 EVT_MENU(ID_About, MyFrame::OnAbout)
@@ -30,6 +29,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 	item = menuDebug->Append(ID_Debug_ffmpeg, "Debug FFMPEG", wxEmptyString, wxITEM_CHECK);
 	if (CLog::getSingletonPtr()->IsLogExtraLogged(LOGFFMPEG))
+		item->Check(true);
+
+	item = menuDebug->Append(ID_Debug_rtmp, "Debug RTMP", wxEmptyString, wxITEM_CHECK);
+	if (CLog::getSingletonPtr()->IsLogExtraLogged(LOGRTMP))
 		item->Check(true);
 
 	wxMenuBar *menuBar = new wxMenuBar;
@@ -65,6 +68,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	hbox->Add(vbox, 1);
 	SetSizer(hbox);
 	Centre();
+	m_rtmpstream = std::make_unique<CRTMPStream>();
+	
+	m_rtmpstream->Open("rtmp://37.48.112.225/channel/1285/liveHI live=true pageUrl=token swfUrl=297105894", "");
 }
 
 
@@ -111,6 +117,12 @@ void MyFrame::DebugToggle(wxCommandEvent& event)
 			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel | LOGFFMPEG);
 		else
 			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel & ~(LOGFFMPEG));
+		break;
+	case ID_Debug_rtmp:
+		if (event.IsChecked())
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel | LOGRTMP);
+		else
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel & ~(LOGRTMP));
 		break;
 
 	}

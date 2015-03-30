@@ -195,6 +195,12 @@ void CLog::SetExtraLogLevels(int level)
 			msg += " | ";
 		msg += "LOGFFMPEG";
 	}
+	if (level & LOGRTMP)
+	{
+		if (!msg.empty())
+			msg += " | ";
+		msg += "LOGRTMP";
+	}
 	m_extraLogLevels = level;
 	waitLock.Leave();
 

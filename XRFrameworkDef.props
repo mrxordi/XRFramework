@@ -30,7 +30,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)XRDependencies\includes;$(SolutionDir)ffmpeg\debug\include;$(ProjectDir);$(SolutionDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)ffmpeg\debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)XRDependencies\lib\debug;$(SolutionDir)ffmpeg\debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)XRDependencies\lib\debug;$(SolutionDir)ffmpeg\debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -42,7 +42,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)XRDependencies\includes;$(SolutionDir)ffmpeg\release\include;$(ProjectDir);$(SolutionDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)ffmpeg\release\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)XRDependencies\lib\release;$(SolutionDir)ffmpeg\release\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)XRDependencies\lib\release;$(SolutionDir)ffmpeg\debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

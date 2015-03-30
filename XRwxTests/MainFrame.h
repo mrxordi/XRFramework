@@ -4,6 +4,7 @@
 #include "wx/sizer.h"
 #include "wx/textctrl.h"
 #include <memory>
+#include "dvdplayer/InputSteams/RTMPStream.h"
 #include "XRFramework/utils/JobManager.h"
 #include "XRFramework/filesystem/FileItem.h"
 #include "XRFramework/filesystem/CurlGlobal.h"
@@ -44,6 +45,7 @@ public:
 
 	FileOperationJob* m_job;
 	CFileItemList m_list;
+	std::unique_ptr<CRTMPStream> m_rtmpstream;
 
 };
 
@@ -53,6 +55,7 @@ enum
 	ID_ResizeWideo,
 	ID_About,
 	ID_Debug_ffmpeg,
+	ID_Debug_rtmp,
 	ID_Debug_curl
 };
 
