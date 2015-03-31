@@ -119,6 +119,8 @@
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
     <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
+    <ClInclude Include="dvdplayer\Demuxers\Demux.h" />
+    <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
     <ClInclude Include="dvdplayer\InputSteams\IInputStream.h" />
     <ClInclude Include="dvdplayer\InputSteams\RTMPStream.h" />
     <ClInclude Include="filesystem\CacheStrategy.h" />
@@ -172,6 +174,8 @@
     <ClCompile Include="DLLoader\LoaderFactory.cpp" />
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
+    <ClCompile Include="dvdplayer\Demuxers\Demux.cpp" />
+    <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
     <ClCompile Include="dvdplayer\InputSteams\IInputStream.cpp" />
     <ClCompile Include="dvdplayer\InputSteams\RTMPStream.cpp" />
     <ClCompile Include="filesystem\CacheStrategy.cpp" />

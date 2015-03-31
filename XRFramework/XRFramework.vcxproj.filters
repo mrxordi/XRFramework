@@ -92,7 +92,6 @@
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
     <ClInclude Include="FrameworkUtils.h" />
-    <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
     <ClInclude Include="utils\XRect.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -142,7 +141,14 @@
     <ClInclude Include="dvdplayer\InputSteams\IInputStream.h">
       <Filter>dvdplayer\DVDInputStreams</Filter>
     </ClInclude>
-    <ClInclude Include="dvdplayer\InputSteams\RTMPStream.h" />
+    <ClInclude Include="dvdplayer\InputSteams\RTMPStream.h">
+      <Filter>dvdplayer\DVDInputStreams</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\Demuxers\Demux.h">
+      <Filter>dvdplayer\DVDDemuxers</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
+    <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -223,7 +229,6 @@
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
     <ClCompile Include="FrameworkUtils.cpp" />
-    <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="utils\MyEvents.cpp" />
     <ClCompile Include="filesystem\CurlGlobal.cpp">
       <Filter>filesystem</Filter>
@@ -270,7 +275,14 @@
     <ClCompile Include="dvdplayer\InputSteams\IInputStream.cpp">
       <Filter>dvdplayer\DVDInputStreams</Filter>
     </ClCompile>
-    <ClCompile Include="dvdplayer\InputSteams\RTMPStream.cpp" />
+    <ClCompile Include="dvdplayer\InputSteams\RTMPStream.cpp">
+      <Filter>dvdplayer\DVDInputStreams</Filter>
+    </ClCompile>
+    <ClCompile Include="dvdplayer\Demuxers\Demux.cpp">
+      <Filter>dvdplayer\DVDDemuxers</Filter>
+    </ClCompile>
+    <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
+    <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">
