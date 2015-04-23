@@ -28,7 +28,7 @@ extern "C"
 		}
 
 		vsnprintf(buf, sizeof(buf), fmt, args);
-		g_LogPtr->Log(level, "%s", 0, "", buf);
+		g_LogPtr->Log(level, "", 0, "", "%s", buf);
 	}
 }
 
@@ -187,6 +187,7 @@ bool CRTMPStream::Open(const CFileItem& fileItem)
 		return false;
 
 	m_eof = false;
+	m_hRTMP->m_read.flags |= RTMP_READ_RESUME;
 
 	return true;
 }
@@ -245,4 +246,15 @@ bool CRTMPStream::Pause(double dTime)
 		RTMP_Pause(m_hRTMP, m_bPaused);
 
 	return true;
+}
+
+bool CRTMPStream::SeekTime(int iTimeInMsec)
+{
+	LOGNOTICE("RTMP Seek to %i requested", iTimeInMsec);
+	XR::CSingleLock lock(m_RTMPSection);
+
+	if (m_hRTMP && RTMP_SendSeek(m_hRTMP, iTimeInMsec))
+		return true;
+
+	return false;
 }

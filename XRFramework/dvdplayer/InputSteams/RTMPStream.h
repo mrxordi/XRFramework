@@ -23,9 +23,9 @@ public:
 	virtual int64_t GetLength();
 
 	XR::CCriticalSection m_RTMPSection;
+	RTMP*		m_hRTMP;
 
 private:
-	RTMP*		m_hRTMP;
 	bool		m_eof;
 	bool		m_bPaused;
 	bool		m_canSeek;

@@ -149,6 +149,7 @@
     </ClInclude>
     <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
     <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
+    <ClInclude Include="dvdplayer\InputSteams\BufferedRTMPStream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -283,6 +284,7 @@
     </ClCompile>
     <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
+    <ClCompile Include="dvdplayer\InputSteams\BufferedRTMPStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">

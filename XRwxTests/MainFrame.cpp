@@ -2,6 +2,7 @@
 #include "MainFrame.h"
 #include "main.h"
 #include "utils/XRect.h"
+#include "dvdplayer/InputSteams/RTMPStream.h"
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU(ID_Quit, MyFrame::OnQuit)
 EVT_MENU(ID_About, MyFrame::OnAbout)
@@ -70,7 +71,38 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	Centre();
 	m_rtmpstream = std::make_unique<CRTMPStream>();
 	
-	m_rtmpstream->Open("rtmp://37.48.112.225/channel/1285/liveHI live=true pageUrl=token swfUrl=297105894", "");
+	m_rtmpstream->Open("'rtmp://184.72.239.149/vod playpath=mp4:BigBuckBunny_115k.mov swfurl=player/player.swf", "");
+	int buffersize = 64 * 1024;
+	char* bData;
+	int nRead = 0;
+	bData = (char*)malloc(buffersize);
+	int i = 0;
+	int aaaa = 0;
+	CFile cFile;
+	cFile.OpenForWrite("special://app/costam.flv", true);
+	while (1)
+	{
+		int res = m_rtmpstream->Read((uint8_t*)bData, buffersize);
+		if (res>0)
+			{
+				cFile.Write(bData, res);
+				std::string str(bData, res);
+				if (bData[0] == 0x09 && bData[11] != 0x27)
+				if (((bData[11] & 0xf0) == 0x10)){
+					uint32_t ts = AMF_DecodeInt24(bData + 4);
+					ts |= (bData[7] << 24);
+					LOGINFO("I have keyframe, timestamp: %d", ts);
+					LOGINFO("I have keyframe, timestamp: %d", m_rtmpstream->m_hRTMP->m_mediaStamp);
+					ts = 0;
+				}
+				if (i == 500)
+					aaaa = m_rtmpstream->SeekTime(20);
+				i++;
+		} else if (res <0) {
+			break;
+		}
+	}
+	free(bData);
 }
 
 
