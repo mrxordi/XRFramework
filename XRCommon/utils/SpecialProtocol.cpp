@@ -152,3 +152,19 @@ std::string CSpecialProtocol::GetPath(const std::string &key)
 	assert(false);
 	return "";
 }
+
+void CSpecialProtocol::InitializePaths()
+{
+	std::string appPath, tempPath, docPath, homePath;
+
+	appPath = CUtil::ResolveExecutablePath();
+	tempPath = CUtil::ResolveSystemTempPath();
+	docPath = CUtil::ResolveDocPath();
+	homePath = CUtil::ResolveUserPath();
+
+	CSpecialProtocol::SetAPPPath(appPath);
+	CSpecialProtocol::SetAPPBinPath(appPath);
+	CSpecialProtocol::SetTempPath(tempPath);
+	CSpecialProtocol::SetDocPath(docPath);
+	CSpecialProtocol::SetHomePath(homePath);
+}

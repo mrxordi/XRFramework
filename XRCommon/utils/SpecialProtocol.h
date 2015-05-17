@@ -16,6 +16,7 @@ class CURL;
 class CSpecialProtocol
 {
 public:
+	static void InitializePaths();
 	static void SetAPPPath(const std::string &path);
 	static void SetAPPBinPath(const std::string &path);
 	static void SetDocPath(const std::string &path);
