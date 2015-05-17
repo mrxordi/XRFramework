@@ -52,3 +52,5 @@ typedef std::tr1::shared_ptr<LogImplementation> LogImplementation_t;
 #define LOGSEVERE(x, ...)	g_LogPtr->Log(LOG_SEVERE, __FILE__, __LINE__, __FUNCTION__, x, __VA_ARGS__);
 #define LOGFATAL(x, ...)	g_LogPtr->Log(LOG_FATAL, __FILE__, __LINE__, __FUNCTION__, x, __VA_ARGS__);
 #endif
+
+enum ConColor { DARKBLUE = 1, DARKGREEN, DARKTEAL, DARKRED, DARKPINK, DARKYELLOW, GRAY, DARKGRAY, BLUE, GREEN, TEAL, RED, PINK, YELLOW, WHITE };

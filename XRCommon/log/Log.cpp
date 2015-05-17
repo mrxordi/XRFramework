@@ -2,6 +2,7 @@
 #include "Log.h"
 
 #include <inttypes.h>
+#include <iostream>
 
 #include "FilePathUtils.h"
 #include "utils/UrlUtils.h"
@@ -9,7 +10,6 @@
 #include "utils/SpecialProtocol.h"
 #include "../XRThreads/SingleLock.h"
 #include "../XRThreads/Thread.h"
-
 
 template<>
 CLog*  Singleton<CLog>::ms_Singleton = 0;
@@ -52,6 +52,8 @@ bool CLog::Init(std::string& path) {
 		}
 
 	}
+	m_hConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
 
 	// create log header
 	Log(LOG_INFO, "", 0, "", "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
@@ -150,6 +152,22 @@ bool CLog::WriteLogString(int logLevel, const char* file, const int lineNumber, 
 
 	if (!this)
 		strData = "[CAUTION CLOG NOT INITIALISED] " + strData;
+
+	if (m_hConsoleHandle) {
+		switch (logLevel) {
+		case LOG_ERROR:
+			SetConsoleTextAttribute(m_hConsoleHandle, ConColor::RED);
+			break;
+		case LOG_INFO:
+			SetConsoleTextAttribute(m_hConsoleHandle, ConColor::YELLOW);
+			break;
+		default:
+			SetConsoleTextAttribute(m_hConsoleHandle, ConColor::WHITE);
+		}
+		std::cout << StringUtils::Format("%02.2d:%02.2d:%02.2d %7s: ", 
+			hour, minute, second,
+			levelNames[logLevel]) << logString << std::endl;
+	}
 
 	PrintDebugString(strData);
 
