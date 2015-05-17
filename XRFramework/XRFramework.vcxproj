@@ -121,7 +121,6 @@
     <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
     <ClInclude Include="dvdplayer\Demuxers\Demux.h" />
     <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
-    <ClInclude Include="dvdplayer\InputSteams\BufferedRTMPStream.h" />
     <ClInclude Include="dvdplayer\InputSteams\IInputStream.h" />
     <ClInclude Include="dvdplayer\InputSteams\RTMPStream.h" />
     <ClInclude Include="filesystem\CacheStrategy.h" />
@@ -159,6 +158,8 @@
     <ClInclude Include="utils\Job.h" />
     <ClInclude Include="utils\JobManager.h" />
     <ClInclude Include="utils\MyEvents.h" />
+    <ClInclude Include="utils\Pcre.h" />
+    <ClInclude Include="utils\PcreJob.h" />
     <ClInclude Include="utils\RingBuffer.h" />
     <ClInclude Include="utils\Timer.h" />
     <ClInclude Include="utils\XRect.h" />
@@ -177,7 +178,6 @@
     <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="dvdplayer\Demuxers\Demux.cpp" />
     <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
-    <ClCompile Include="dvdplayer\InputSteams\BufferedRTMPStream.cpp" />
     <ClCompile Include="dvdplayer\InputSteams\IInputStream.cpp" />
     <ClCompile Include="dvdplayer\InputSteams\RTMPStream.cpp" />
     <ClCompile Include="filesystem\CacheStrategy.cpp" />
@@ -217,6 +217,8 @@
     <ClCompile Include="utils\Job.cpp" />
     <ClCompile Include="utils\JobManager.cpp" />
     <ClCompile Include="utils\MyEvents.cpp" />
+    <ClCompile Include="utils\Pcre.cpp" />
+    <ClCompile Include="utils\PcreJob.cpp" />
     <ClCompile Include="utils\RingBuffer.cpp" />
     <ClCompile Include="utils\Timer.cpp" />
   </ItemGroup>
