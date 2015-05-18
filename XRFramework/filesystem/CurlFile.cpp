@@ -465,7 +465,7 @@ void CCurlFile::SetCommonOptions(CReadState* state)
 	curl_easy_setopt(m_state->m_easyHandle, CURLOPT_TRANSFERTEXT, FALSE);
 
 	// setup POST data if it is set (and it may be empty)
-	if (m_postdataset)
+	if (m_postdataset || !m_postdata.empty())
 	{
 		curl_easy_setopt(h, CURLOPT_POST, 1);
 		curl_easy_setopt(h, CURLOPT_POSTFIELDSIZE, m_postdata.length());

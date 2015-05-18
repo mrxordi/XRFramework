@@ -180,7 +180,8 @@ bool StringConverter::InnerConvert(iconv_t type, int multiplier, const INPUT& st
 
 		if (returnV == (size_t)-1)
 		{
-			if (errno == E2BIG) //output buffer is not big enough
+			int ret = errno;
+			if (ret == E2BIG) //output buffer is not big enough
 			{
 				//save where iconv() ended converting, realloc might make outBufStart invalid
 				size_t bytesConverted = outBufSize - outBytesAvail;
@@ -203,7 +204,7 @@ bool StringConverter::InnerConvert(iconv_t type, int multiplier, const INPUT& st
 				//continue in the loop and convert the rest
 				continue;
 			}
-			else if (errno == EILSEQ) //An invalid multibyte sequence has been encountered in the input
+			else if (ret == EILSEQ) //An invalid multibyte sequence has been encountered in the input
 			{
 				if (failOnInvalidChar)
 					break;
@@ -214,7 +215,7 @@ bool StringConverter::InnerConvert(iconv_t type, int multiplier, const INPUT& st
 				//continue in the loop and convert the rest
 				continue;
 			}
-			else if (errno == EINVAL) /* Invalid sequence at the end of input buffer */
+			else if (ret == EINVAL) /* Invalid sequence at the end of input buffer */
 			{
 				if (!failOnInvalidChar)
 					returnV = 0; /* reset error status to use converted part */

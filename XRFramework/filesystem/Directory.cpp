@@ -131,7 +131,7 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const Hints
 		while (!result && !cancel)
 		{
 			const std::string pathToUrl(url.Get());
-			if (wxGetApp().IsCurrentThread() && allowThreads && UrlUtils::IsSpecial(pathToUrl))
+			if (/*wxGetApp().IsCurrentThread() && */allowThreads && UrlUtils::IsSpecial(pathToUrl))
 			{
 
 				GetListDirectory get(pDirectory, realURL, url);
@@ -141,8 +141,8 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const Hints
 					{
 						// update progress
 						float progress = pDirectory->GetProgress();
-						if (progress > 0)
-							wxGetApp().m_mainFrame->SetStatusText(StringUtils::Format("Ladowanie katalogu.... %i", progress));
+						/*if (progress > 0)*/
+							/*wxGetApp().m_mainFrame->SetStatusText(StringUtils::Format("Ladowanie katalogu.... %i", progress));*/
 
 							//g_iApplication->GetStatusBar()->SetText(StringUtils::Format("Ladowanie katalogu.... %i", progress));
 					}
@@ -158,7 +158,7 @@ bool CDirectory::GetDirectory(const CURL& url, CFileItemList &items, const Hints
 
 			if (!result)
 			{
-				if (!cancel && wxGetApp().IsCurrentThread())
+				if (!cancel /*&& wxGetApp().IsCurrentThread()*/)
 					continue;
 				LOGERR("Error getting %s.", url.GetRedacted().c_str());
 				return false;

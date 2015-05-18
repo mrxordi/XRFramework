@@ -27,8 +27,8 @@ public:
 	virtual bool Pause(double dTime) = 0;
 	virtual int64_t GetLength() = 0;
 	virtual std::string& GetContent() { return m_content; };
-	virtual std::string& GetFileName() { return m_strFileName; }
-	virtual CURL &GetURL() { return m_url; }
+	virtual const std::string& GetFileName() { return m_strFileName; }
+	virtual const CURL &GetURL() { return m_url; }
 	virtual void Abort() {}
 	virtual int GetBlockSize() { return 0; }
 	bool IsStreamType(EStreamType type) const { return m_streamType == type; }

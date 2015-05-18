@@ -27,7 +27,6 @@ bool CSettingSection::Deserialize(const XMLNode *node, bool update /*= false*/)
 	//We get our ID of section
 	if (!CSetting::Deserialize(node, update))
 		return false;
-
 	const XMLElement* settingElement = node->FirstChildElement("setting");
 	while(settingElement != NULL) {
 		std::string settingID;

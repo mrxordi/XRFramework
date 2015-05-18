@@ -62,7 +62,7 @@ CRTMPStream::CRTMPStream() : IInputStream(EStreamType::DVDSTREAM_TYPE_RTMP)
 	LOGDEBUG("Using external libRTMP");
 
 	RTMP_LogSetCallback(RTMPInputStream_Log);
-	RTMP_LogSetLevel(RTMP_LOGDEBUG2);
+	RTMP_LogSetLevel(RTMP_LOGDEBUG);
 	m_hRTMP = RTMP_Alloc();
 	RTMP_Init(m_hRTMP);
 
