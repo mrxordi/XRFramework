@@ -30,6 +30,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	if (CLog::getSingletonPtr()->IsLogExtraLogged(LOGFFMPEG))
 		item->Check(true);
 
+	item = menuDebug->Append(ID_Debug_rtmp, "Debug RTMP", wxEmptyString, wxITEM_CHECK);
+	if (CLog::getSingletonPtr()->IsLogExtraLogged(LOGRTMP))
+		item->Check(true);
+
 	wxMenuBar *menuBar = new wxMenuBar;
 	menuBar->Append(menuFile, "&File");
 	menuBar->Append(menuDebug, "&Debug Options");
@@ -41,6 +45,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 	wxDX10renderer* widget = new wxDX10renderer(this, -1);
 	wxGetApp().m_VideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, widget);
+	
 
 }
 
@@ -93,6 +98,12 @@ void MyFrame::DebugToggle(wxCommandEvent& event)
 			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel | LOGFFMPEG);
 		else
 			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel & ~(LOGFFMPEG));
+		break;
+	case ID_Debug_rtmp:
+		if (event.IsChecked())
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel | LOGRTMP);
+		else
+			CLog::getSingletonPtr()->SetExtraLogLevels(extraLogLevel & ~(LOGRTMP));
 		break;
 
 	}

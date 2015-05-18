@@ -17,6 +17,7 @@ public:
 	void OnCloseWindow(wxCloseEvent& event);
 	
 	DECLARE_EVENT_TABLE()
+private:
 };
 
 enum
@@ -25,5 +26,6 @@ enum
 	ID_ResizeWideo,
 	ID_About,
 	ID_Debug_ffmpeg,
+	ID_Debug_rtmp,
 	ID_Debug_curl
 };

@@ -12,6 +12,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="wxDX10renderer.cpp" />
+    <ClCompile Include="WeebTv.cpp" />
+    <ClCompile Include="BufferedStream.cpp" />
+    <ClCompile Include="StreamCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
@@ -19,6 +22,9 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="wxDX10renderer.h" />
     <ClInclude Include="stdafxf.h" />
+    <ClInclude Include="WeebTv.h" />
+    <ClInclude Include="BufferedStream.h" />
+    <ClInclude Include="StreamCache.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

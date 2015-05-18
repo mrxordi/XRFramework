@@ -71,7 +71,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 	Centre();
 	m_rtmpstream = std::make_unique<CRTMPStream>();
 	
-	m_rtmpstream->Open("'rtmp://184.72.239.149/vod playpath=mp4:BigBuckBunny_115k.mov swfurl=player/player.swf", "");
+	m_rtmpstream->Open("rtmpt://37.48.65.15:80/channel/1363/live live=true pageUrl=token swfUrl=419646407", "");
 	int buffersize = 64 * 1024;
 	char* bData;
 	int nRead = 0;
@@ -86,7 +86,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 		if (res>0)
 			{
 				cFile.Write(bData, res);
-				std::string str(bData, res);
 				if (bData[0] == 0x09 && bData[11] != 0x27)
 				if (((bData[11] & 0xf0) == 0x10)){
 					uint32_t ts = AMF_DecodeInt24(bData + 4);
@@ -95,9 +94,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 					LOGINFO("I have keyframe, timestamp: %d", m_rtmpstream->m_hRTMP->m_mediaStamp);
 					ts = 0;
 				}
-				if (i == 500)
-					aaaa = m_rtmpstream->SeekTime(20);
-				i++;
 		} else if (res <0) {
 			break;
 		}

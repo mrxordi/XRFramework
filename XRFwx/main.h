@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 #include "wx/wx.h" 
+#include "WeebTv.h"
+#include "BufferedStream.h"
 #include "../XRCommon/settings/AppSettings.h"
 #include "../XRCommon/settings/helpers/Monitors.h"
 #include "../XRFramework/render/RenderSystemDX.h"
@@ -23,7 +25,10 @@ public:
 	MyFrame* m_mainFrame;
 	std::shared_ptr<cRenderSystemDX> m_renderSystem;
 	std::unique_ptr<WinRenderer> m_VideoRenderer;
+	std::unique_ptr<CWeebTv> m_weeb;
 private:
+	std::unique_ptr<CBufferedStream> m_bufStream;
+
 	DWORD m_threadId;
 };
 
