@@ -3,6 +3,8 @@
 
 #include <inttypes.h>
 #include <iostream>
+#include <io.h>
+#include <fcntl.h>
 
 #include "FilePathUtils.h"
 #include "utils/UrlUtils.h"
@@ -52,6 +54,16 @@ bool CLog::Init(std::string& path) {
 		}
 
 	}
+#if _DEBUG
+	if (!m_hConsoleHandle)
+		AllocConsole();
+	HANDLE handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
+	int hCrt = _open_osfhandle((long)handle_out, _O_TEXT);
+	FILE* hf_out = _fdopen(hCrt, "w");
+	setvbuf(hf_out, NULL, _IONBF, 1);
+	*stdout = *hf_out;
+
+#endif
 	m_hConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 
@@ -164,9 +176,10 @@ bool CLog::WriteLogString(int logLevel, const char* file, const int lineNumber, 
 		default:
 			SetConsoleTextAttribute(m_hConsoleHandle, ConColor::WHITE);
 		}
-		std::cout << StringUtils::Format("%02.2d:%02.2d:%02.2d %7s: ", 
-			hour, minute, second,
-			levelNames[logLevel]) << logString << std::endl;
+// 		std::cout << StringUtils::Format("%02.2d:%02.2d:%02.2d %7s: ", 
+// 			hour, minute, second,
+// 			levelNames[logLevel]) << logString << std::endl;
+		std::cout << strData << std::endl;
 	}
 
 	PrintDebugString(strData);
