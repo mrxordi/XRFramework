@@ -489,7 +489,7 @@ bool CSettingString::Deserialize(const XMLNode *node, bool update /*= false*/)
 	m_changed = m_DefaultValue != m_Value;
 
 	if (!CheckValidity(m_Value)) {
-		LOGWARN("Setting %s value (%s) is empty (setting default value).", GetID(), m_Value.c_str());
+		LOGWARN("Setting %s value is empty (setting default value).", GetID());
 		m_Value = m_DefaultValue;
 	}
 	m_changed = m_DefaultValue != m_Value;

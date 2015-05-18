@@ -31,6 +31,16 @@ public:
 	bool SetFloat(const std::string& id, float value);
 	bool SetBool(const std::string& id, bool value);
 	bool SetString(const std::string& id, std::string value);
+
+	/*!\brief Registers the given ISettingCallback implementation to be triggered
+	\for the given list of settings.
+	\param settingsHandler ISettingsHandler implementation
+	\param settingList List of settings to trigger the given ISettingCallback implementation*/
+	void RegisterCallback(ISettingCallback *callback, const std::set<std::string> &settingList);
+	/*!\brief Unregisters the given ISettingCallback implementation.
+	\param callback ISettingCallback implementation*/
+	void UnregisterCallback(ISettingCallback *callback);
+
 public:
 	float m_contrast;
 	float m_brightness;

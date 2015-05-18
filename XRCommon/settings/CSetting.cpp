@@ -4,7 +4,7 @@
 #include "utils/URL.h"
 
 CSetting::CSetting(const std::string &id, CSettingManager *settingsManager /*= nullptr*/)
-	: m_id(id), m_settingmanager(settingsManager), m_type(SettingType::ST_UKNOWN), m_changed(false), m_callback(nullptr), m_bList(false)
+	: m_id(id), m_settingmanager(settingsManager), m_type(SettingType::ST_UKNOWN), m_changed(false), m_callback((ISettingCallback*)m_settingmanager), m_bList(false)
 {
 
 }
@@ -76,7 +76,8 @@ bool CSetting::GetString(const XMLNode* pRootNode, const char* strTag, std::stri
 	const char* encoded = pElement->Attribute("urlencoded");
 	if (pElement != NULL)
 	{
-		strStringValue = pElement->GetText();
+		const char* value = pElement->GetText();
+		strStringValue = value ? value : "";
 		if (encoded && _strcmpi(encoded, "yes") == 0)
 			strStringValue = CURL::Decode(strStringValue);
 		return true;

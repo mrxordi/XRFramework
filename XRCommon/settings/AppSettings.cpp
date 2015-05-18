@@ -104,3 +104,13 @@ void CAppSettings::SaveCurrentRect(XRect& rect, int monitor)
 	SetInt("window.height", rect.Height());
 	SetInt("window.monitor", monitor);
 }
+
+void CAppSettings::RegisterCallback(ISettingCallback *callback, const std::set<std::string> &settingList)
+{
+	m_manager->RegisterCallback(callback, settingList);
+}
+
+void CAppSettings::UnregisterCallback(ISettingCallback *callback)
+{
+	m_manager->UnregisterCallback(callback);
+}

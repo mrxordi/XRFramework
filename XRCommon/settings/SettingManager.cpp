@@ -116,8 +116,8 @@ void CSettingManager::AddSection(CSettingSection *section)
 		SettingMap::iterator setting = m_settings.find(settingId);
 		if (setting == m_settings.end()) {
 			Setting tmpSetting = { NULL };
-			std::string newid = section->GetID() +"."+ settingId;
-			std::pair<SettingMap::iterator, bool> tmpIt = m_settings.insert(make_pair(newid, tmpSetting));
+			//std::string newid = section->GetID() +"."+ settingId;
+			std::pair<SettingMap::iterator, bool> tmpIt = m_settings.insert(make_pair(settingId, tmpSetting));
 			setting = tmpIt.first;
 		}
 		if (setting->second.setting == nullptr) {
@@ -242,10 +242,10 @@ float CSettingManager::GetFloat(const std::string &id) const
 	CSetting *setting = GetSetting(id);
 	if (!setting) {
 		LOGERR("GetFloat() - Setting not found! - use AddFloat() to add setting first");
-		return false;
+		return 0;
 	}
 	if (setting->GetType() != SettingType::ST_FLOAT)
-		return false;
+		return 0;
 
 	return ((CSettingFloat*)setting)->GetValue();
 }
@@ -256,10 +256,10 @@ std::string CSettingManager::GetString(const std::string &id) const
 	CSetting *setting = GetSetting(id);
 	if (!setting) {
 		LOGERR("GetString() - Setting not found! - use AddString() to add setting first");
-		return false;
+		return "";
 	}
 	if (setting->GetType() != SettingType::ST_STRING)
-		return false;
+		return "";
 
 	return ((CSettingString*)setting)->GetValue();
 }
@@ -349,7 +349,7 @@ bool CSettingManager::OnSettingChanging(const CSetting *setting)
 		return false;
 
 	XR::CSingleLock lock(m_settingsCritical);
-	if (!m_loaded)
+	if (!m_initialized)
 		return true;
 
 	SettingMap::const_iterator settingIt = m_settings.find(setting->GetID());
