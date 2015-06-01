@@ -13,7 +13,7 @@ public:
 	virtual bool    Open(const char* strFile, const std::string &content);
 	virtual bool	Open(const CFileItem& fileItem);
 	virtual void    Close();
-	virtual int     Read(uint8_t* buf, int buf_size);
+	virtual size_t Read(uint8_t* buf, size_t buf_size);
 	virtual int64_t Seek(int64_t offset, int whence);
 	bool            SeekTime(int iTimeInMsec);
 	bool            CanSeek()  { return m_canSeek; }

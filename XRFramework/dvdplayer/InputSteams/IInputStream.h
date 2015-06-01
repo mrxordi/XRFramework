@@ -22,7 +22,7 @@ public:
 	virtual bool Open(const char* strFileName, const std::string& content);
 	virtual bool Open(const CFileItem& fileItem);
 	virtual void Close() = 0;
-	virtual int Read(uint8_t* buf, int buf_size) = 0;
+	virtual size_t Read(uint8_t* buf, size_t buf_size) = 0;
 	virtual int64_t Seek(int64_t offset, int whence) = 0;
 	virtual bool Pause(double dTime) = 0;
 	virtual int64_t GetLength() = 0;

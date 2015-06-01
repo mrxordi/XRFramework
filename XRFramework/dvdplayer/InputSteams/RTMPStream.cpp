@@ -222,7 +222,7 @@ int64_t CRTMPStream::GetLength()
 	return 1;
 }
 
-int CRTMPStream::Read(uint8_t* buf, int buf_size)
+size_t CRTMPStream::Read(uint8_t* buf, size_t buf_size)
 {
 	if (!m_hRTMP)
 		return -1;
