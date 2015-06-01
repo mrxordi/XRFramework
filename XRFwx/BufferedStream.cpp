@@ -26,6 +26,14 @@ bool CBufferedStream::Open(const char* strFileName, const std::string& content)
 
 	XR::CSingleLock lock(m_sync);
 	IInputStream::Open(strFileName, content);
+
+	// opening the source stream.
+	if (!m_sourceStream->Open(strFileName, content))
+	{
+		LOGERR("Failed to open source rtmp stream");
+		Close();
+		return false;
+	}
 	LOGDEBUG("Opening <%s> using cache.", m_strFileName.c_str());
 	if (!m_streamCache)
 	{
@@ -37,17 +45,13 @@ bool CBufferedStream::Open(const char* strFileName, const std::string& content)
 		Close();
 		return false;
 	}
-	// opening the source stream.
-	if (!m_sourceStream->Open(strFileName, content))
-	{
-		LOGERR("Failed to open source rtmp stream");
-		return false;
-	}
+
 	m_readPos = 0;
 	m_writePos = 0;
 	
 	m_seekEvent.Reset();
 	m_seekEnded.Reset();
+	m_content = m_sourceStream->GetContent();
 
 	CThread::Create(false);
 
@@ -63,17 +67,137 @@ void CBufferedStream::Close()
 		m_streamCache->Close();
 
 	m_sourceStream->Close();
+
+	m_CachedKeyframes.clear();
 }
 
-int CBufferedStream::Read(uint8_t* buf, int buf_size)
+size_t CBufferedStream::Read(uint8_t* buf, size_t buf_size)
 {
-	throw std::logic_error("The method or operation is not implemented.");
+	XR::CSingleLock lock(m_sync);
+	if (!m_streamCache)
+	{
+		LOGERR("Sanity failed. no cache strategy!");
+		return -1;
+	}
+	int64_t iRc;
+
+	if (buf_size > SSIZE_MAX)
+		buf_size = SSIZE_MAX;
+
+	do {
+		// attempt to read
+		iRc = m_streamCache->ReadFromCache((char *)buf, (size_t)buf_size);
+		if (iRc > 0)
+		{
+			m_readPos += iRc;
+			return (int)iRc;
+		}
+
+		if (iRc == -2)
+		{
+			// just wait for some data to show up
+			iRc = m_streamCache->WaitForData(1, 10000);
+		}
+	} while (iRc>0);
+
+	if (iRc == -3)
+	{
+		LOGWARN("Timeout waiting for data", __FUNCTION__);
+		return -1;
+	}
+
+	if (iRc == 0)
+		return 0;
+
+	// unknown error code
+	LOGERR("Cache strategy returned unknown error code %" PRId64 ".", iRc);
+	return -1;
 }
 
+//************************************
+// Method:    Seek
+// FullName:  CBufferedStream::Seek
+// Access:    virtual public 
+// Returns:   int64_t
+// Qualifier: Function returns position after seek, as flv can seek only key frames
+// Parameter: int64_t offset - Indicates offset from the begining of file
+// Parameter: int whence - SEEK_SET, SEEK_CUR, SEEK_END
+//************************************
 int64_t CBufferedStream::Seek(int64_t offset, int whence)
 {
-	throw std::logic_error("The method or operation is not implemented.");
+	XR::CSingleLock lock(m_sync);
+
+	if (!m_streamCache)
+	{
+		LOGERR("Sanity failed while seeking. no cache strategy!");
+		return -1;
+	}
+	int64_t iCurPos = m_readPos;
+	int64_t iTarget = offset;
+	if (whence == SEEK_END)
+		iTarget = GetLength() + iTarget;
+	else if (whence == SEEK_CUR)
+		iTarget = iCurPos + iTarget;
+	else if (whence == SEEK_POSSIBLE)
+		return true;
+	else if (whence != SEEK_SET)
+		return -1;
+
+	if (iTarget == m_readPos)
+		return m_readPos;
+
+	if ((m_nSeekResult = m_streamCache->Seek(iTarget)) != iTarget)
+	{
+		return 0;
+	}
+	else
+		m_readPos = iTarget;
+	return m_nSeekResult;
 }
+
+//************************************
+// Method:    SeekTime
+// FullName:  CBufferedStream::SeekTime
+// Access:    virtual public 
+// Returns:   int64_t
+// Qualifier: Function returns time after seek, as flv can seek only key frames
+//			  so the time can be different than requested
+// Parameter: int64_t time_ms
+//************************************
+int64_t CBufferedStream::SeekTime(int64_t time_ms)
+{
+	if (!m_streamCache)
+	{
+		LOGERR("Sanity failed while seeking. no cache strategy!");
+		return -1;
+	}
+
+	int64_t seek = 0;
+	auto it = m_CachedKeyframes.begin();
+
+	for (; it < (m_CachedKeyframes.end()-1); it++)
+	{
+		int64_t second = (it + 1)->first;
+		if (it->first <= time_ms && second > time_ms) {
+			seek = it->second;
+			break;
+		} 			
+	}
+
+	if (it == m_CachedKeyframes.end()-1) {
+		LOGWARN("Tried to seek behind buffered position.");
+		seek = (m_CachedKeyframes.end()-2)->second;
+	}
+
+	seek = Seek(seek, SEEK_SET);
+	if (seek <= 0) {
+		LOGERR("Failed to SeekTime(%" PRId64 "); returning NULL.", time_ms);
+		return 0;
+	}
+
+	return seek;
+}
+
 
 bool CBufferedStream::Pause(double dTime)
 {
@@ -82,17 +206,14 @@ bool CBufferedStream::Pause(double dTime)
 
 int64_t CBufferedStream::GetLength()
 {
-	return m_writePos;
-}
-
-void CBufferedStream::Abort()
-{
-
+	return -1;
 }
 
 bool CBufferedStream::IsEOF()
 {
-	return m_streamCache->IsEndOfInput();
+	if (m_streamCache->IsEndOfInput())
+		m_bEof = true;
+	return m_bEof;
 }
 
 // BitstreamStats CBufferedStream::GetBitstreamStats() const
@@ -187,6 +308,7 @@ void CBufferedStream::ParsePacketHeader(const uint8_t* pData)
 		LOGINFO("I have video keyframe, timestamp: %u, at cache offset %" PRId64 ".", ts, m_writePos);
 		XR::CSingleLock lock(m_sync);
 		m_CachedKeyframes.push_back(make_pair<>(ts, m_writePos));
+
 	}
 }
 
