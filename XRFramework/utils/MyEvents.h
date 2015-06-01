@@ -1,7 +1,7 @@
 #pragma once
 #include "wx/event.h"
 
-class WinRenderer;
+class CDX10FrameRenderer;
 
 class wxVideoRendererEvent : public wxEvent
 {
@@ -15,12 +15,12 @@ public:
 		VR_ACTION_CLOSING,
 	};
 public:
-	wxVideoRendererEvent(WinRenderer* VideoRenderer, VR_ACTION action);
+	wxVideoRendererEvent(CDX10FrameRenderer* VideoRenderer, VR_ACTION action);
 	virtual ~wxVideoRendererEvent();
 
 	wxEvent* Clone() const override { return new wxVideoRendererEvent(*this); }
  	VR_ACTION e_action;
-	WinRenderer* pVideoRenderer;
+	CDX10FrameRenderer* pVideoRenderer;
 };
 
 wxDECLARE_EVENT(wxEVT_VIDEO_RENDERER, wxVideoRendererEvent);

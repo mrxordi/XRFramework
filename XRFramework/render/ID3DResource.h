@@ -6,7 +6,7 @@
 #include <memory>
 using namespace DirectX;
 
-class cRenderSystemDX;
+class CDX10SystemRenderer;
 
 class ID3DResource
 {
@@ -25,7 +25,7 @@ public:
 class D3DTexture : public ID3DResource
 {
 public:
-	D3DTexture();
+	D3DTexture(CDX10SystemRenderer *sys);
 	virtual ~D3DTexture();
 
 	bool Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels = 1);
@@ -54,6 +54,7 @@ private:
 	ID3D10RenderTargetView* m_renderTargetView;
 	
 	bool m_bLocked;
+	CDX10SystemRenderer *m_rendererSystem;
 };
 
 /************************************************************************/
@@ -64,7 +65,7 @@ typedef std::map<std::string, std::string> DefinesMap;
 class D3DEffect : public ID3DResource
 {
 public:
-	D3DEffect();
+	D3DEffect(CDX10SystemRenderer *m_rendererSystem);
 	virtual ~D3DEffect();
 
 	bool Create(const std::string &effectString, DefinesMap* defines);
@@ -92,6 +93,7 @@ private:
 	ID3D10Effect* m_effect;
 	ID3D10EffectTechnique* m_technique;
 	DefinesMap   m_defines;
+	CDX10SystemRenderer *m_rendererSystem;
 };
 
 /************************************************************************/
@@ -105,7 +107,7 @@ public:
 		INDEXED_BUFFER
 	};
 
-	D3DVertexBuffer();
+	D3DVertexBuffer(CDX10SystemRenderer *sys);
 	virtual ~D3DVertexBuffer();
 
 	bool CreateBuffer(UINT length, D3D10_USAGE usage = D3D10_USAGE_DEFAULT, void* data = NULL);
@@ -130,4 +132,5 @@ private:
 	UINT		m_length;
 	ID3D10Buffer* m_indexBuffer;
 	ID3D10Buffer* m_vertexBuffer;
+	CDX10SystemRenderer *m_rendererSystem;
 };

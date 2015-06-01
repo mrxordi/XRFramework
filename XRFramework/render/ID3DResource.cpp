@@ -8,7 +8,7 @@ const char* usages[] = { "D3D10_USAGE_DEFAULT", "D3D10_USAGE_IMMUTABLE", "D3D10_
 /************************************************************************/
 /*    D3DTexture                                                        */
 /************************************************************************/
-D3DTexture::D3DTexture()
+D3DTexture::D3DTexture(CDX10SystemRenderer *sys) : m_rendererSystem(sys)
 {
 	m_bLocked = false;
 	m_resource = nullptr;
@@ -26,7 +26,7 @@ D3DTexture::~D3DTexture()
 
 bool D3DTexture::Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usage, DXGI_FORMAT format, UINT mipLevels)
 {
-	if (!g_DXRendererPtr) {
+	if (!m_rendererSystem) {
 		LOGFATAL("Failed to create texture, no system ptr provided");
 	}
 	m_mipLevels = mipLevels;
@@ -34,7 +34,7 @@ bool D3DTexture::Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usag
 	m_bindflag = bindflag;
 	m_width = width;
 	m_height = height;
-	ID3D10Device* pDevice = g_DXRendererPtr->GetDevice();
+	ID3D10Device* pDevice = m_rendererSystem->GetDevice();
 
 	DXGI_SAMPLE_DESC dxgiSampleDesc;
 	dxgiSampleDesc.Count = 1;
@@ -105,7 +105,7 @@ bool D3DTexture::Create(UINT width, UINT height, UINT bindflag, D3D10_USAGE usag
 		}*/
 		LOGINFO("Texture dimension %ux%u created with usage: %s", m_width, m_height, usages[usage]);
 
-		g_DXRendererPtr->Register(this);
+		m_rendererSystem->Register(this);
 		return true;
 	}
 	return false;
@@ -138,7 +138,7 @@ void D3DTexture::Release()
 	SAFE_RELEASE(m_shaderResourceView);
 	SAFE_RELEASE(m_renderTargetView);
 	SAFE_RELEASE(m_resource);
-	g_DXRendererPtr->Unregister(this);
+	m_rendererSystem->Unregister(this);
 }
 
 void D3DTexture::OnDestroyDevice()
@@ -151,7 +151,7 @@ void D3DTexture::OnDestroyDevice()
 /************************************************************************/
 /*    D3DEffect                                                         */
 /************************************************************************/
-D3DEffect::D3DEffect() 
+D3DEffect::D3DEffect(CDX10SystemRenderer *sys) : m_rendererSystem(sys)
 {
 	m_effect = NULL;
 	m_technique = NULL;
@@ -166,7 +166,7 @@ D3DEffect::~D3DEffect()
 
 bool D3DEffect::Create(const std::string &effectString, DefinesMap* defines)
 {
-	if (!g_DXRendererPtr) {
+	if (!m_rendererSystem) {
 		LOGFATAL("Failed to create effect. No render system provided.");
 	}
 	if (m_effect)
@@ -178,7 +178,7 @@ bool D3DEffect::Create(const std::string &effectString, DefinesMap* defines)
 		m_defines = *defines; //FIXME: is this a copy of all members?
 	if (CreateEffect())
 	{
-		g_DXRendererPtr->Register(this);
+		m_rendererSystem->Register(this);
 		return true;
 	}
 
@@ -192,7 +192,7 @@ void D3DEffect::Release()
 	//SAFE_DELETE(m_technique);
 	SAFE_RELEASE(m_effect);
 	m_defines.clear();
-	g_DXRendererPtr->Unregister(this);
+	m_rendererSystem->Unregister(this);
 }
 
 bool D3DEffect::SetFloatArray(std::string handle, const float* val, unsigned int count)
@@ -283,7 +283,7 @@ bool D3DEffect::CreateEffect()
 		return false;
 	}
 
-	if (FAILED(D3D10CreateEffectFromMemory(compiledeffect->GetBufferPointer(), compiledeffect->GetBufferSize(), 0, g_DXRendererPtr->GetDevice(), 0, &m_effect)))
+	if (FAILED(D3D10CreateEffectFromMemory(compiledeffect->GetBufferPointer(), compiledeffect->GetBufferSize(), 0, m_rendererSystem->GetDevice(), 0, &m_effect)))
 	{
 		std::string msg(static_cast<const char*>(errors->GetBufferPointer()),
 			errors->GetBufferSize());
@@ -302,7 +302,7 @@ bool D3DEffect::CreateEffect()
 /************************************************************************/
 /*    D3DVertexBuffer                                                    */
 /************************************************************************/
-D3DVertexBuffer::D3DVertexBuffer() 
+D3DVertexBuffer::D3DVertexBuffer(CDX10SystemRenderer *sys) : m_rendererSystem(sys)
 {
 	m_bIsValid = false;
 	m_length = 0;
@@ -345,13 +345,13 @@ bool D3DVertexBuffer::CreateBuffer(UINT length, D3D10_USAGE usage /*= D3D10_USAG
 
 	HRESULT hhr = -1L;
 
-	if (g_DXRendererPtr->GetDevice()) {
-		hhr = g_DXRendererPtr->GetDevice()->CreateBuffer(&vertexBufferDesc, data ? &InitData : NULL, &m_vertexBuffer);
+	if (m_rendererSystem->GetDevice()) {
+		hhr = m_rendererSystem->GetDevice()->CreateBuffer(&vertexBufferDesc, data ? &InitData : NULL, &m_vertexBuffer);
 	}
 	if (SUCCEEDED(hhr)) {
 		m_length = length;
 		m_bIsValid = true;
-		g_DXRendererPtr->Register(this);
+		m_rendererSystem->Register(this);
 		return true;
 	}
 	else
@@ -386,8 +386,8 @@ bool D3DVertexBuffer::CreateIndex(UINT length, D3D10_USAGE usage /*= D3D10_USAGE
 	}
 
 	HRESULT hhr = -1;
-	if (g_DXRendererPtr->GetDevice()) {
-		hhr = g_DXRendererPtr->GetDevice()->CreateBuffer(&indexBufferDesc, data ? &InitData : NULL, &m_indexBuffer);
+	if (m_rendererSystem->GetDevice()) {
+		hhr = m_rendererSystem->GetDevice()->CreateBuffer(&indexBufferDesc, data ? &InitData : NULL, &m_indexBuffer);
 	}
 	if (SUCCEEDED(hhr)) {
 		m_type = INDEXED_BUFFER;
@@ -407,7 +407,7 @@ void D3DVertexBuffer::Release()
 	SAFE_RELEASE(m_indexBuffer);
 	m_type = NONINDEXED_BUFFER;
 	m_bIsValid = false;
-	g_DXRendererPtr->Unregister(this);
+	m_rendererSystem->Unregister(this);
 }
 
 bool D3DVertexBuffer::LockBuffer(D3D10_MAP mapType, void **data)

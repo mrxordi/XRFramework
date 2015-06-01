@@ -15,12 +15,13 @@ using namespace DirectX;
 using namespace PackedVector;
 
 class ID3DResource;
+struct Context;
 
-class cRenderSystemDX : public Singleton < cRenderSystemDX >, public XR::CCriticalSection
+class CDX10SystemRenderer : public XR::CCriticalSection
 {
 public:
-	cRenderSystemDX();
-	virtual ~cRenderSystemDX();
+	CDX10SystemRenderer(Context* ctx);
+	virtual ~CDX10SystemRenderer();
 
 	//static cRenderSystemDX& Create() { return *new cRenderSystemDX(); }
 	//static void				Destroy() { delete cRenderSystemDX::getSingletonPtr(); }
@@ -107,7 +108,5 @@ protected:
 	std::string		m_RenderVersion;
 
 	D3D10_VIEWPORT m_viewPort;
+	Context*	   m_context;
 };
-
-#define g_DXRenderer cRenderSystemDX::getSingleton()
-#define g_DXRendererPtr cRenderSystemDX::getSingletonPtr()

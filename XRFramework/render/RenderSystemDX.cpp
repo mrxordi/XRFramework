@@ -4,11 +4,8 @@
 #include "render/ID3DResource.h"
 //#include "window/DisplaySettings.h"
 
-// singleton instance pointer
-template<> cRenderSystemDX* Singleton<cRenderSystemDX>::ms_Singleton = 0;
 
-
-cRenderSystemDX::cRenderSystemDX(void)
+CDX10SystemRenderer::CDX10SystemRenderer(Context* ctx) : m_context(ctx)
 {
 	m_bRenderCreated = false;
 	m_bVSync = false;
@@ -33,11 +30,12 @@ cRenderSystemDX::cRenderSystemDX(void)
 	XMStoreFloat4x4(&m_world,XMMatrixIdentity());
 }
 
-cRenderSystemDX::~cRenderSystemDX(void)
+CDX10SystemRenderer::~CDX10SystemRenderer(void)
 {
+	m_enumeration.Shutdown();
 }
 
-bool cRenderSystemDX::InitRenderSystem(HWND hWnd)
+bool CDX10SystemRenderer::InitRenderSystem(HWND hWnd)
 {
 	m_enumeration.Initialize();
 
@@ -122,7 +120,7 @@ bool cRenderSystemDX::InitRenderSystem(HWND hWnd)
 	return true;
 }
 
-bool cRenderSystemDX::DestroyRenderSystem()
+bool CDX10SystemRenderer::DestroyRenderSystem()
 {
 
 	if (m_pSwapChain)
@@ -140,20 +138,20 @@ bool cRenderSystemDX::DestroyRenderSystem()
 		(*i)->OnDestroyDevice();
 
 	SAFE_RELEASE(m_pDevice);
-	m_enumeration.Shutdown();
 
 	LOGDEBUG("RenderSystem now is destroyed.");
+	m_bRenderCreated = false;
 	return true;
 }
 
 
-void cRenderSystemDX::Register(ID3DResource *resource)
+void CDX10SystemRenderer::Register(ID3DResource *resource)
 {
 	XR::CSingleLock lock(m_resourceSection);
 	m_resources.push_back(resource);
 }
 
-void cRenderSystemDX::Unregister(ID3DResource *resource)
+void CDX10SystemRenderer::Unregister(ID3DResource *resource)
 {
 	XR::CSingleLock lock(m_resourceSection);
 	std::vector<ID3DResource*>::iterator i = find(m_resources.begin(), m_resources.end(), resource);
@@ -161,7 +159,7 @@ void cRenderSystemDX::Unregister(ID3DResource *resource)
 		m_resources.erase(i);
 }
 
-bool cRenderSystemDX::OnResize()
+bool CDX10SystemRenderer::OnResize()
 {
 	if (!m_pDevice)
 		return false;
@@ -280,12 +278,12 @@ bool cRenderSystemDX::OnResize()
 	return true;
 }
 
-bool cRenderSystemDX::OnMove()
+bool CDX10SystemRenderer::OnMove()
 {
 	return true;
 }
 
-bool cRenderSystemDX::BeginRender()
+bool CDX10SystemRenderer::BeginRender()
 {
 	lock();
 	if (!m_bRenderCreated)
@@ -308,7 +306,7 @@ bool cRenderSystemDX::BeginRender()
 
 }
 
-bool cRenderSystemDX::EndRender()
+bool CDX10SystemRenderer::EndRender()
 {
 
 	m_inScene = false;
@@ -330,18 +328,18 @@ bool cRenderSystemDX::EndRender()
 	return true;
 }
 
-bool cRenderSystemDX::PresentRender()
+bool CDX10SystemRenderer::PresentRender()
 {
 
 	return true;
 }
 
-void cRenderSystemDX::SetVSync(bool vsync)
+void CDX10SystemRenderer::SetVSync(bool vsync)
 {
 
 }
 
-void cRenderSystemDX::SetCameraPosition(XMFLOAT2 &camera, int screenWidth, int screenHeight)
+void CDX10SystemRenderer::SetCameraPosition(XMFLOAT2 &camera, int screenWidth, int screenHeight)
 {
 	XR::CSingleLock(*this);
 	if (!m_pDevice)

@@ -1,9 +1,9 @@
 #include "stdafxf.h"
 #include "MyEvents.h"
-#include "core/VideoRenderers/WinRenderer.h"
+#include "core/VideoRenderers/DX10FrameRenderer.h"
 #include "../XRCommon/log/Log.h"
 
-wxVideoRendererEvent::wxVideoRendererEvent(WinRenderer* VideoRenderer, VR_ACTION action) 
+wxVideoRendererEvent::wxVideoRendererEvent(CDX10FrameRenderer* VideoRenderer, VR_ACTION action) 
 	: pVideoRenderer(VideoRenderer), e_action(action)
 {
 	SetEventType(wxEVT_VIDEO_RENDERER);
