@@ -12,5 +12,6 @@
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
+#include <stdint.h>
 
 #include "wx/wx.h"
