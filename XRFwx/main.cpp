@@ -17,7 +17,6 @@ MyApp::~MyApp()
 {
 	m_settings->SetInt("system.extralogging", CLog::getSingletonPtr()->GetExtraLogLevel());
 	m_settings->SaveSettings();
-	m_VideoRenderer.reset();
 	ConverterFactory::DestroyAll();
 	CLog::Destroy();
 }
@@ -47,8 +46,7 @@ bool MyApp::OnInit()
 	//CCurlFile file;
 	//LOGINFO("You are %s internet", file.IsInternet() ? "connected to" : "disconnected from");
 
-	m_monitors = std::make_unique<CMonitors>();
-	m_VideoRenderer = std::make_unique<WinRenderer>();
+/*	m_monitors = std::make_unique<CMonitors>();*/
 
 	XRect rect;
 	rect.top = 0;
@@ -57,9 +55,9 @@ bool MyApp::OnInit()
 	rect.right = GetAppSettings().GetInt("window.width");
 	int monitor = GetAppSettings().GetInt("window.monitor");
 
-	m_monitors->GetMonitor(monitor)->CenterRectToMonitor(rect);
+	//->GetMonitor(monitor)->CenterRectToMonitor(rect);
 
-	m_mainFrame = new MyFrame("XRFramework...", rect.TopLeft(), rect.Size());
+	m_mainFrame = new MainFrame("XRFramework...", wxRect(rect.TopLeft(), rect.Size()));
 	m_mainFrame->SetIcon(wxICON(APP_ICON));
 	m_mainFrame->Show(TRUE);
 	SetTopWindow(m_mainFrame);
@@ -67,33 +65,14 @@ bool MyApp::OnInit()
 	m_weeb = std::make_unique<CWeebTv>();
 
 	m_bufStream = std::make_unique<CBufferedStream>();
-	//m_bufStream->Open(m_weeb->GetStreamLink("tvvvvtvn", false).c_str(), "");
-	CFile file("special://temp/filecache002.cache");
-	auto_buffer buffeer;
-	file.Open();
-	file.LoadFile(buffeer);
-
-	uint8_t* pb = (uint8_t*)buffeer.get();
-	for (size_t i = 0; i < buffeer.size(); i++)
-	{
-		if (pb[0] == 0x09 && ((pb[11] & 0xF0) >> 4) == 1 && pb[10] == 0x00 && pb[9] == 0x00 && pb[8] == 0x00) {
-			uint32_t ts = AMF_DecodeInt24((char*)(pb + 4));
-			ts |= (pb[7] << 24);
-			LOGINFO("I have video keyframe, timestamp: %u, at cache offset %u.", ts, i);
-		}
-		pb++;
-	}
-
-
-
-
-
+	m_bufStream->Open(m_weeb->GetStreamLink("tvvvvtvn", false).c_str(), "");
 
 	return TRUE;
 }
 
 int MyApp::OnExit()
 {
+	m_bufStream->Close();
 	return wxApp::OnExit();
 }
 

@@ -6,9 +6,9 @@
 #include "../XRCommon/settings/AppSettings.h"
 #include "../XRCommon/settings/helpers/Monitors.h"
 #include "../XRFramework/render/RenderSystemDX.h"
-#include "../XRFramework/core/VideoRenderers/WinRenderer.h"
+#include "../XRFramework/core/VideoRenderers/DX10FrameRenderer.h"
 
-class MyFrame;
+class MainFrame;
 
 class MyApp : public wxApp
 {
@@ -20,14 +20,16 @@ public:
 	virtual bool IsCurrentThread() const;
 
 	std::unique_ptr<CAppSettings> m_settings;
-	std::unique_ptr<CMonitors> m_monitors;
+/*	std::unique_ptr<CMonitors> m_monitors;*/
 
-	MyFrame* m_mainFrame;
-	std::shared_ptr<cRenderSystemDX> m_renderSystem;
-	std::unique_ptr<WinRenderer> m_VideoRenderer;
+	MainFrame* m_mainFrame;
+// 	std::unique_ptr<CDX10SystemRenderer> m_renderSystem;
+// 	std::unique_ptr<CDX10FrameRenderer> m_VideoRenderer;
+
 	std::unique_ptr<CWeebTv> m_weeb;
-private:
 	std::unique_ptr<CBufferedStream> m_bufStream;
+
+private:
 
 	DWORD m_threadId;
 };
