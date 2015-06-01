@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BufferedStream.cpp" />
+    <ClCompile Include="Cmd.cpp" />
     <ClCompile Include="DelayedDllLoad.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
@@ -104,18 +105,24 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StreamCache.cpp" />
+    <ClCompile Include="Toolbar.cpp" />
+    <ClCompile Include="VideoBox.cpp" />
     <ClCompile Include="WeebTv.cpp" />
-    <ClCompile Include="wxDX10renderer.cpp" />
+    <ClCompile Include="wxDX10Display.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BufferedStream.h" />
+    <ClInclude Include="Cmd.h" />
+    <ClInclude Include="Context.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="StreamCache.h" />
+    <ClInclude Include="Toolbar.h" />
+    <ClInclude Include="VideoBox.h" />
     <ClInclude Include="WeebTv.h" />
-    <ClInclude Include="wxDX10renderer.h" />
+    <ClInclude Include="wxDX10Display.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XRCommon\XRCommon.vcxproj">
@@ -148,6 +155,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\appico.ico" />
+    <Image Include="resource\bitmap1.bmp" />
+    <Image Include="resource\bitmaps\button_pause_64.png" />
+    <Image Include="resource\bitmaps\button_play_64.png" />
+    <Image Include="resource\bitmaps\button_stop_64.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,21 +3,23 @@
 #include "../XRFramework/utils/MyEvents.h"
 #include <memory>
 
-class cRenderSystemDX;
-class WinRenderer;
+class CDX10SystemRenderer;
+class CDX10FrameRenderer;
+struct Context;
 
-class wxDX10renderer : public wxWindow
+class wxDX10Display final : public wxWindow
 {
-
+	friend class CDX10FrameRenderer;
+	friend class CDX10FrameRenderer;
 public:
-	wxEXPLICIT wxDX10renderer(wxWindow *parent,
+	wxEXPLICIT wxDX10Display(wxWindow *parent, Context* ctx,
 		wxWindowID id = wxID_ANY,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxString& name = L"DX10Canvas");
 
-	virtual ~wxDX10renderer();
+	virtual ~wxDX10Display();
 
 	void Render();
 
@@ -45,9 +47,11 @@ private:
 	wxSize m_videoSize;
 	wxSize m_oldvideoSize;
 	bool   m_bIsSizing;
-	WinRenderer* m_pVideoRenderer;
+	std::unique_ptr<CDX10SystemRenderer> m_pDXSystemRenderer;
+	std::unique_ptr<CDX10FrameRenderer> m_pVideoRenderer;
+	Context*			m_context;
 
 	DECLARE_EVENT_TABLE()
-	DECLARE_CLASS(wxDX10renderer)
+	DECLARE_CLASS(wxDX10Display)
 };
 

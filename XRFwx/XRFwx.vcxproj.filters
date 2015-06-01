@@ -5,26 +5,40 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="wx">
+      <UniqueIdentifier>{91ed032b-aef1-4eea-8c9a-05d09be23433}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DelayedDllLoad.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="wxDX10renderer.cpp" />
     <ClCompile Include="WeebTv.cpp" />
     <ClCompile Include="BufferedStream.cpp" />
     <ClCompile Include="StreamCache.cpp" />
+    <ClCompile Include="wxDX10Display.cpp">
+      <Filter>wx</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoBox.cpp" />
+    <ClCompile Include="Toolbar.cpp" />
+    <ClCompile Include="Cmd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="wxDX10renderer.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="WeebTv.h" />
     <ClInclude Include="BufferedStream.h" />
     <ClInclude Include="StreamCache.h" />
+    <ClInclude Include="Context.h" />
+    <ClInclude Include="wxDX10Display.h">
+      <Filter>wx</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoBox.h" />
+    <ClInclude Include="Toolbar.h" />
+    <ClInclude Include="Cmd.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
@@ -33,6 +47,18 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\appico.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\bitmaps\button_pause_64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\bitmaps\button_play_64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\bitmaps\button_stop_64.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\bitmap1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

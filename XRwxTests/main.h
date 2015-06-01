@@ -4,7 +4,7 @@
 #include "../XRCommon/settings/AppSettings.h"
 #include "../XRCommon/settings/helpers/Monitors.h"
 #include "../XRFramework/render/RenderSystemDX.h"
-#include "../XRFramework/core/VideoRenderers/WinRenderer.h"
+#include "../XRFramework/core/VideoRenderers/DX10FrameRenderer.h"
 
 class MyFrame;
 
@@ -21,8 +21,8 @@ public:
 	std::unique_ptr<CMonitors> m_monitors;
 
 	MyFrame* m_mainFrame;
-	std::shared_ptr<cRenderSystemDX> m_renderSystem;
-	std::unique_ptr<WinRenderer> m_VideoRenderer;
+	std::shared_ptr<CDX10SystemRenderer> m_renderSystem;
+	std::unique_ptr<CDX10FrameRenderer> m_VideoRenderer;
 };
 
 wxDECLARE_EVENT(EVT_RENDER, wxIdleEvent);
