@@ -1,19 +1,26 @@
 #include <stdafxf.h>
+#include "Context.h"
 #include "MainFrame.h"
+#include "VideoBox.h"
 #include "main.h"
-#include "wxDX10renderer.h"
+#include "wxDX10Display.h"
 #include "utils/XRect.h"
+#include "XRCommon/log/Log.h"
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(ID_Quit, MyFrame::OnQuit)
-EVT_MENU(ID_About, MyFrame::OnAbout)
-EVT_MENU(ID_ResizeWideo, MyFrame::OnResizeWideo)
-EVT_MENU_RANGE(ID_Debug_ffmpeg, ID_Debug_curl, MyFrame::DebugToggle)
-EVT_CLOSE(MyFrame::OnCloseWindow)
+
+BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+EVT_MENU(ID_Quit, MainFrame::OnQuit)
+EVT_MENU(ID_About, MainFrame::OnAbout)
+EVT_MENU(ID_ResizeWideo, MainFrame::OnResizeWideo)
+EVT_MENU_RANGE(ID_Debug_ffmpeg, ID_Debug_curl, MainFrame::DebugToggle)
+EVT_CLOSE(MainFrame::OnCloseWindow)
+EVT_BUTTON(IDB_Seek, MainFrame::OnSeekButton)
+EVT_BUTTON(IDB_Read, MainFrame::OnReadPacket)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-: wxFrame((wxFrame *)NULL, -1, title, pos, size)
+MainFrame::MainFrame(const wxString& title, const wxRect& rect)
+	: wxFrame((wxFrame *)NULL, -1, title, wxDefaultPosition, rect.GetSize(), wxDEFAULT_FRAME_STYLE| wxCLIP_CHILDREN), 
+	m_context(std::make_unique<Context>())
 {
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(ID_About, "&About...");
@@ -42,46 +49,58 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 	CreateStatusBar();
 	SetStatusText("Welcome to wxWindows!");
-
-	wxDX10renderer* widget = new wxDX10renderer(this, -1);
-	wxGetApp().m_VideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, widget);
+	m_context->frame = this;
+	m_context->parent = this;
 	
+	wxPanel *panel = new wxPanel(this, wxID_ANY);
+	wxPanel *videobox = new VideoBox(this, m_context.get());
+	wxDX10Display* widget = new wxDX10Display(panel, m_context.get(), -1);
 
+	m_sizer = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer->Add(widget, wxSizerFlags(1).Expand().Border());
+	panel->SetSizer(m_sizer);
+
+	wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+	sizerTop->Add(panel, wxSizerFlags(1).Expand().Border());
+	sizerTop->Add(videobox, wxSizerFlags(0).Border());
+
+	SetSizer(sizerTop);
+
+	//wxGetApp().m_VideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, widget);
+	
+	// create the controls
 }
 
 
-void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
 	Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
 
 	wxMessageBox("This is a wxWindows Hello world sample",
 		"About Hello World", wxOK | wxICON_INFORMATION, this);
 }
 
-void MyFrame::OnResizeWideo(wxCommandEvent& WXUNUSED(event)) 
+void MainFrame::OnResizeWideo(wxCommandEvent& WXUNUSED(event)) 
 {
-	wxGetApp().m_VideoRenderer->Configure(640, 480, 24.0f, CONF_FLAGS_YUVCOEF_BT601, ERenderFormat::RENDER_FMT_NV12, NULL);
+
 }
 
-void MyFrame::OnCloseWindow(wxCloseEvent& event)
+void MainFrame::OnCloseWindow(wxCloseEvent& event)
 {
 	wxSize size = GetSize();
-	CMonitor* monitor = wxGetApp().m_monitors->GetNearestMonitor(GetHWND());
+	CMonitor* monitor = m_context->monitors->GetNearestMonitor(GetHWND());
 
 	if (monitor)
 		GetAppSettings().SaveCurrentRect(XRect(0, 0, size.x, size.y), monitor->GetOrdinal());
 
-	wxVideoRendererEvent* ev = new wxVideoRendererEvent(wxGetApp().m_VideoRenderer.get(), wxVideoRendererEvent::VR_ACTION_DETACH);
-	QueueEvent(ev);
-
 	wxFrame::OnCloseWindow(event);
 }
 
-void MyFrame::DebugToggle(wxCommandEvent& event)
+void MainFrame::DebugToggle(wxCommandEvent& event)
 {
 	int extraLogLevel = CLog::getSingletonPtr()->GetExtraLogLevel();
 
@@ -107,4 +126,18 @@ void MyFrame::DebugToggle(wxCommandEvent& event)
 		break;
 
 	}
+}
+
+void MainFrame::OnReadPacket(wxCommandEvent& event)
+{
+	uint8_t buf[2*1024];
+	size_t out = wxGetApp().m_bufStream->Read(buf, sizeof(buf));
+	LOGINFO("Readed %u from buffer. End %d.", out, wxGetApp().m_bufStream->GetCurrentReadPositon());
+}
+
+void MainFrame::OnSeekButton(wxCommandEvent& event)
+{
+	int val = m_msInput->GetValue();
+	int64_t out = wxGetApp().m_bufStream->SeekTime(val);
+	LOGINFO("Seek returned %d.", out);
 }
