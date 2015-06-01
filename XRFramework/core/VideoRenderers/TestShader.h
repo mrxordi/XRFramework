@@ -1,10 +1,10 @@
 #pragma once
-#include "WinShader.h"
+#include "CDX10Shader.h"
 #include <DirectXMath.h>
 
 using namespace DirectX;
 
-class TestShader : public WinShader
+class TestShader : public CDX10Shader
 {
 	struct CUSTOMVERTEX {
 		XMFLOAT4 position;
@@ -12,7 +12,7 @@ class TestShader : public WinShader
 	};
 
 public:
-	TestShader() {};
+	TestShader(CDX10SystemRenderer *sys) : CDX10Shader(sys) {};
 	virtual ~TestShader();
 
 	virtual bool Create();

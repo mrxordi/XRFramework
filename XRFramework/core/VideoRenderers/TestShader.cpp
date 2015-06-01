@@ -86,9 +86,9 @@ void TestShader::PrepareParameters()
 
 void TestShader::SetShaderParameters()
 {
-	m_effect.SetMatrix("gW", g_DXRendererPtr->m_world);
-	m_effect.SetMatrix("gV", g_DXRendererPtr->m_view);
-	m_effect.SetMatrix("gP", g_DXRendererPtr->m_projection);
+	m_effect.SetMatrix("gW", m_rendererSystem->m_world);
+	m_effect.SetMatrix("gV", m_rendererSystem->m_view);
+	m_effect.SetMatrix("gP", m_rendererSystem->m_projection);
 }
 
 bool TestShader::BuildVertexLayout()
@@ -104,7 +104,7 @@ bool TestShader::BuildVertexLayout()
 	D3D10_PASS_DESC pDesc;
 	m_effect.GetTechnique()->GetPassByIndex(0)->GetDesc(&pDesc);
 
-	ID3D10Device* pDevice = g_DXRendererPtr->GetDevice();
+	ID3D10Device* pDevice = m_rendererSystem->GetDevice();
 	HRESULT hr = pDevice->CreateInputLayout(layout, numElements, pDesc.pIAInputSignature, pDesc.IAInputSignatureSize, &m_inputLayout);
 	if (SUCCEEDED(hr))
 		return true;

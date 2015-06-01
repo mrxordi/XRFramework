@@ -7,10 +7,10 @@
 /*    YUVBuffer                                                         */
 /************************************************************************/
 
-YUVBuffer::YUVBuffer() : m_width(0), m_height(0), m_format(RENDER_FMT_NONE), m_activeplanes(0), m_locked(false)
+YUVBuffer::YUVBuffer(CDX10SystemRenderer *sys) : m_width(0), m_height(0), m_format(RENDER_FMT_NONE), m_activeplanes(0), m_locked(false)
 {
 	for (int i = 0; i < MAX_PLANES; ++i) 
-		planes[i].texture = std::make_unique<D3DTexture>();
+		planes[i].texture = std::make_unique<D3DTexture>(sys);
 }
 
 YUVBuffer::~YUVBuffer()
@@ -379,9 +379,9 @@ void YUV2RGBShader::PrepareParameters(XRect sourceRect, XRect destRect, float co
 
 void YUV2RGBShader::SetShaderParameters(YUVBuffer* YUVbuf) 
 {
-	m_effect.SetMatrix("gW", g_DXRendererPtr->m_world);
-	m_effect.SetMatrix("gV", g_DXRendererPtr->m_view);
-	m_effect.SetMatrix("gP", g_DXRendererPtr->m_projection);
+	m_effect.SetMatrix("gW", m_rendererSystem->m_world);
+	m_effect.SetMatrix("gV", m_rendererSystem->m_view);
+	m_effect.SetMatrix("gP", m_rendererSystem->m_projection);
 	m_effect.SetMatrix("g_ColorMatrix", *m_matrix.Matrix());
 	m_effect.SetTexture("g_YTexture", m_YUVPlanes[0]);
 	if (YUVbuf->GetActivePlanes() > 1)
@@ -399,7 +399,7 @@ bool YUV2RGBShader::UploadToGPU(YUVBuffer* YUVbuf)
 		src = YUVbuf->planes[i].texture->GetResource();
 		dest = m_YUVPlanes[i].GetResource();
 
-		g_DXRendererPtr->GetDevice()->CopyResource(dest, src);
+		m_rendererSystem->GetDevice()->CopyResource(dest, src);
 	}
 	return true;
 }
@@ -419,7 +419,7 @@ bool YUV2RGBShader::BuildVertexLayout()
 	D3D10_PASS_DESC pDesc;
 	m_effect.GetTechnique()->GetPassByIndex(0)->GetDesc(&pDesc);
 
-	ID3D10Device* pDevice = g_DXRendererPtr->GetDevice();
+	ID3D10Device* pDevice = m_rendererSystem->GetDevice();
 	HRESULT hr = pDevice->CreateInputLayout(layout, numElements, pDesc.pIAInputSignature, pDesc.IAInputSignatureSize, &m_inputLayout);
 
 	if (SUCCEEDED(hr))

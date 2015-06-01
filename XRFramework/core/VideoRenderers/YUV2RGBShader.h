@@ -1,9 +1,10 @@
 #pragma once
-#include "WinShader.h"
+#include "CDX10Shader.h"
 #include <d3d10.h>
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <memory>
+#include <array>
 #include "RenderModes.h"
 #include "YUV2RGBMatrix.h"
 #include "render/ID3DResource.h"
@@ -32,7 +33,7 @@ struct SVideoPlane
 class YUVBuffer
 {
 public:
-	YUVBuffer();
+	YUVBuffer(CDX10SystemRenderer *sys);
 	virtual ~YUVBuffer();
 	
 	bool Create(ERenderFormat format, unsigned int width, unsigned int height);
@@ -56,7 +57,7 @@ private:
 //###############################################
 //#  YUV2RGBShader
 //###############################################
-class YUV2RGBShader : public WinShader
+class YUV2RGBShader : public CDX10Shader
 {
 	struct CUSTOMVERTEX {
 		XMFLOAT4 coord;
@@ -65,7 +66,8 @@ class YUV2RGBShader : public WinShader
 		XMFLOAT2 tvv;	 // V Texture coordinates
 	};
 public:
-	YUV2RGBShader() :
+	YUV2RGBShader(CDX10SystemRenderer* sys) :
+		CDX10Shader(sys), m_YUVPlanes({ { sys, sys, sys } }),
 		m_sourceWidth(0),
 		m_sourceHeight(0),
 		m_format(RENDER_FMT_NONE)
@@ -91,7 +93,7 @@ private:
 	unsigned int   m_sourceWidth, m_sourceHeight;
 	XRect          m_sourceRect, m_destRect;
 	ERenderFormat  m_format;
-	D3DTexture    m_YUVPlanes[3];
+	std::array<D3DTexture, 3> m_YUVPlanes;
 	float          m_texSteps[2];
 };
 
