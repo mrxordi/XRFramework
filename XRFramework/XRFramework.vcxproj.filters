@@ -76,9 +76,6 @@
     <ClInclude Include="core\VideoRenderers\TransformMatrix.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
-    <ClInclude Include="core\VideoRenderers\WinShader.h">
-      <Filter>core\VideoRenderers</Filter>
-    </ClInclude>
     <ClInclude Include="core\VideoRenderers\TestShader.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
@@ -86,9 +83,6 @@
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
     <ClInclude Include="core\VideoRenderers\YUV2RGBShader.h">
-      <Filter>core\VideoRenderers</Filter>
-    </ClInclude>
-    <ClInclude Include="core\VideoRenderers\WinRenderer.h">
       <Filter>core\VideoRenderers</Filter>
     </ClInclude>
     <ClInclude Include="FrameworkUtils.h" />
@@ -148,11 +142,16 @@
       <Filter>dvdplayer\DVDDemuxers</Filter>
     </ClInclude>
     <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
-    <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
     <ClInclude Include="utils\PcreJob.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\Pcre.h" />
+    <ClInclude Include="core\VideoRenderers\DX10FrameRenderer.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="core\VideoRenderers\CDX10Shader.h">
+      <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafxf.cpp" />
@@ -217,9 +216,6 @@
     <ClCompile Include="utils\BitstreamStats.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="core\VideoRenderers\WinShader.cpp">
-      <Filter>core\VideoRenderers</Filter>
-    </ClCompile>
     <ClCompile Include="core\VideoRenderers\TestShader.cpp">
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
@@ -227,9 +223,6 @@
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
     <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp">
-      <Filter>core\VideoRenderers</Filter>
-    </ClCompile>
-    <ClCompile Include="core\VideoRenderers\WinRenderer.cpp">
       <Filter>core\VideoRenderers</Filter>
     </ClCompile>
     <ClCompile Include="FrameworkUtils.cpp" />
@@ -286,11 +279,16 @@
       <Filter>dvdplayer\DVDDemuxers</Filter>
     </ClCompile>
     <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
-    <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="utils\PcreJob.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="utils\Pcre.cpp" />
+    <ClCompile Include="core\VideoRenderers\DX10FrameRenderer.cpp">
+      <Filter>core\VideoRenderers</Filter>
+    </ClCompile>
+    <ClCompile Include="core\VideoRenderers\CDX10Shader.cpp">
+      <Filter>core\VideoRenderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">

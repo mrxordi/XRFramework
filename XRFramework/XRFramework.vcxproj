@@ -108,8 +108,8 @@
     <ClInclude Include="core\VideoRenderers\RenderModes.h" />
     <ClInclude Include="core\VideoRenderers\TestShader.h" />
     <ClInclude Include="core\VideoRenderers\TransformMatrix.h" />
-    <ClInclude Include="core\VideoRenderers\WinRenderer.h" />
-    <ClInclude Include="core\VideoRenderers\WinShader.h" />
+    <ClInclude Include="core\VideoRenderers\DX10FrameRenderer.h" />
+    <ClInclude Include="core\VideoRenderers\CDX10Shader.h" />
     <ClInclude Include="core\VideoRenderers\YUV2RGBMatrix.h" />
     <ClInclude Include="core\VideoRenderers\YUV2RGBShader.h" />
     <ClInclude Include="DLLoader\DllPaths_win32.h" />
@@ -118,7 +118,6 @@
     <ClInclude Include="DLLoader\LoaderContainer.h" />
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
-    <ClInclude Include="dvdplayer\Codecs\VideoCodec.h" />
     <ClInclude Include="dvdplayer\Demuxers\Demux.h" />
     <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
     <ClInclude Include="dvdplayer\InputSteams\IInputStream.h" />
@@ -166,8 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\VideoRenderers\TestShader.cpp" />
-    <ClCompile Include="core\VideoRenderers\WinRenderer.cpp" />
-    <ClCompile Include="core\VideoRenderers\WinShader.cpp" />
+    <ClCompile Include="core\VideoRenderers\DX10FrameRenderer.cpp" />
+    <ClCompile Include="core\VideoRenderers\CDX10Shader.cpp" />
     <ClCompile Include="core\VideoRenderers\YUV2RGBMatrix.cpp" />
     <ClCompile Include="core\VideoRenderers\YUV2RGBShader.cpp" />
     <ClCompile Include="DLLoader\DynamicDll.cpp" />
@@ -175,7 +174,6 @@
     <ClCompile Include="DLLoader\LoaderContainer.cpp" />
     <ClCompile Include="DLLoader\LoaderFactory.cpp" />
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
-    <ClCompile Include="dvdplayer\Codecs\VideoCodec.cpp" />
     <ClCompile Include="dvdplayer\Demuxers\Demux.cpp" />
     <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
     <ClCompile Include="dvdplayer\InputSteams\IInputStream.cpp" />
