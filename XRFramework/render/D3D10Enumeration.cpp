@@ -12,6 +12,8 @@ D3D10Enumeration::D3D10Enumeration(void)
 	ClearAdapterInfoList();
 
 	CreateDXGIFactory(__uuidof(IDXGIFactory), (LPVOID*)&m_pDXGIFactory);
+	if (!m_pDXGIFactory)
+		LOGFATAL("Failed to create DXGIFactory - %s", GetLastError());
 }
 
 
