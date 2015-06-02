@@ -79,6 +79,11 @@ size_t CBufferedStream::Read(uint8_t* buf, size_t buf_size)
 		LOGERR("Sanity failed. no cache strategy!");
 		return -1;
 	}
+   if (!IsRunning())
+   {
+      LOGERR("Sanity failed. Buffered Stream is not running! No data to read.");
+      return -1;
+   }
 	int64_t iRc;
 
 	if (buf_size > SSIZE_MAX)
@@ -129,9 +134,14 @@ int64_t CBufferedStream::Seek(int64_t offset, int whence)
 
 	if (!m_streamCache)
 	{
-		LOGERR("Sanity failed while seeking. no cache strategy!");
+		LOGERR("Sanity failed while seeking. no cache strategy running!");
 		return -1;
 	}
+   if (!IsRunning())
+   {
+      LOGERR("Sanity failed. Buffered Stream is not running! No data to read.");
+      return -1;
+   }
 	int64_t iCurPos = m_readPos;
 	int64_t iTarget = offset;
 	if (whence == SEEK_END)
@@ -171,6 +181,11 @@ int64_t CBufferedStream::SeekTime(int64_t time_ms)
 		LOGERR("Sanity failed while seeking. no cache strategy!");
 		return -1;
 	}
+   if (!IsRunning())
+   {
+      LOGERR("Sanity failed. Buffered Stream is not running! No data to read.");
+      return -1;
+   }
 
 	int64_t seek = 0;
 	auto it = m_CachedKeyframes.begin();

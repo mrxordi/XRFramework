@@ -14,8 +14,8 @@ EVT_MENU(ID_About, MainFrame::OnAbout)
 EVT_MENU(ID_ResizeWideo, MainFrame::OnResizeWideo)
 EVT_MENU_RANGE(ID_Debug_ffmpeg, ID_Debug_curl, MainFrame::DebugToggle)
 EVT_CLOSE(MainFrame::OnCloseWindow)
-EVT_BUTTON(IDB_Seek, MainFrame::OnSeekButton)
-EVT_BUTTON(IDB_Read, MainFrame::OnReadPacket)
+// EVT_BUTTON(IDB_Seek, MainFrame::OnSeekButton)
+// EVT_BUTTON(IDB_Read, MainFrame::OnReadPacket)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString& title, const wxRect& rect)
@@ -62,7 +62,7 @@ MainFrame::MainFrame(const wxString& title, const wxRect& rect)
 
 	wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 	sizerTop->Add(panel, wxSizerFlags(1).Expand().Border());
-	sizerTop->Add(videobox, wxSizerFlags(0).Border());
+	sizerTop->Add(videobox, wxSizerFlags(0).Border().Expand());
 
 	SetSizer(sizerTop);
 
@@ -126,18 +126,4 @@ void MainFrame::DebugToggle(wxCommandEvent& event)
 		break;
 
 	}
-}
-
-void MainFrame::OnReadPacket(wxCommandEvent& event)
-{
-	uint8_t buf[2*1024];
-	size_t out = wxGetApp().m_bufStream->Read(buf, sizeof(buf));
-	LOGINFO("Readed %u from buffer. End %d.", out, wxGetApp().m_bufStream->GetCurrentReadPositon());
-}
-
-void MainFrame::OnSeekButton(wxCommandEvent& event)
-{
-	int val = m_msInput->GetValue();
-	int64_t out = wxGetApp().m_bufStream->SeekTime(val);
-	LOGINFO("Seek returned %d.", out);
 }

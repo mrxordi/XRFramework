@@ -15,25 +15,37 @@ void Toolbar::RegenerateToolbar() {
 
 void Toolbar::Populate() {
    bool needs_onidle = false;
-   Cmd* arr_command[2];
-   arr_command[0] = static_cast<Cmd*>(new CmdPlay());
-   arr_command[1] = static_cast<Cmd*>(new CmdPause());
-   arr_command[2] = static_cast<Cmd*>(new CmdStop());
+   AddCommand(std::make_unique<CmdPlay>());
+   AddCommand(std::make_unique<CmdPause>());
+   AddCommand(std::make_unique<CmdStop>());
 
-   for (size_t i = 0; i < 3; i++)
-   {
-      Cmd* command = arr_command[i];
+//    auto it = m_commands.begin();
+//    for (; it != m_commands.end(); ++it)
+//    {
+//       Cmd* command = m_commands[i]->get();
+//       int flags = command->Type();
+//       wxItemKind kind =
+//          flags & Cmd::CommandFlags::COMMAND_RADIO ? wxITEM_RADIO :
+//          flags & Cmd::CommandFlags::COMMAND_TOGGLE ? wxITEM_CHECK : wxITEM_NORMAL;
+// 
+//       wxBitmap const& bitmap = command->Icon(16, GetLayoutDirection());
+//       AddTool(500 + m_commands.size(), command->StrDisplay(m_context), bitmap, GetTooltip(command), kind);
+// 
+//       needs_onidle = needs_onidle || flags != Cmd::COMMAND_NORMAL;
+//    }
+   uint32_t i = 0;
+   for (auto& cmd : m_commands) {
+      Cmd* command = cmd.second.get();
       int flags = command->Type();
       wxItemKind kind =
          flags & Cmd::CommandFlags::COMMAND_RADIO ? wxITEM_RADIO :
          flags & Cmd::CommandFlags::COMMAND_TOGGLE ? wxITEM_CHECK : wxITEM_NORMAL;
-
       wxBitmap const& bitmap = command->Icon(16, GetLayoutDirection());
-      AddTool(500 + m_commands.size(), command->StrDisplay(m_context), bitmap, GetTooltip(command), kind);
-
-      m_commands.push_back(std::unique_ptr<Cmd>(command));
+      command->SetToolID(500 + i);
+      AddTool(500 + i, command->StrDisplay(m_context), bitmap, GetTooltip(command), kind);
 
       needs_onidle = needs_onidle || flags != Cmd::COMMAND_NORMAL;
+      i++;
    }
 
    // Only bind the update function if there are actually any dynamic tools
@@ -43,3 +55,8 @@ void Toolbar::Populate() {
 
    Realize();
 };
+
+void Toolbar::AddCommand(std::unique_ptr<Cmd> ptr)
+{
+   m_commands[ptr->name()] = std::move(ptr);
+}

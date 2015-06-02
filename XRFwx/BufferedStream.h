@@ -24,10 +24,6 @@ public:
 		return m_readPos;
 	}
 
-//	virtual void Abort() override;
-//	virtual int GetBlockSize() override;
-/*	virtual BitstreamStats GetBitstreamStats() const override;*/
-
 	virtual bool IsEOF() override;
 	virtual void StopThread(bool bWait = true) override;
 	virtual void OnException() override;

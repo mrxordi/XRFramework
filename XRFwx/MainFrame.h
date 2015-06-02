@@ -20,8 +20,8 @@ public:
 
 	void OnCloseWindow(wxCloseEvent& event);
 
-	void OnReadPacket(wxCommandEvent& event);
-	void OnSeekButton(wxCommandEvent& event);
+// 	void OnReadPacket(wxCommandEvent& event);
+// 	void OnSeekButton(wxCommandEvent& event);
 	
 	DECLARE_EVENT_TABLE()
 

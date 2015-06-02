@@ -31,7 +31,7 @@ struct Context;
 #define CMD_TYPE(a) int Type() const { return a; }
 
 #define CMD_ICON(icon) wxBitmap Icon(int size, wxLayoutDirection dir = wxLayout_LeftToRight) const override { \
-   wxMemoryInputStream* mem = nullptr;                             \
+   wxMemoryInputStream* mem = nullptr; \
    if (size == 64) mem = new wxMemoryInputStream(icon##_64, sizeof(icon##_64));                     \
 	if (size == 48) mem = new wxMemoryInputStream(icon##_48, sizeof(icon##_48));                     \
 	if (size == 32) mem = new wxMemoryInputStream(icon##_32, sizeof(icon##_32));                     \
@@ -122,6 +122,10 @@ public:
 
    /// Destructor
    virtual ~Cmd() = default;
+   virtual void SetToolID(uint32_t id) { m_id = id; };
+   virtual uint32_t GetToolID() { return m_id; };
+protected:
+   uint32_t m_id;
 };
 
 class CmdPlay : public Cmd 
@@ -134,11 +138,12 @@ public:
    STR_HELP("Nacisnij aby wystartowac.")
    CMD_TYPE(COMMAND_VALIDATE)
 
-   virtual bool Validate(const Context *c) 
+
+   virtual bool Validate(const Context *c)
    {
-   if(c)
-      return true;
-   return false;
+      if (c)
+         return true;
+      return false;
    };
 
    virtual void operator()(const Context*c)
@@ -187,7 +192,7 @@ public:
    };
 
    virtual void operator()(const Context*c) override {
-      LOGINFO("Stop pressed");
+      LOGINFO("Pause pressed");
    };
 };
 

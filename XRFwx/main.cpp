@@ -65,7 +65,7 @@ bool MyApp::OnInit()
 	m_weeb = std::make_unique<CWeebTv>();
 
 	m_bufStream = std::make_unique<CBufferedStream>();
-	m_bufStream->Open(m_weeb->GetStreamLink("tvvvvtvn", false).c_str(), "");
+	//m_bufStream->Open(m_weeb->GetStreamLink("tvvvvtvn", false).c_str(), "");
 
 	return TRUE;
 }
