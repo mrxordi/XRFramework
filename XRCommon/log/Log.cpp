@@ -170,9 +170,12 @@ bool CLog::WriteLogString(int logLevel, const char* file, const int lineNumber, 
 		case LOG_ERROR:
 			SetConsoleTextAttribute(m_hConsoleHandle, ConColor::RED);
 			break;
-		case LOG_INFO:
-			SetConsoleTextAttribute(m_hConsoleHandle, ConColor::YELLOW);
-			break;
+      case LOG_INFO:
+         SetConsoleTextAttribute(m_hConsoleHandle, ConColor::YELLOW);
+         break;
+      case LOG_NOTICE:
+         SetConsoleTextAttribute(m_hConsoleHandle, ConColor::DARKBLUE);
+         break;
 		default:
 			SetConsoleTextAttribute(m_hConsoleHandle, ConColor::WHITE);
 		}

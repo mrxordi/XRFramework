@@ -43,15 +43,18 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)BUILD\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(SolutionDir)XRDependencies\includes;D:\Program Files\VisualLeakDetector\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)BUILD\</OutDir>
+    <IncludePath>$(SolutionDir)XRDependencies\includes;D:\Program Files\VisualLeakDetector\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>
+      </SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WXUSINGDLL;__WXDEBUG__;__WXMSW__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)XRFramework;$(SolutionDir)XRCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -59,14 +62,21 @@
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
       <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>librtmp.lib;Shell32.lib;wxWidgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>avcodec-56.dll;avfilter-5.dll;avdevice-56.dll;avutil-54.dll;avformat-56.dll;swresample-1.dll;swscale-3.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <OptimizeReferences>
+      </OptimizeReferences>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -74,30 +84,41 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>
+      </SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;WXUSINGDLL;__WXMSW__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)XRFramework;$(SolutionDir)XRCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)XRFwx;$(SolutionDir)XRFramework;$(SolutionDir)XRCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafxf.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <OptimizeReferences>
+      </OptimizeReferences>
       <AdditionalLibraryDirectories>G:\dev\wxWidgets\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Shell32.lib;wxWidgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>librtmp.lib;Shell32.lib;wxWidgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <LinkTimeCodeGeneration />
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
     </Link>
     <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BufferedStream.cpp" />
     <ClCompile Include="Cmd.cpp" />
     <ClCompile Include="DelayedDllLoad.cpp" />
+    <ClCompile Include="gui\GUIFont.cpp" />
+    <ClCompile Include="gui\GUIManager.cpp" />
+    <ClCompile Include="gui\GUITextureBase.cpp" />
+    <ClCompile Include="gui\GUITextureManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -106,23 +127,29 @@
     </ClCompile>
     <ClCompile Include="StreamCache.cpp" />
     <ClCompile Include="Toolbar.cpp" />
-    <ClCompile Include="VideoBox.cpp" />
+    <ClCompile Include="VideoBoxToolbar.cpp" />
     <ClCompile Include="WeebTv.cpp" />
     <ClCompile Include="wxDX10Display.cpp" />
+    <ClCompile Include="wxXRStatusBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BufferedStream.h" />
     <ClInclude Include="Cmd.h" />
     <ClInclude Include="Context.h" />
+    <ClInclude Include="gui\GUIFont.h" />
+    <ClInclude Include="gui\GUIManager.h" />
+    <ClInclude Include="gui\GUITextureBase.h" />
+    <ClInclude Include="gui\GUITextureManager.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafxf.h" />
     <ClInclude Include="StreamCache.h" />
     <ClInclude Include="Toolbar.h" />
-    <ClInclude Include="VideoBox.h" />
+    <ClInclude Include="VideoBoxToolbar.h" />
     <ClInclude Include="WeebTv.h" />
     <ClInclude Include="wxDX10Display.h" />
+    <ClInclude Include="wxXRStatusBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XRCommon\XRCommon.vcxproj">

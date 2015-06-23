@@ -64,13 +64,22 @@ bool wxDX10Display::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/,
 	parent->Bind(wxEVT_MOVE_START, &wxDX10Display::HandleEnterSizeMove, this);
 	parent->Bind(wxEVT_MOVE_END, &wxDX10Display::HandleExitSizeMove, this);
 	Bind(wxEVT_VIDEO_RENDERER, &wxDX10Display::OnVideoRendererEvent, this);
-	m_context->videoDisplay = this;
+
+   m_context->videoDisplay = this;
+
+   m_pVideoRenderer = std::make_unique<CDX10FrameRenderer>(m_context);
+   //To Tylko w czasie tworzenia
+   m_pVideoRenderer->Configure(1920, 1080, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, this);
+
+   m_context->frameRenderer = m_pVideoRenderer.get();
+   m_pGUIManager = std::make_unique<CGUIManager>(this);
 
 	return true;
 }
 
 wxDX10Display::~wxDX10Display()
 {
+    m_pGUIManager.reset();
 	if (m_pDXSystemRenderer.get() && m_pDXSystemRenderer->GetDevice())
 	{
 		if (m_pVideoRenderer)
@@ -89,9 +98,7 @@ void wxDX10Display::Render()
 			m_pVideoRenderer->Render();
 		else
 		{
-			m_pVideoRenderer = std::make_unique<CDX10FrameRenderer>(m_context);
-			//To Tylko w czasie tworzenia
-			m_pVideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, this);
+
 		}
 		m_pDXSystemRenderer->EndRender();
 	}
@@ -99,8 +106,10 @@ void wxDX10Display::Render()
 
 void wxDX10Display::OnSizeEvent(wxSizeEvent &event)
 {
-	//if (m_bIsSizing)  // \	That is uncommented only when debugging and coding ;)
-	//	return;			// /	It isnt needed (slows app)
+#ifdef _DEBUG
+	if (m_bIsSizing)  //	That is uncommented only when debugging and coding ;)
+		return;			//	It isn't needed (slows app)
+#endif
 	m_videoSize = event.GetSize();
 	m_pDXSystemRenderer->OnResize();
 }
@@ -129,16 +138,19 @@ void wxDX10Display::OnIdle(wxIdleEvent& event)
 
 void wxDX10Display::OnVideoRendererEvent(wxVideoRendererEvent &event)
 {
-	if (event.pVideoRenderer)
-		XR::CSingleLock lock(event.pVideoRenderer->m_eventlock);
+   if (event.pVideoRenderer)
+      XR::CSingleLock lock(event.pVideoRenderer->m_eventlock);
+   else
+      return;
 
 	switch (event.e_action) 
 	{
 	case wxVideoRendererEvent::VR_ACTION_ATTACH:
-		break;
+   {
+      break;
+   }
 	case wxVideoRendererEvent::VR_ACTION_DETACH:
 		m_pVideoRenderer = nullptr;
 		break;
 	};
 }
-

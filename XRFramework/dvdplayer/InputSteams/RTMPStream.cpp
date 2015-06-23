@@ -59,7 +59,7 @@ CRTMPStream::CRTMPStream() : IInputStream(EStreamType::DVDSTREAM_TYPE_RTMP)
 		printf("WSAStartup failed: %d\n", iResult);
 	}
 
-	LOGDEBUG("Using external libRTMP");
+	LOGDEBUG("Using external libRTMP. Starting RTMP Stream.");
 
 	RTMP_LogSetCallback(RTMPInputStream_Log);
 	RTMP_LogSetLevel(RTMP_LOGDEBUG);
@@ -82,6 +82,8 @@ CRTMPStream::~CRTMPStream()
 		RTMP_Free(m_hRTMP);
 	m_hRTMP = NULL;
 	m_bPaused = false;
+   LOGDEBUG("Using external libRTMP. Destroying RTMP Stream.");
+
 }
 
 bool CRTMPStream::Open(const char* strFile, const std::string &content)

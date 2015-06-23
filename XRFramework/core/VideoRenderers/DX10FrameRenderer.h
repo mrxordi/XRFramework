@@ -64,13 +64,14 @@ public:
 	void Release();
 	void Render();
 	void RenderPS();
+   void Flip(int source);
 	
 	void CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height);
 	void ManageDisplay();
 	void ManageTextures();
 	
 //	int AddVideoPicture(DVDVideoPicture& pic);
-	int GetImage(YV12Image* image, int source);
+   int GetImage(YV12Image* image, int source = AUTOSOURCE);
 	void ReleaseImage(int index);
 	
 	int NextYV12Texture();
@@ -101,8 +102,8 @@ private:
 
 	unsigned int		m_iFlags;
 	int					m_requestedMethod;
-	YUVBuffer	        *m_VideoBuffers[NUM_BUFFERS];
-	float				m_fps;
+	YUVBuffer	      *m_VideoBuffers[NUM_BUFFERS];
+	float				   m_fps;
 	ERenderFormat		m_format;
 	YUV2RGBShader*		m_colorShader;
 	ERenderMethod		m_renderMethod;

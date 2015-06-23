@@ -42,7 +42,7 @@ std::string CUrlOptions::GetOptionsString(bool withLeadingSeperator /* = false *
 			options = m_strLead + options;
 	}
 
-	return options;
+	return std::move(options);
 }
 
 void CUrlOptions::AddOption(const std::string &key, const char *value)

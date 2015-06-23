@@ -8,6 +8,9 @@
     <Filter Include="wx">
       <UniqueIdentifier>{91ed032b-aef1-4eea-8c9a-05d09be23433}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{15df8a5e-a50f-451c-b154-ab270928cd4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DelayedDllLoad.cpp" />
@@ -20,9 +23,30 @@
     <ClCompile Include="wxDX10Display.cpp">
       <Filter>wx</Filter>
     </ClCompile>
-    <ClCompile Include="VideoBox.cpp" />
-    <ClCompile Include="Toolbar.cpp" />
-    <ClCompile Include="Cmd.cpp" />
+    <ClCompile Include="Toolbar.cpp">
+      <Filter>wx</Filter>
+    </ClCompile>
+    <ClCompile Include="Cmd.cpp">
+      <Filter>wx</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoBoxToolbar.cpp">
+      <Filter>wx</Filter>
+    </ClCompile>
+    <ClCompile Include="wxXRStatusBar.cpp">
+      <Filter>wx</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\GUIManager.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\GUITextureManager.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\GUIFont.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\GUITextureBase.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
@@ -36,9 +60,30 @@
     <ClInclude Include="wxDX10Display.h">
       <Filter>wx</Filter>
     </ClInclude>
-    <ClInclude Include="VideoBox.h" />
-    <ClInclude Include="Toolbar.h" />
-    <ClInclude Include="Cmd.h" />
+    <ClInclude Include="Toolbar.h">
+      <Filter>wx</Filter>
+    </ClInclude>
+    <ClInclude Include="Cmd.h">
+      <Filter>wx</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoBoxToolbar.h">
+      <Filter>wx</Filter>
+    </ClInclude>
+    <ClInclude Include="wxXRStatusBar.h">
+      <Filter>wx</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\GUIManager.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\GUITextureManager.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\GUIFont.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\GUITextureBase.h">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

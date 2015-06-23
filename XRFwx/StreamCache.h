@@ -22,6 +22,7 @@ public:
 	int64_t  GetAvailableRead();
 	void	 EndOfInput();
 	bool	 IsEndOfInput();
+   int IoControl(EIoControl request, void* param);
 
 private:
 	bool  m_bEndOfInput;

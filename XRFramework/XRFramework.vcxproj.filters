@@ -141,7 +141,6 @@
     <ClInclude Include="dvdplayer\Demuxers\Demux.h">
       <Filter>dvdplayer\DVDDemuxers</Filter>
     </ClInclude>
-    <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
     <ClInclude Include="utils\PcreJob.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -151,6 +150,16 @@
     </ClInclude>
     <ClInclude Include="core\VideoRenderers\CDX10Shader.h">
       <Filter>core\VideoRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\Player.h">
+      <Filter>dvdplayer</Filter>
+    </ClInclude>
+    <ClInclude Include="dvdplayer\Demuxers\DemuxStream.h">
+      <Filter>dvdplayer\DVDDemuxers</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamsList.h" />
+    <ClInclude Include="dvdplayer\FFmpeg.h">
+      <Filter>dvdplayer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -278,7 +287,6 @@
     <ClCompile Include="dvdplayer\Demuxers\Demux.cpp">
       <Filter>dvdplayer\DVDDemuxers</Filter>
     </ClCompile>
-    <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
     <ClCompile Include="utils\PcreJob.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -288,6 +296,16 @@
     </ClCompile>
     <ClCompile Include="core\VideoRenderers\CDX10Shader.cpp">
       <Filter>core\VideoRenderers</Filter>
+    </ClCompile>
+    <ClCompile Include="dvdplayer\Player.cpp">
+      <Filter>dvdplayer</Filter>
+    </ClCompile>
+    <ClCompile Include="dvdplayer\Demuxers\DemuxStream.cpp">
+      <Filter>dvdplayer\DVDDemuxers</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamsList.cpp" />
+    <ClCompile Include="dvdplayer\FFmpeg.cpp">
+      <Filter>dvdplayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

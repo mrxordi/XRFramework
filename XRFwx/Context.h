@@ -8,6 +8,8 @@ class CDX10SystemRenderer;
 class CDX10FrameRenderer;
 class MainFrame;
 class wxWindow;
+class CPlayer;
+class wxDX10Display;
 
 struct Context
 {
@@ -20,6 +22,8 @@ struct Context
 
 	MainFrame *frame = nullptr;
 	wxDX10Display *videoDisplay = nullptr;
+   CDX10FrameRenderer * frameRenderer = nullptr;
+   CPlayer *player;
 
 	Context()  : monitors(std::make_unique<CMonitors>()) {};
 	~Context() {};

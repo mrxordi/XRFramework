@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "XRCommon/log/Log.h"
 #include "wx/bitmap.h"
 #include "wx/string.h"
@@ -31,12 +32,12 @@ struct Context;
 #define CMD_TYPE(a) int Type() const { return a; }
 
 #define CMD_ICON(icon) wxBitmap Icon(int size, wxLayoutDirection dir = wxLayout_LeftToRight) const override { \
-   wxMemoryInputStream* mem = nullptr; \
-   if (size == 64) mem = new wxMemoryInputStream(icon##_64, sizeof(icon##_64));                     \
-	if (size == 48) mem = new wxMemoryInputStream(icon##_48, sizeof(icon##_48));                     \
-	if (size == 32) mem = new wxMemoryInputStream(icon##_32, sizeof(icon##_32));                     \
-	if (size == 24) mem = new wxMemoryInputStream(icon##_24, sizeof(icon##_24));                     \
-	if (size == 16) mem = new wxMemoryInputStream(icon##_16, sizeof(icon##_16));                     \
+   std::unique_ptr<wxMemoryInputStream> mem = nullptr; \
+   if (size == 64) mem = std::make_unique<wxMemoryInputStream>(icon##_64, sizeof(icon##_64));                     \
+	if (size == 48) mem = std::make_unique<wxMemoryInputStream>(icon##_48, sizeof(icon##_48));                     \
+	if (size == 32) mem = std::make_unique<wxMemoryInputStream>(icon##_32, sizeof(icon##_32));                     \
+	if (size == 24) mem = std::make_unique<wxMemoryInputStream>(icon##_24, sizeof(icon##_24));                     \
+	if (size == 16) mem = std::make_unique<wxMemoryInputStream>(icon##_16, sizeof(icon##_16));                     \
    if (mem != nullptr) {if(dir != wxLayout_RightToLeft) {return wxBitmap(wxImage(*mem)); }           \
       return wxBitmap(wxImage(*mem).Mirror());                                                       \
    } };                                                                                             \

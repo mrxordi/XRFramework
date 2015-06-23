@@ -30,8 +30,11 @@ public:
 	virtual void OnStartup() override;
 	virtual void OnExit() override;
 	virtual void Process() override;
+   virtual int IoControl(EIoControl request, void* param) override;
+
 private:
 	void ParsePacketHeader(const uint8_t* pData);
+
 
 private:
 	bool m_bEof;

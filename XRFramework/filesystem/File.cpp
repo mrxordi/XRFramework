@@ -18,7 +18,7 @@ CFile::CFile()
 	m_pFile = NULL;
 	m_flags = 0;
 	//m_bitStreamStats = NULL;
-	//m_pBuffer = NULL;
+	m_pBuffer = NULL;
 }
 
 CFile::CFile(const std::string& path, const unsigned int flags /*= 0*/)

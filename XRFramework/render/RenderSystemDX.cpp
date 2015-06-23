@@ -127,6 +127,7 @@ bool CDX10SystemRenderer::DestroyRenderSystem()
 	{
 		m_pSwapChain->SetFullscreenState(false, NULL);
 	}
+
 	SAFE_RELEASE(m_pRenderTargetView);
 	SAFE_RELEASE(m_pDepthStencilView);
 	SAFE_RELEASE(m_pRasterizerState);
@@ -183,6 +184,7 @@ bool CDX10SystemRenderer::OnResize()
 	XR::CSingleLock lock(*this);
 	// Release the old views, as they hold references to the buffers we
 	// will be destroying.  Also release the old depth/stencil buffer.
+
 	SAFE_RELEASE(m_pRenderTargetView);
 	SAFE_RELEASE(m_pDepthStencilView);
 	SAFE_RELEASE(m_pDepthStencilBuffer);
@@ -297,7 +299,7 @@ bool CDX10SystemRenderer::BeginRender()
 	// because mFont->DrawText changes them.  Note that we can 
 	// restore the default states by passing null.
 	m_pDevice->OMSetDepthStencilState(0, 0);
-	float blendFactors[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	float blendFactors[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	m_pDevice->OMSetBlendState(0, blendFactors, 0xffffffff);
 
 	m_inScene = true;

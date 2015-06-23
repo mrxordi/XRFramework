@@ -34,6 +34,7 @@ CDX10FrameRenderer::CDX10FrameRenderer(Context* ctx) : m_context(ctx)
 	m_sourceFrameRatio = 0.0;
 	m_fps = 0.0f;
 	m_bUseHQScaler = false;
+   m_bConfigured = false;
 }
 
 CDX10FrameRenderer::~CDX10FrameRenderer() 
@@ -100,12 +101,30 @@ bool CDX10FrameRenderer::Configure(UINT width, UINT height, float fps, unsigned 
 	LOGDEBUG("Video Renderer current source rect: %lu-%lu x %lu-%lu ", m_sourceRect.left, m_sourceRect.right, m_sourceRect.top, m_sourceRect.bottom);
 	LOGDEBUG("Video Renderer current target rect: %lu-%lu x %lu-%lu ", m_destRect.left, m_destRect.right, m_destRect.top, m_destRect.bottom);
 
-	if (!m_bConfigured)
-		SendVideoRendererMessage(wxVideoRendererEvent::VR_ACTION_ATTACH);
+// 	if (!m_bConfigured)
+// 		SendVideoRendererMessage(wxVideoRendererEvent::VR_ACTION_ATTACH);
 
 	m_bConfigured = true;
 	return true;
 }
+
+void CDX10FrameRenderer::Flip(int source)
+{
+   if (source == AUTOSOURCE)
+      source = NextYV12Texture();
+
+   if (m_VideoBuffers[m_iYV12RenderBuffer] != NULL)
+      m_VideoBuffers[m_iYV12RenderBuffer]->StartDecode();
+
+   if (source >= 0 && source < m_NumYV12Buffers)
+      m_iYV12RenderBuffer = source;
+   else
+      m_iYV12RenderBuffer = 0;
+
+   if (m_VideoBuffers[m_iYV12RenderBuffer] != NULL)
+      m_VideoBuffers[m_iYV12RenderBuffer]->StartRender();
+}
+
 
 void CDX10FrameRenderer::CalculateFrameAspectRatio(unsigned int desired_width, unsigned int desired_height) 
 {
@@ -198,7 +217,6 @@ int CDX10FrameRenderer::GetImage(YV12Image* image, int source)
 	return source;
 }
 
-
 void CDX10FrameRenderer::ReleaseImage(int index)
 {
 }
@@ -255,8 +273,6 @@ bool CDX10FrameRenderer::CreateYV12Texture(int index)
 	}
 	m_VideoBuffers[index] = buf;
 
-	buf = m_VideoBuffers[index];
-
 	buf->StartDecode();
 	buf->Clear();
 
@@ -295,7 +311,7 @@ void CDX10FrameRenderer::Render()
 	UpdatePSVideoFilter();
 	ManageTextures();
 
-	if (m_iYV12RenderBuffer < 0 || m_VideoBuffers[m_iYV12RenderBuffer]->IsReadyToRender())
+	if (m_iYV12RenderBuffer < 0 || !m_VideoBuffers[m_iYV12RenderBuffer]->IsReadyToRender())
 		return;
 
 	RenderPS();

@@ -23,9 +23,6 @@ public:
 	CDX10SystemRenderer(Context* ctx);
 	virtual ~CDX10SystemRenderer();
 
-	//static cRenderSystemDX& Create() { return *new cRenderSystemDX(); }
-	//static void				Destroy() { delete cRenderSystemDX::getSingletonPtr(); }
-
 	virtual bool InitRenderSystem(HWND hwnd = NULL);
 	virtual bool DestroyRenderSystem();
 	bool OnResize();

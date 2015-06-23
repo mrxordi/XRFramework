@@ -1,5 +1,5 @@
 #pragma once
-//#include <Windows.h>
+#include "LoggerContext.h"
 class LogImplementation
 {
 public:
@@ -13,5 +13,6 @@ public:
 	static void GetCurrentLocalTime(int& hour, int& minute, int& second);
 private:
 	HANDLE m_hFile;
+   LoggerContext m_threadsContext;
 };
 

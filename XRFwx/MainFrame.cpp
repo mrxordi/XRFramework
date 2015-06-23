@@ -1,11 +1,16 @@
 #include <stdafxf.h>
+#include "wx/wx.h"
 #include "Context.h"
 #include "MainFrame.h"
-#include "VideoBox.h"
+#include "VideoBoxToolbar.h"
 #include "main.h"
 #include "wxDX10Display.h"
 #include "utils/XRect.h"
 #include "XRCommon/log/Log.h"
+#include "XRCommon/utils/StringUtils.h"
+#include "XRFramework/dvdplayer/Player.h"
+#include "gui/GUIManager.h"
+#include "gui/GUITexture.h"
 
 
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
@@ -14,20 +19,20 @@ EVT_MENU(ID_About, MainFrame::OnAbout)
 EVT_MENU(ID_ResizeWideo, MainFrame::OnResizeWideo)
 EVT_MENU_RANGE(ID_Debug_ffmpeg, ID_Debug_curl, MainFrame::DebugToggle)
 EVT_CLOSE(MainFrame::OnCloseWindow)
-// EVT_BUTTON(IDB_Seek, MainFrame::OnSeekButton)
-// EVT_BUTTON(IDB_Read, MainFrame::OnReadPacket)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString& title, const wxRect& rect)
 	: wxFrame((wxFrame *)NULL, -1, title, wxDefaultPosition, rect.GetSize(), wxDEFAULT_FRAME_STYLE| wxCLIP_CHILDREN), 
-	m_context(std::make_unique<Context>())
+   m_context(std::make_unique<Context>())
 {
+   //Menu File
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(ID_About, "&About...");
 	menuFile->Append(ID_ResizeWideo, "&Resize Wideo...");
 	menuFile->AppendSeparator();
 	menuFile->Append(ID_Quit, "E&xit");
 
+   //Debug menu addition
 	wxMenu* menuDebug = new wxMenu;
 	wxMenuItem* item = menuDebug->Append(ID_Debug_curl, "Debug CURL", wxEmptyString, wxITEM_CHECK);
 	if (CLog::getSingletonPtr()->IsLogExtraLogged(LOGCURL))
@@ -46,14 +51,13 @@ MainFrame::MainFrame(const wxString& title, const wxRect& rect)
 	menuBar->Append(menuDebug, "&Debug Options");
 
 	SetMenuBar(menuBar);
-
-	CreateStatusBar();
-	SetStatusText("Welcome to wxWindows!");
+   wxStatusBar* statusbar = CreateStatusBar();
+   
 	m_context->frame = this;
 	m_context->parent = this;
 	
 	wxPanel *panel = new wxPanel(this, wxID_ANY);
-	wxPanel *videobox = new VideoBox(this, m_context.get());
+	wxPanel *videoboxToolbar = new VideoBoxToolbar(this, m_context.get());
 	wxDX10Display* widget = new wxDX10Display(panel, m_context.get(), -1);
 
 	m_sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -62,18 +66,21 @@ MainFrame::MainFrame(const wxString& title, const wxRect& rect)
 
 	wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 	sizerTop->Add(panel, wxSizerFlags(1).Expand().Border());
-	sizerTop->Add(videobox, wxSizerFlags(0).Border().Expand());
+	sizerTop->Add(videoboxToolbar, wxSizerFlags(0).Border().Expand());
 
-	SetSizer(sizerTop);
-
-	//wxGetApp().m_VideoRenderer->Configure(1280, 534, 24.0, CONF_FLAGS_YUVCOEF_BT601, RENDER_FMT_YUV420P, widget);
-	
-	// create the controls
+   m_player = new CPlayer(m_context.get(), nullptr);
+    SetSizer(sizerTop);
 }
 
+MainFrame::~MainFrame()
+{
+   DestroyChildren();
+   SAFE_DELETE(m_player);
+}
 
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
+   SAFE_DELETE(m_player);
 	Close(TRUE);
 }
 
@@ -82,11 +89,17 @@ void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 	wxMessageBox("This is a wxWindows Hello world sample",
 		"About Hello World", wxOK | wxICON_INFORMATION, this);
+//    const CWeebTv::channel* toOpen = wxGetApp().m_weeb->GetChannel("tvvvvtvn");
+//    m_player->Open(toOpen);
+   CGUITextureBase * texturebase = m_context->videoDisplay->GetGUIManager()->GetTextureManager()->CreateTexture("special://app/data/media");
+   texturebase->LoadFromFile("special://app/data/media/img.png");
 }
 
 void MainFrame::OnResizeWideo(wxCommandEvent& WXUNUSED(event)) 
 {
-
+   static uint32_t a = 0;
+   wxProgressEvent* ev = new wxProgressEvent(StringUtils::Format("Postep: %u", a++), this);
+   QueueEvent(ev);
 }
 
 void MainFrame::OnCloseWindow(wxCloseEvent& event)
@@ -96,6 +109,7 @@ void MainFrame::OnCloseWindow(wxCloseEvent& event)
 
 	if (monitor)
 		GetAppSettings().SaveCurrentRect(XRect(0, 0, size.x, size.y), monitor->GetOrdinal());
+
 
 	wxFrame::OnCloseWindow(event);
 }
@@ -126,4 +140,17 @@ void MainFrame::DebugToggle(wxCommandEvent& event)
 		break;
 
 	}
+}
+
+wxStatusBar* MainFrame::OnCreateStatusBar(int number /*= 1*/, long style /*= wxSTB_DEFAULT_STYLE*/, wxWindowID id /*= 0*/, const wxString& name /*= wxStatusLineNameStr*/)
+{
+   wxStatusBar *statusBar = new wxXRStatusBar(this, id, style, name);
+
+   return statusBar;
+}
+
+wxXRStatusBar* MainFrame::GetBusyBar()
+{
+   wxXRStatusBar* ret = dynamic_cast<wxXRStatusBar*>(GetStatusBar());
+   return ret;
 }

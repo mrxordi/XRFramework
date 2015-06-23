@@ -24,7 +24,7 @@ public:
 	CThread(IRunnable* pRunnable, const char* ThreadName);
 	virtual ~CThread(void);
 
-	void Create(bool bAutoDelete, unsigned stacksize = 0);
+	void Create(bool bAutoDelete = false, unsigned stacksize = 0);
 	void Sleep(unsigned int miliseconds);
 	virtual void StopThread(bool bWait = true);
 	bool WaitForThreadExit(unsigned int milliseconds);
@@ -66,10 +66,10 @@ protected:
 	*  stop is called on the thread the wait will return with a response
 	*  indicating what happened.
 	*/
-	inline WaitResponse AbortableWait(::CEvent& event, int timeoutMillis = -1 /* indicates wait forever*/) 
+	inline WaitResponse AbortableWait(CEvent& event, int timeoutMillis = -1 /* indicates wait forever*/) 
 	{
 		XR::CEventGroup group(&event, &m_StopEvent, NULL);
-		::CEvent* result = timeoutMillis < 0 ? group.wait() : group.wait(timeoutMillis);
+		CEvent* result = timeoutMillis < 0 ? group.wait() : group.wait(timeoutMillis);
 		return  result == &event ? WAIT_SIGNALED :
 			(result == NULL ? WAIT_TIMEDOUT : WAIT_INTERRUPTED);
 	}
@@ -97,5 +97,6 @@ private:
 	float m_fLastUsage;
 
 	std::string m_ThreadName;
+   
 };
 

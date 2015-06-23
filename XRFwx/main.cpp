@@ -19,6 +19,7 @@ MyApp::~MyApp()
 	m_settings->SaveSettings();
 	ConverterFactory::DestroyAll();
 	CLog::Destroy();
+
 }
 
 MyApp::MyApp()
@@ -37,6 +38,7 @@ bool MyApp::OnInit()
 		fprintf(stderr, "Could not init logging classes. Permission errors on (%s)\n",
 			CSpecialProtocol::TranslatePath("special://home/").c_str());
 	}
+   
 	m_settings = std::make_unique<CAppSettings>();
 	m_settings->Initialize(std::string("special://app/data/settings.xml"));
 	g_LogPtr->SetExtraLogLevels(m_settings->GetInt("system.extralogging"));
@@ -46,8 +48,6 @@ bool MyApp::OnInit()
 	//CCurlFile file;
 	//LOGINFO("You are %s internet", file.IsInternet() ? "connected to" : "disconnected from");
 
-/*	m_monitors = std::make_unique<CMonitors>();*/
-
 	XRect rect;
 	rect.top = 0;
 	rect.left = 0;
@@ -55,7 +55,6 @@ bool MyApp::OnInit()
 	rect.right = GetAppSettings().GetInt("window.width");
 	int monitor = GetAppSettings().GetInt("window.monitor");
 
-	//->GetMonitor(monitor)->CenterRectToMonitor(rect);
 
 	m_mainFrame = new MainFrame("XRFramework...", wxRect(rect.TopLeft(), rect.Size()));
 	m_mainFrame->SetIcon(wxICON(APP_ICON));
@@ -64,15 +63,30 @@ bool MyApp::OnInit()
 
 	m_weeb = std::make_unique<CWeebTv>();
 
-	m_bufStream = std::make_unique<CBufferedStream>();
-	//m_bufStream->Open(m_weeb->GetStreamLink("tvvvvtvn", false).c_str(), "");
+   // register ffmpeg lockmanager callback
+   av_lockmgr_register(&ffmpeg_lockmgr_cb);
+   // register avcodec
+   avcodec_register_all();
+   // register avformat
+   av_register_all();
+   // register avfilter
+   avfilter_register_all();
+   // set avutil callback
+   av_log_set_callback(ff_avutil_log);
+
 
 	return TRUE;
 }
 
 int MyApp::OnExit()
 {
-	m_bufStream->Close();
+//    if (m_mainFrame)
+//       delete m_mainFrame;
+
+   if (m_bufStream)
+	   m_bufStream->Close();
+    av_lockmgr_register(NULL);
+
 	return wxApp::OnExit();
 }
 

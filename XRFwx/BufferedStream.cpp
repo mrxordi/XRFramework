@@ -2,8 +2,7 @@
 #include <inttypes.h>
 #include "BufferedStream.h"
 
-
-CBufferedStream::CBufferedStream() : IInputStream(EStreamType::DVDSTREAM_TYPE_RTMP), CThread("CBufferedStream")
+CBufferedStream::CBufferedStream() : IInputStream(EStreamType::DVDSTREAM_TYPE_RTMPBUFFERED), CThread("CBufferedStream")
 {
 	m_nSeekResult = 0;
 	m_seekPos = 0;
@@ -12,12 +11,18 @@ CBufferedStream::CBufferedStream() : IInputStream(EStreamType::DVDSTREAM_TYPE_RT
 	m_streamCache = new CStreamCache;
 	m_sourceStream = new CRTMPStream;
 	m_bData = new uint8_t[m_buffersize];
+   LOGINFO("Creating Buffered steam.");
 }
-
 
 CBufferedStream::~CBufferedStream()
 {
+   Close();
 	SAFE_DELETE_ARRAY(m_bData);
+   
+   SAFE_DELETE(m_sourceStream);
+   SAFE_DELETE(m_streamCache);
+   LOGINFO("Destroing Buffered steam.");
+
 }
 
 bool CBufferedStream::Open(const char* strFileName, const std::string& content)
@@ -60,7 +65,8 @@ bool CBufferedStream::Open(const char* strFileName, const std::string& content)
 
 void CBufferedStream::Close()
 {
-	StopThread();
+   if (IsRunning())
+	   StopThread();
 
 	XR::CSingleLock lock(m_sync);
 	if (m_streamCache)
@@ -330,4 +336,11 @@ void CBufferedStream::ParsePacketHeader(const uint8_t* pData)
 const std::string& CBufferedStream::GetFileName()
 {
 	return m_strFileName;
+}
+
+int CBufferedStream::IoControl(EIoControl request, void* param)
+{
+   if (m_streamCache)
+      return m_streamCache->IoControl(request, param);
+   return -1;
 }

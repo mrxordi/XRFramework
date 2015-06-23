@@ -68,6 +68,7 @@ bool CWeebTv::ParseChannelList(std::string& htmlResponse)
 		(*it).second.online = std::atoi(value["channel_online"].asCString());
 		(*it).second.multibitrate = (value["multibitrate"].asString() == "1") ? true : false;
 		(*it).second.hasImage = (value["multibitrate"].asCString() == "1") ? true : false;
+      (*it).second.handler = this;
 	}
 
 
@@ -86,8 +87,9 @@ bool CWeebTv::Init()
 	m_connection.SetUserAgent("XBMC");
 	m_connection.SetRequestHeader("ContentType", "application/x-www-form-urlencoded");
 	m_connection.SetPostData(StringUtils::Format("&username=%s&userpassword=%s", m_username.c_str(), m_password.c_str()));
-	if (m_connection.Open(url) && m_connection.ReadData(html)){
-		m_connection.Close();
+	if (m_connection.Open(url)){
+      m_connection.ReadData(html);
+      m_connection.Close();
 		return ParseChannelList(html);
 	}
 
@@ -110,6 +112,7 @@ std::string CWeebTv::GetStreamLink(int id, bool hd)
 
 	if (!m_channelList.empty() && m_channelList.size() > id)
 		return GetStreamLink(it->first, hd);
+   return "";
 }
 
 std::string CWeebTv::GetStreamLink(const std::string& str_id, bool hd)
@@ -166,5 +169,20 @@ std::string CWeebTv::GetStreamLink(const std::string& str_id, bool hd)
 	html += playPath + " live=true pageUrl=token swfUrl=";
 	html += token;
 
+   m_connection.Close();
+
 	return html;
+}
+
+const CWeebTv::channel* const CWeebTv::GetChannel(const std::string& str_id)
+{
+
+   ChannelMap::iterator it = m_channelList.find(str_id);
+
+   if (it == m_channelList.end())
+   {
+      LOGERR("Failed to get stream ling by string id: %s - id doesnt exist.", str_id);
+      return nullptr;
+   }
+   return &it->second;
 }

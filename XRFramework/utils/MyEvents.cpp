@@ -16,3 +16,18 @@ wxVideoRendererEvent::~wxVideoRendererEvent()
 
 wxDEFINE_EVENT(wxEVT_VIDEO_RENDERER, wxVideoRendererEvent);
 
+
+wxPlayerEvent::wxPlayerEvent(CPlayer* player) 
+   : pPlayer(player)
+{
+   SetEventType(wxEVT_PLAYER);
+}
+
+wxPlayerEvent::~wxPlayerEvent()
+{
+   LOGINFO("player event destruction");
+}
+
+wxDEFINE_EVENT(wxEVT_PLAYER, wxPlayerEvent); 
+wxDEFINE_EVENT(wxEVT_PLAYER_SEEK, wxPlayerSeekEvent); 
+wxDEFINE_EVENT(wxEVT_PROGRESS, wxProgressEvent);

@@ -7,7 +7,7 @@
 
 CStreamCache::CStreamCache() : m_cacheFileRead(new CWin32File())
 , m_cacheFileWrite(new CWin32File())
-, m_hDataAvailEvent(NULL), m_nWritePosition(0)
+, m_hDataAvailEvent(nullptr), m_nWritePosition(0)
 , m_nReadPosition(0)
 , m_bEndOfInput(false)
 {
@@ -24,8 +24,7 @@ CStreamCache::~CStreamCache()
 int CStreamCache::Open()
 {
 	Close();
-
-	m_hDataAvailEvent = new CEvent;
+   m_hDataAvailEvent = new CEvent;
 
 	m_filename = CSpecialProtocol::TranslatePath(CFUtil::GetNextFilename("special://temp/filecache%03d.cache", 999));
 	if (m_filename.empty())
@@ -195,4 +194,22 @@ int64_t CStreamCache::Seek(int64_t iFilePosition)
 bool CStreamCache::IsEndOfInput()
 {
 	return m_bEndOfInput;
+}
+
+int CStreamCache::IoControl(EIoControl request, void* param)
+{
+   int result = -1;
+   if (m_cacheFileRead == NULL)
+      return -1;
+   result = m_cacheFileRead->IoControl(request, param);
+
+   if (result == -1 && request == IOCTRL_SEEK_POSSIBLE)
+   {
+      if (m_cacheFileRead->GetLength() >= 0 && m_cacheFileRead->Seek(0, SEEK_CUR) >= 0)
+         return 1;
+      else
+         return 0;
+   }
+
+   return result;
 }

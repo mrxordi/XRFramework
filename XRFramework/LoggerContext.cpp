@@ -12,7 +12,7 @@ public:
 	ContextOpaque() : loggerImpl(NULL) {}
 };
 
-Context::Context()
+LoggerContext::LoggerContext()
 {
 	impl = new ContextOpaque;
 
@@ -22,7 +22,7 @@ Context::Context()
 	CThread::SetLogger(impl->loggerImpl);
 }
 
-Context::~Context()
+LoggerContext::~LoggerContext()
 {
 	// cleanup
 	CThread::SetLogger(NULL);

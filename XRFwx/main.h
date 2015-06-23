@@ -7,6 +7,18 @@
 #include "../XRCommon/settings/helpers/Monitors.h"
 #include "../XRFramework/render/RenderSystemDX.h"
 #include "../XRFramework/core/VideoRenderers/DX10FrameRenderer.h"
+#include "XRFramework/dvdplayer/FFmpeg.h"
+
+extern "C" {
+#include "libswscale/swscale.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libavutil/avutil.h"
+#include "libavutil/ffversion.h"
+#include "libavfilter/avfilter.h"
+#include "libpostproc/postprocess.h"
+}
+
 
 class MainFrame;
 
@@ -20,14 +32,13 @@ public:
 	virtual bool IsCurrentThread() const;
 
 	std::unique_ptr<CAppSettings> m_settings;
-/*	std::unique_ptr<CMonitors> m_monitors;*/
 
 	MainFrame* m_mainFrame;
-// 	std::unique_ptr<CDX10SystemRenderer> m_renderSystem;
-// 	std::unique_ptr<CDX10FrameRenderer> m_VideoRenderer;
+   CPlayer* m_player;
 
 	std::unique_ptr<CWeebTv> m_weeb;
 	std::unique_ptr<CBufferedStream> m_bufStream;
+
 
 private:
 

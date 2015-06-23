@@ -339,6 +339,7 @@ void CThread::SpawnThread(unsigned stacksize)
 {
 	// Create in the suspended state, so that no matter the thread priorities and scheduled order, the handle will be assigned
 	// before the new thread exits.
+   uint32_t threadId = 0;
 	m_ThreadOpaque.handle = CreateThread(NULL, stacksize, (LPTHREAD_START_ROUTINE)&staticThread, this, CREATE_SUSPENDED, &m_ThreadId);
 
 	if (m_ThreadOpaque.handle == NULL) 

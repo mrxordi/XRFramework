@@ -7,9 +7,10 @@
 
 #define SEEK_POSSIBLE 0x10 // flag used to check if protocol allows seeks
 
-enum class EStreamType {
+enum EStreamType {
 	DVDSTREAM_TYPE_NONE,
-	DVDSTREAM_TYPE_RTMP,
+   DVDSTREAM_TYPE_RTMP,
+   DVDSTREAM_TYPE_RTMPBUFFERED,
 };
 
 class IInputStream
@@ -34,6 +35,8 @@ public:
 	bool IsStreamType(EStreamType type) const { return m_streamType == type; }
 	virtual bool IsEOF() = 0;
 	virtual BitstreamStats GetBitstreamStats() const { return m_stats; }
+   virtual int IoControl(EIoControl request, void* param) { return -1; }
+
 
 protected:
 	EStreamType m_streamType;

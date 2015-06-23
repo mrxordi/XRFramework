@@ -22,7 +22,7 @@
       </AdditionalDependencies>
     </Lib>
     <Link>
-      <DelayLoadDLLs>avcodec-56.dll;avfilter-5.dll;avdevice-56.dll;avutil-54.dll;avformat-56.dll;swresample-1.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>avcodec-56.dll;avfilter-5.dll;avdevice-56.dll;avutil-54.dll;avformat-56.dll;swresample-1.dll;swscale-3.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

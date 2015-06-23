@@ -46,9 +46,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)BUILD\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(SolutionDir)XRDependencies\includes;D:\Program Files\VisualLeakDetector\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)BUILD\</OutDir>
+    <IncludePath>$(SolutionDir)XRDependencies\includes;D:\Program Files\VisualLeakDetector\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -63,6 +65,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)XRCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,6 +77,9 @@
       </IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -119,9 +125,11 @@
     <ClInclude Include="DLLoader\LoaderFactory.h" />
     <ClInclude Include="DLLoader\Win32DllLoader.h" />
     <ClInclude Include="dvdplayer\Demuxers\Demux.h" />
-    <ClInclude Include="dvdplayer\Demuxers\DemuxFFmpeg.h" />
+    <ClInclude Include="dvdplayer\Demuxers\DemuxStream.h" />
+    <ClInclude Include="dvdplayer\FFmpeg.h" />
     <ClInclude Include="dvdplayer\InputSteams\IInputStream.h" />
     <ClInclude Include="dvdplayer\InputSteams\RTMPStream.h" />
+    <ClInclude Include="dvdplayer\Player.h" />
     <ClInclude Include="filesystem\CacheStrategy.h" />
     <ClInclude Include="filesystem\CurlFile.h" />
     <ClInclude Include="filesystem\CurlGlobal.h" />
@@ -143,6 +151,7 @@
     <ClInclude Include="render\ID3DResource.h" />
     <ClInclude Include="render\RenderSystemDX.h" />
     <ClInclude Include="stdafxf.h" />
+    <ClInclude Include="StreamsList.h" />
     <ClInclude Include="system\SysInfo.h" />
     <ClInclude Include="FrameworkUtils.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -175,9 +184,11 @@
     <ClCompile Include="DLLoader\LoaderFactory.cpp" />
     <ClCompile Include="DLLoader\Win32DllLoader.cpp" />
     <ClCompile Include="dvdplayer\Demuxers\Demux.cpp" />
-    <ClCompile Include="dvdplayer\Demuxers\DemuxFFmpeg.cpp" />
+    <ClCompile Include="dvdplayer\Demuxers\DemuxStream.cpp" />
+    <ClCompile Include="dvdplayer\FFmpeg.cpp" />
     <ClCompile Include="dvdplayer\InputSteams\IInputStream.cpp" />
     <ClCompile Include="dvdplayer\InputSteams\RTMPStream.cpp" />
+    <ClCompile Include="dvdplayer\Player.cpp" />
     <ClCompile Include="filesystem\CacheStrategy.cpp" />
     <ClCompile Include="filesystem\CurlFile.cpp" />
     <ClCompile Include="filesystem\CurlGlobal.cpp" />
@@ -202,6 +213,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StreamsList.cpp" />
     <ClCompile Include="system\SysInfo.cpp" />
     <ClCompile Include="FrameworkUtils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

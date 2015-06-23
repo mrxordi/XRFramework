@@ -3,7 +3,7 @@
 #include "XRCommon/log/Log.h"
 #include "XRCommon/utils/StringUtils.h"
 #include "XRFramework/Base.h"
-#include "JobManager.h"3
+#include "JobManager.h"
 #include "Pcre.h"
 
 // static variables
