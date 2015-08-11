@@ -41,7 +41,6 @@ public:
 
 
 private:
-
 	DWORD m_threadId;
 };
 

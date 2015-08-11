@@ -6,6 +6,7 @@
 #include "../XRFramework/render/RenderSystemDX.h"
 #include "../XRFramework/core/VideoRenderers/DX10FrameRenderer.h"
 #include "../XRCommon/log/Log.h"
+#include "XRThreads/SystemClock.h"
 
 BEGIN_EVENT_TABLE(wxDX10Display, wxWindow)
 EVT_SIZE(wxDX10Display::OnSizeEvent)
@@ -31,7 +32,7 @@ wxDX10Display::wxDX10Display(wxWindow *parent, Context* ctx, wxWindowID id /*= w
 bool wxDX10Display::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/, const wxPoint& pos /*= wxDefaultPosition*/, const wxSize& size /*= wxDefaultSize*/, long style /*= 0*/, const wxString& name /*= L"DX10Canvas"*/)
 {
 	wxCHECK_MSG(parent, false, wxT("can't create wxWindow without parent"));
-
+    style = style | wxWANTS_CHARS;
 	if (!CreateBase(parent, id, pos, size, style, wxDefaultValidator, name))
 		return false;
 
@@ -73,7 +74,7 @@ bool wxDX10Display::CreateWindow(wxWindow *parent, wxWindowID id /*= wxID_ANY*/,
 
    m_context->frameRenderer = m_pVideoRenderer.get();
    m_pGUIManager = std::make_unique<CGUIManager>(this);
-
+   
 	return true;
 }
 
@@ -92,6 +93,7 @@ wxDX10Display::~wxDX10Display()
 
 void wxDX10Display::Render()
 {
+    uint32_t deltatime = XR::SystemClockMillis();
 	if (m_pDXSystemRenderer->BeginRender())
 	{
 		if (m_pVideoRenderer)
@@ -100,6 +102,13 @@ void wxDX10Display::Render()
 		{
 
 		}
+        if (m_pGUIManager)
+        {
+            if (!m_pGUIManager->RenderGui(deltatime))
+            {
+                //empty for now
+            }
+        }
 		m_pDXSystemRenderer->EndRender();
 	}
 }

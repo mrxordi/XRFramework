@@ -38,15 +38,7 @@
     <ClCompile Include="gui\GUIManager.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="gui\GUITextureManager.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\GUIFont.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\GUITextureBase.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
+    <ClCompile Include="gui\GUILogger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
@@ -75,15 +67,7 @@
     <ClInclude Include="gui\GUIManager.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="gui\GUITextureManager.h">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\GUIFont.h">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\GUITextureBase.h">
-      <Filter>gui</Filter>
-    </ClInclude>
+    <ClInclude Include="gui\GUILogger.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

@@ -28,6 +28,7 @@ VideoBoxToolbar::VideoBoxToolbar(wxWindow *parent, Context *ctx)
    buttonSeek->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &VideoBoxToolbar::OnSeekButton, this);
    buttonRead->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &VideoBoxToolbar::OnReadPacket, this);
    buttonLoadTestFrame->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &VideoBoxToolbar::OnLoadTestFrame, this);
+   SetFocus();
 }
 
 

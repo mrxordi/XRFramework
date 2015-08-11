@@ -115,10 +115,8 @@
     <ClCompile Include="BufferedStream.cpp" />
     <ClCompile Include="Cmd.cpp" />
     <ClCompile Include="DelayedDllLoad.cpp" />
-    <ClCompile Include="gui\GUIFont.cpp" />
+    <ClCompile Include="gui\GUILogger.cpp" />
     <ClCompile Include="gui\GUIManager.cpp" />
-    <ClCompile Include="gui\GUITextureBase.cpp" />
-    <ClCompile Include="gui\GUITextureManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -136,10 +134,8 @@
     <ClInclude Include="BufferedStream.h" />
     <ClInclude Include="Cmd.h" />
     <ClInclude Include="Context.h" />
-    <ClInclude Include="gui\GUIFont.h" />
+    <ClInclude Include="gui\GUILogger.h" />
     <ClInclude Include="gui\GUIManager.h" />
-    <ClInclude Include="gui\GUITextureBase.h" />
-    <ClInclude Include="gui\GUITextureManager.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="resource.h" />

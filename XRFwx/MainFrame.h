@@ -41,7 +41,7 @@ private:
 
 enum
 {
-   ID_Quit = 1,
+   ID_Quit = 500,
    ID_ResizeWideo,
    ID_About,
    ID_Debug_ffmpeg,

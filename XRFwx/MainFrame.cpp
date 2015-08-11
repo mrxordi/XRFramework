@@ -10,8 +10,6 @@
 #include "XRCommon/utils/StringUtils.h"
 #include "XRFramework/dvdplayer/Player.h"
 #include "gui/GUIManager.h"
-#include "gui/GUITexture.h"
-
 
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 EVT_MENU(ID_Quit, MainFrame::OnQuit)
@@ -80,7 +78,8 @@ MainFrame::~MainFrame()
 
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-   SAFE_DELETE(m_player);
+
+    SAFE_DELETE(m_player);
 	Close(TRUE);
 }
 
@@ -91,8 +90,8 @@ void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 		"About Hello World", wxOK | wxICON_INFORMATION, this);
 //    const CWeebTv::channel* toOpen = wxGetApp().m_weeb->GetChannel("tvvvvtvn");
 //    m_player->Open(toOpen);
-   CGUITextureBase * texturebase = m_context->videoDisplay->GetGUIManager()->GetTextureManager()->CreateTexture("special://app/data/media");
-   texturebase->LoadFromFile("special://app/data/media/img.png");
+//    CGUITextureBase * texturebase = m_context->videoDisplay->GetGUIManager()->GetTextureManager()->CreateTexture("special://app/data/media");
+//    texturebase->LoadFromFile("special://app/data/media/img.png");
 }
 
 void MainFrame::OnResizeWideo(wxCommandEvent& WXUNUSED(event)) 

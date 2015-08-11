@@ -4,6 +4,7 @@
 #include "../XRFramework/utils/MyEvents.h"
 #include <memory>
 
+
 class CDX10SystemRenderer;
 class CDX10FrameRenderer;
 struct Context;
@@ -50,8 +51,8 @@ private:
 	wxSize m_oldvideoSize;
 	bool   m_bIsSizing;
 	std::unique_ptr<CDX10SystemRenderer> m_pDXSystemRenderer;
-   std::unique_ptr<CDX10FrameRenderer> m_pVideoRenderer;
-   std::unique_ptr<CGUIManager> m_pGUIManager;
+    std::unique_ptr<CDX10FrameRenderer> m_pVideoRenderer;
+    std::unique_ptr<CGUIManager> m_pGUIManager;
 	Context*			m_context;
 
 	DECLARE_EVENT_TABLE()

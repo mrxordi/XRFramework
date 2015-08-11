@@ -15,7 +15,7 @@ static const char* const levelNames[] =
 static const char* const logLevelNames[] =
 { "LOG_LEVEL_NONE" /*-1*/, "LOG_LEVEL_NORMAL" /*0*/, "LOG_LEVEL_DEBUG" /*1*/, "LOG_LEVEL_DEBUG_FREEMEM" /*2*/ };
 
-class CLog : public Singleton < CLog > {
+class CLog : public ::Singleton < CLog > {
 public:
 	CLog() : m_isInit(false), m_bConsoleOnly(true) {};
 	virtual ~CLog();

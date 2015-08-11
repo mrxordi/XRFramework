@@ -1,21 +1,36 @@
 #pragma once
-#include <memory>
-#include "Context.h"
-#include "wxDX10Display.h"
-#include "GUITextureManager.h"
+#include "wx/wx.h"
+#include "GUILogger.h"
+#include "CEGUI/CEGUI.h"
+#include "CEGUI/RendererModules/Direct3D10/Renderer.h"
 class wxDX10Display;
 
-class CGUIManager
+
+class CGUIManager : wxEvtHandler
 {
 public:
-   CGUIManager(wxDX10Display* ctx);
-   virtual ~CGUIManager();
-   virtual bool Initialize();
+    CGUIManager(wxDX10Display* parent);
+    ~CGUIManager();
 
+    bool RenderGui(uint32_t deltatime);
 
-   CGUITextureManager* GetTextureManager() { if (m_pTextureManager) return m_pTextureManager.get(); return nullptr; };
+    void MouseMotion(wxMouseEvent& evt);
+    void MouseKey(wxMouseEvent& evt);
+    void MouseWheel(wxMouseEvent& evt);
+
+    void HandleKeyUp(wxKeyEvent& evt);
+    void HandleKeyDown(wxKeyEvent& evt);
+    void HandleInChar(wxKeyEvent& evt);
+
 private:
-   wxDX10Display* m_pParent;
-   std::unique_ptr<CGUITextureManager> m_pTextureManager;
+    GUILogger* guilogger;
+    CEGUI::Renderer* m_ceguiRenderer;
+    wxDX10Display* m_parent;
+
+    bool m_bRenderGui;
+
+    DECLARE_EVENT_TABLE()
+
+    DECLARE_CLASS(CGUIManager)
 };
 

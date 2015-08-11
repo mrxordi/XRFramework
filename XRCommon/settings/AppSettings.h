@@ -10,7 +10,7 @@ class XRect;
  * \brief Wrapper around Settings Manager responsible for prop. configuring all callbacks
  * \ and parsing files.
  */
-class CAppSettings : public Singleton<CAppSettings>	
+class CAppSettings : public ::Singleton<CAppSettings>	
 {
 public:
 public:

@@ -19,7 +19,6 @@ MyApp::~MyApp()
 	m_settings->SaveSettings();
 	ConverterFactory::DestroyAll();
 	CLog::Destroy();
-
 }
 
 MyApp::MyApp()
